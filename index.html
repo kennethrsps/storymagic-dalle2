@@ -663,12 +663,13 @@
                 <div class="premium-features">
                     <h4>✨ What You Get:</h4>
                     <ul>
-                        <li>Personalized AI-generated artwork</li>
-                        <li>Custom story featuring your child</li>
-                        <li>High-resolution 1024x1024 images</li>
-                        <li>Professional-quality illustrations</li>
-                        <li>Unique story every time</li>
-                        <li>Perfect for printing & sharing</li>
+                        <li>5-page personalized story book</li>
+                        <li>Educational lessons on every page</li>
+                        <li>Simple words perfect for toddlers</li>
+                        <li>AI-generated custom artwork</li>
+                        <li>Character looks like your child</li>
+                        <li>Downloadable PDF for printing</li>
+                        <li>Perfect bedtime story length</li>
                     </ul>
                 </div>
 
@@ -745,12 +746,14 @@
             <div class="price">$12.99</div>
             <div class="price-subtitle">One-time payment • Instant delivery</div>
             <ul style="text-align: left; margin: 30px 0; line-height: 2;">
-                <li>✅ 1 Personalized AI-generated story</li>
-                <li>✅ High-resolution artwork (1024x1024)</li>
-                <li>✅ Multiple character customization options</li>
-                <li>✅ 8+ different story themes</li>
-                <li>✅ Perfect for printing & sharing</li>
-                <li>✅ Instant download</li>
+                <li>✅ 5-page personalized story book</li>
+                <li>✅ Educational lessons on every page</li>
+                <li>✅ Simple language perfect for toddlers</li>
+                <li>✅ Character customized to look like your child</li>
+                <li>✅ High-resolution AI artwork</li>
+                <li>✅ Downloadable PDF ready for printing</li>
+                <li>✅ Perfect 5-minute bedtime story</li>
+                <li>✅ 8 different adventure themes</li>
             </ul>
             <button class="buy-btn" onclick="purchaseStory()">🛒 Buy Now - $12.99</button>
             <p style="margin-top: 20px; color: #666; font-size: 0.9em;">30-day money-back guarantee</p>
@@ -762,47 +765,255 @@
         // Global variables to store current story data
         let currentStoryData = {};
 
-        // Enhanced story templates with more detailed character descriptions
+        // Enhanced story templates with multi-page structure for toddlers
         const storyTemplates = {
             garden: {
-                title: "{name}'s Magical Garden Adventure",
-                text: "Once upon a time, <span class='highlight'>{name}</span>, a {age}-year-old {gender} with beautiful {hair} and sparkling {eyes}, discovered a magical garden where flowers could talk and butterflies granted wishes. Together with {animalFriend}, {name} helped save the garden from a terrible drought, learning that caring for others brings the greatest magic of all.",
-                prompt: "A beautiful magical garden with talking flowers, colorful butterflies, and a happy {age}-year-old {gender} named {name} with {hair} and {eyes}, accompanied by a {animalFriend}, watering glowing plants, fantasy children's book illustration, vibrant colors, whimsical and enchanting, detailed character features, professional storybook art style"
+                title: "{name}'s Magic Garden",
+                pages: [
+                    {
+                        text: "<span class='highlight'>{name}</span> found a sad garden. The flowers were wilting.",
+                        lesson: "Sometimes things need our help.",
+                        prompt: "A {age}-year-old {gender} named {name} with {hair} and {eyes} looking at wilted flowers in a garden, accompanied by {animalFriend}, simple toddler book illustration, bright colors, sad flowers"
+                    },
+                    {
+                        text: "'{animalFriend}, how can we help?' asked <span class='highlight'>{name}</span>.",
+                        lesson: "It's good to ask for help and ideas.",
+                        prompt: "{name} talking to {animalFriend} in the garden, both looking thoughtful, toddler book style, simple and colorful"
+                    },
+                    {
+                        text: "<span class='highlight'>{name}</span> watered the flowers every day. Drop by drop.",
+                        lesson: "Small actions can make a big difference.",
+                        prompt: "{name} with a small watering can, gently watering colorful flowers, {animalFriend} helping, toddler book illustration, cheerful scene"
+                    },
+                    {
+                        text: "The flowers smiled! 'Thank you, <span class='highlight'>{name}</span>!' they said.",
+                        lesson: "Kindness makes others happy.",
+                        prompt: "Beautiful blooming flowers with happy faces talking to {name} and {animalFriend}, magical garden scene, bright colors, joyful toddler book style"
+                    },
+                    {
+                        text: "<span class='highlight'>{name}</span> learned that caring for others is magical!",
+                        lesson: "Taking care of others feels wonderful.",
+                        prompt: "{name} and {animalFriend} in a beautiful, thriving magical garden with rainbow flowers and butterflies, celebration scene, toddler book illustration"
+                    }
+                ],
+                mainPrompt: "A beautiful magical garden with talking flowers, colorful butterflies, and a happy {age}-year-old {gender} named {name} with {hair} and {eyes}, accompanied by a {animalFriend}, watering glowing plants, fantasy children's book illustration, vibrant colors, whimsical and enchanting, detailed character features, professional storybook art style"
             },
             space: {
-                title: "Commander {name}'s Space Mission",
-                text: "Brave astronaut <span class='highlight'>{name}</span>, a courageous {age}-year-old {gender} with {hair} and bright {eyes}, received an urgent mission to save a distant planet. Flying through sparkling nebulas with {animalFriend} as co-pilot, {name} discovered that friendship and teamwork were the greatest powers in the universe.",
-                prompt: "A young {age}-year-old {gender} astronaut named {name} with {hair} and {eyes} in a colorful space suit floating among stars, planets, and nebulas, accompanied by a {animalFriend} in a tiny space helmet, children's book illustration, cosmic and magical, detailed facial features"
+                title: "Captain {name} Goes to Space",
+                pages: [
+                    {
+                        text: "<span class='highlight'>{name}</span> put on a special space suit. 'Ready for adventure!'",
+                        lesson: "Getting ready is important for big adventures.",
+                        prompt: "{name} putting on a colorful space suit with {animalFriend} wearing a tiny helmet, toddler book illustration, exciting preparation scene"
+                    },
+                    {
+                        text: "The rocket went WHOOSH! Up, up, up to the stars!",
+                        lesson: "Dreams can take us far away.",
+                        prompt: "{name} and {animalFriend} in a rocket ship flying past stars and planets, toddler book style, simple and magical"
+                    },
+                    {
+                        text: "<span class='highlight'>{name}</span> met friendly aliens. 'Hello!' they all said.",
+                        lesson: "Being friendly helps us make new friends.",
+                        prompt: "{name} and {animalFriend} meeting colorful, friendly alien creatures on a planet, toddler book illustration, welcoming scene"
+                    },
+                    {
+                        text: "Together they played space games and shared space snacks.",
+                        lesson: "Sharing makes friendship stronger.",
+                        prompt: "{name}, {animalFriend}, and alien friends playing together and sharing colorful space food, happy toddler book scene"
+                    },
+                    {
+                        text: "<span class='highlight'>{name}</span> learned friendship works everywhere in the universe!",
+                        lesson: "Friends are special wherever you go.",
+                        prompt: "{name} and {animalFriend} waving goodbye to alien friends from their rocket, space scene with hearts and stars, toddler book style"
+                    }
+                ],
+                mainPrompt: "A young {age}-year-old {gender} astronaut named {name} with {hair} and {eyes} in a colorful space suit floating among stars, planets, and nebulas, accompanied by a {animalFriend} in a tiny space helmet, children's book illustration, cosmic and magical, detailed facial features"
             },
             princess: {
-                title: "Royal {name} and the Crystal Kingdom",
-                text: "In a kingdom made of shimmering crystals, Royal <span class='highlight'>{name}</span>, a noble {age}-year-old {gender} with magnificent {hair} and wise {eyes}, embarked on a quest to restore the kingdom's lost colors. With {animalFriend} as a trusted companion, {name} learned that true royalty comes from helping others.",
-                prompt: "A young {age}-year-old royal {gender} named {name} with {hair} and {eyes} in a beautiful crystal palace with rainbow reflections, wearing elegant royal clothes, accompanied by a {animalFriend}, surrounded by magical crystal formations, children's book illustration, sparkly and majestic, detailed character portrait"
+                title: "{name} the Kind Royal",
+                pages: [
+                    {
+                        text: "Princess <span class='highlight'>{name}</span> lived in a beautiful castle with {animalFriend}.",
+                        lesson: "Everyone has a special place they call home.",
+                        prompt: "{name} wearing a simple crown in a colorful castle with {animalFriend}, toddler book illustration, royal but cozy scene"
+                    },
+                    {
+                        text: "The kingdom's colors started fading away. Everything looked sad.",
+                        lesson: "Sometimes things go wrong and that's okay.",
+                        prompt: "A kingdom with fading colors, {name} and {animalFriend} looking concerned but determined, toddler book style"
+                    },
+                    {
+                        text: "<span class='highlight'>{name}</span> decided to help. 'Let's spread kindness everywhere!'",
+                        lesson: "We can choose to help when things are difficult.",
+                        prompt: "{name} and {animalFriend} walking through the kingdom with hearts floating around them, toddler book illustration"
+                    },
+                    {
+                        text: "Every kind word brought colors back. Red! Blue! Yellow!",
+                        lesson: "Kind words have magical power.",
+                        prompt: "{name} speaking to people with colorful words floating in the air, bringing colors back to buildings, magical toddler scene"
+                    },
+                    {
+                        text: "<span class='highlight'>{name}</span> learned that kindness is the most royal thing of all!",
+                        lesson: "Being kind makes you truly special.",
+                        prompt: "{name} and {animalFriend} in a colorful, restored kingdom with happy people celebrating, toddler book illustration, joyful scene"
+                    }
+                ],
+                mainPrompt: "A young {age}-year-old royal {gender} named {name} with {hair} and {eyes} in a beautiful crystal palace with rainbow reflections, wearing elegant royal clothes, accompanied by a {animalFriend}, surrounded by magical crystal formations, children's book illustration, sparkly and majestic, detailed character portrait"
             },
             ocean: {
-                title: "{name}'s Underwater Adventure",
-                text: "Deep beneath the ocean waves, <span class='highlight'>{name}</span>, an adventurous {age}-year-old {gender} with flowing {hair} and ocean-blue {eyes}, discovered an underwater city filled with friendly sea creatures. Together with {animalFriend} and dolphins, seahorses, and wise old turtles, {name} helped protect the ocean's greatest treasure.",
-                prompt: "A cheerful {age}-year-old {gender} named {name} with {hair} and {eyes} swimming underwater with colorful fish, dolphins, and sea turtles, accompanied by a {animalFriend}, in a vibrant coral reef, magical underwater scene, children's book illustration, bright and oceanic, detailed character swimming"
+                title: "{name}'s Ocean Adventure",
+                pages: [
+                    {
+                        text: "<span class='highlight'>{name}</span> and {animalFriend} dove into the blue ocean.",
+                        lesson: "It's fun to explore new places.",
+                        prompt: "{name} and {animalFriend} diving into clear blue water, bubbles around them, toddler book illustration, underwater adventure beginning"
+                    },
+                    {
+                        text: "A little fish was crying. 'I'm lost!' she said.",
+                        lesson: "Sometimes others need our help.",
+                        prompt: "{name} and {animalFriend} meeting a sad little fish underwater, coral reef background, toddler book style, gentle scene"
+                    },
+                    {
+                        text: "'Don't worry,' said <span class='highlight'>{name}</span>. 'We'll help you find home.'",
+                        lesson: "Helping others feels good.",
+                        prompt: "{name} comforting the little fish while {animalFriend} looks encouraging, underwater scene, toddler book illustration"
+                    },
+                    {
+                        text: "They swam together until they found the fish's family.",
+                        lesson: "Working together helps us succeed.",
+                        prompt: "{name}, {animalFriend}, and the little fish swimming together past colorful coral, toddler book style, teamwork scene"
+                    },
+                    {
+                        text: "'Thank you!' said all the fish. <span class='highlight'>{name}</span> felt so happy!",
+                        lesson: "Helping others makes us happy too.",
+                        prompt: "{name} and {animalFriend} surrounded by grateful fish families, underwater celebration, colorful coral reef, toddler book illustration"
+                    }
+                ],
+                mainPrompt: "A cheerful {age}-year-old {gender} named {name} with {hair} and {eyes} swimming underwater with colorful fish, dolphins, and sea turtles, accompanied by a {animalFriend}, in a vibrant coral reef, magical underwater scene, children's book illustration, bright and oceanic, detailed character swimming"
             },
             forest: {
-                title: "{name} and the Enchanted Forest",
-                text: "When <span class='highlight'>{name}</span>, a brave {age}-year-old {gender} with beautiful {hair} and kind {eyes}, wandered into an enchanted forest, they met talking animals who needed help finding their lost home. With {animalFriend} leading the way, {name} guided them through magical adventures to safety.",
-                prompt: "A brave {age}-year-old {gender} named {name} with {hair} and {eyes} in an enchanted forest with talking animals like rabbits, deer, and owls, accompanied by a {animalFriend}, magical trees with glowing leaves, children's book illustration, warm and mystical, detailed character in forest setting"
+                title: "{name} and the Forest Friends",
+                pages: [
+                    {
+                        text: "<span class='highlight'>{name}</span> and {animalFriend} walked into the green forest.",
+                        lesson: "Nature is beautiful and full of life.",
+                        prompt: "{name} and {animalFriend} entering a lush green forest with tall trees, toddler book illustration, peaceful forest scene"
+                    },
+                    {
+                        text: "They heard crying. Baby animals couldn't find their way home.",
+                        lesson: "It's important to listen when others need help.",
+                        prompt: "{name} and {animalFriend} finding small crying animals like baby rabbits and squirrels, forest setting, toddler book style"
+                    },
+                    {
+                        text: "'Follow me!' said <span class='highlight'>{name}</span>. 'I know the way!'",
+                        lesson: "Being brave helps us help others.",
+                        prompt: "{name} leading baby animals through the forest with {animalFriend}, determined and caring expression, toddler book illustration"
+                    },
+                    {
+                        text: "One by one, each baby found their family. Hugs everywhere!",
+                        lesson: "Families love each other very much.",
+                        prompt: "Baby animals reuniting with their parents, lots of hugs and joy, {name} and {animalFriend} watching happily, forest scene, toddler book style"
+                    },
+                    {
+                        text: "<span class='highlight'>{name}</span> learned that helping brings everyone together!",
+                        lesson: "Helping others creates a happy community.",
+                        prompt: "All the forest animals having a celebration with {name} and {animalFriend}, forest party scene, toddler book illustration, joyful ending"
+                    }
+                ],
+                mainPrompt: "A brave {age}-year-old {gender} named {name} with {hair} and {eyes} in an enchanted forest with talking animals like rabbits, deer, and owls, accompanied by a {animalFriend}, magical trees with glowing leaves, children's book illustration, warm and mystical, detailed character in forest setting"
             },
             castle: {
-                title: "Knight {name} and the Medieval Quest",
-                text: "In a time of knights and castles, young <span class='highlight'>{name}</span>, a valiant {age}-year-old {gender} with noble {hair} and determined {eyes}, was chosen for a special quest. With {animalFriend} as their loyal companion, {name} proved that courage comes in all sizes.",
-                prompt: "A young {age}-year-old {gender} knight named {name} with {hair} and {eyes} in medieval armor standing before a grand castle, accompanied by a {animalFriend}, medieval fantasy setting, children's book illustration, heroic and inspiring, detailed character in knight costume"
+                title: "Brave Knight {name}",
+                pages: [
+                    {
+                        text: "Knight <span class='highlight'>{name}</span> put on shiny armor. 'Time to help!'",
+                        lesson: "Getting ready helps us do our best.",
+                        prompt: "{name} putting on colorful knight armor with {animalFriend} helping, castle background, toddler book illustration, preparation scene"
+                    },
+                    {
+                        text: "A dragon was sad. 'Everyone runs away from me,' he cried.",
+                        lesson: "Sometimes others feel lonely and different.",
+                        prompt: "{name} and {animalFriend} meeting a gentle, sad dragon, castle courtyard, toddler book style, empathetic scene"
+                    },
+                    {
+                        text: "'I won't run,' said <span class='highlight'>{name}</span>. 'Want to be friends?'",
+                        lesson: "Being brave means being kind, not fighting.",
+                        prompt: "{name} extending a hand in friendship to the dragon, {animalFriend} encouraging, toddler book illustration, friendship moment"
+                    },
+                    {
+                        text: "The dragon smiled! They played games and had so much fun.",
+                        lesson: "Friends can be different from us and that's wonderful.",
+                        prompt: "{name}, {animalFriend}, and the happy dragon playing together in the castle courtyard, toddler book style, joyful play scene"
+                    },
+                    {
+                        text: "<span class='highlight'>{name}</span> learned that real knights make friends, not enemies!",
+                        lesson: "True courage is about kindness and friendship.",
+                        prompt: "{name} and {animalFriend} and the dragon all together as friends, castle celebration scene, toddler book illustration, happy ending"
+                    }
+                ],
+                mainPrompt: "A young {age}-year-old {gender} knight named {name} with {hair} and {eyes} in medieval armor standing before a grand castle, accompanied by a {animalFriend}, medieval fantasy setting, children's book illustration, heroic and inspiring, detailed character in knight costume"
             },
             pirate: {
-                title: "Captain {name}'s Treasure Hunt",
-                text: "Ahoy! Captain <span class='highlight'>{name}</span>, a daring {age}-year-old {gender} with windswept {hair} and adventurous {eyes}, set sail on the seven seas. With first mate {animalFriend} and a treasure map, {name} discovered that the greatest treasure was the friends made along the way.",
-                prompt: "A young {age}-year-old {gender} pirate captain named {name} with {hair} and {eyes} on a pirate ship with treasure chests, accompanied by a {animalFriend} wearing a tiny pirate hat, ocean adventure scene, children's book illustration, adventurous and fun, detailed pirate character"
+                title: "Captain {name}'s Treasure",
+                pages: [
+                    {
+                        text: "Captain <span class='highlight'>{name}</span> and {animalFriend} set sail on their boat.",
+                        lesson: "Adventures are more fun with friends.",
+                        prompt: "{name} wearing a colorful pirate hat on a friendly pirate ship with {animalFriend}, ocean scene, toddler book illustration, adventure beginning"
+                    },
+                    {
+                        text: "They found a treasure map! 'X marks the spot!'",
+                        lesson: "Maps and clues help us find what we're looking for.",
+                        prompt: "{name} and {animalFriend} looking at a colorful treasure map, excited expressions, toddler book style, discovery scene"
+                    },
+                    {
+                        text: "On the island, they met other pirates who looked hungry.",
+                        lesson: "Sometimes people need help even if they look different.",
+                        prompt: "{name} and {animalFriend} meeting friendly but hungry pirates on a tropical island, toddler book illustration, meeting scene"
+                    },
+                    {
+                        text: "<span class='highlight'>{name}</span> shared their treasure food with everyone!",
+                        lesson: "Sharing treasure makes everyone happy.",
+                        prompt: "{name} sharing food from a treasure chest with all the pirates, everyone eating and smiling, island picnic scene, toddler book style"
+                    },
+                    {
+                        text: "<span class='highlight'>{name}</span> learned that sharing treasure is the best treasure of all!",
+                        lesson: "The best treasures are the ones we share.",
+                        prompt: "All the pirates celebrating together with {name} and {animalFriend}, treasure chest of food in the middle, tropical island, toddler book illustration, happy sharing scene"
+                    }
+                ],
+                mainPrompt: "A young {age}-year-old {gender} pirate captain named {name} with {hair} and {eyes} on a pirate ship with treasure chests, accompanied by a {animalFriend} wearing a tiny pirate hat, ocean adventure scene, children's book illustration, adventurous and fun, detailed pirate character"
             },
             dinosaur: {
-                title: "{name}'s Prehistoric Adventure",
-                text: "When <span class='highlight'>{name}</span>, a curious {age}-year-old {gender} with amazing {hair} and wonder-filled {eyes}, discovered a portal to the age of dinosaurs, an incredible adventure began. With {animalFriend} by their side, {name} learned about friendship with the gentle giants of the past.",
-                prompt: "A {age}-year-old {gender} named {name} with {hair} and {eyes} surrounded by friendly dinosaurs in a prehistoric landscape with volcanoes and ancient plants, accompanied by a {animalFriend}, children's book illustration, exciting and educational, detailed character with dinosaurs"
+                title: "{name} Meets the Dinosaurs",
+                pages: [
+                    {
+                        text: "<span class='highlight'>{name}</span> found a magic door. Behind it were... DINOSAURS!",
+                        lesson: "New discoveries can be exciting and surprising.",
+                        prompt: "{name} and {animalFriend} discovering a magical door leading to a dinosaur world, toddler book illustration, wonder and excitement"
+                    },
+                    {
+                        text: "A baby dinosaur was crying. 'I can't reach the tall leaves!'",
+                        lesson: "Sometimes being small makes things hard.",
+                        prompt: "{name} and {animalFriend} meeting a small, sad baby dinosaur looking up at tall trees, prehistoric setting, toddler book style"
+                    },
+                    {
+                        text: "'I have an idea!' said <span class='highlight'>{name}</span>. 'Let's work together!'",
+                        lesson: "Good ideas come when we want to help.",
+                        prompt: "{name} having a bright idea, lightbulb floating above head, {animalFriend} and baby dinosaur listening, toddler book illustration"
+                    },
+                    {
+                        text: "{animalFriend} climbed on <span class='highlight'>{name}</span>, who climbed on the dinosaur!",
+                        lesson: "Teamwork helps us reach higher than we can alone.",
+                        prompt: "{name}, {animalFriend}, and baby dinosaur stacked up reaching for leaves, funny and helpful teamwork scene, toddler book style"
+                    },
+                    {
+                        text: "They all munched leaves together. <span class='highlight'>{name}</span> learned teamwork is prehistoric-ally awesome!",
+                        lesson: "Working together makes everything better.",
+                        prompt: "{name}, {animalFriend}, and baby dinosaur eating leaves together happily, other dinosaurs joining the feast, prehistoric celebration, toddler book illustration"
+                    }
+                ],
+                mainPrompt: "A {age}-year-old {gender} named {name} with {hair} and {eyes} surrounded by friendly dinosaurs in a prehistoric landscape with volcanoes and ancient plants, accompanied by a {animalFriend}, children's book illustration, exciting and educational, detailed character with dinosaurs"
             }
         };
 
@@ -959,52 +1170,109 @@
                 const { jsPDF } = window.jspdf;
                 const pdf = new jsPDF('p', 'mm', 'a4');
                 
-                // Add title
-                pdf.setFontSize(24);
+                // Cover page
+                pdf.setFontSize(28);
                 pdf.setFont(undefined, 'bold');
-                pdf.text(currentStoryData.title, 105, 30, { align: 'center' });
+                pdf.text(currentStoryData.title, 105, 40, { align: 'center' });
                 
-                // Add image
+                pdf.setFontSize(16);
+                pdf.setFont(undefined, 'normal');
+                pdf.text(`A Story for ${currentStoryData.name}`, 105, 60, { align: 'center' });
+                
+                // Add main image to cover
                 const img = new Image();
                 img.crossOrigin = 'anonymous';
                 
                 img.onload = function() {
-                    // Add image to PDF (centered, maintaining aspect ratio)
-                    const imgWidth = 150;
-                    const imgHeight = 150;
-                    const x = (210 - imgWidth) / 2; // Center on A4 width
+                    // Cover image
+                    const imgWidth = 120;
+                    const imgHeight = 120;
+                    const x = (210 - imgWidth) / 2;
                     
-                    pdf.addImage(img, 'JPEG', x, 50, imgWidth, imgHeight);
+                    pdf.addImage(img, 'JPEG', x, 80, imgWidth, imgHeight);
                     
-                    // Add story text
+                    // Add story pages
+                    currentStoryData.pages.forEach((page, index) => {
+                        pdf.addPage();
+                        
+                        // Page number
+                        pdf.setFontSize(12);
+                        pdf.setFont(undefined, 'normal');
+                        pdf.text(`Page ${index + 1}`, 105, 20, { align: 'center' });
+                        
+                        // Story text (large, simple font for toddlers)
+                        pdf.setFontSize(18);
+                        pdf.setFont(undefined, 'bold');
+                        const cleanText = page.text.replace(/<[^>]*>/g, '');
+                        const lines = pdf.splitTextToSize(cleanText, 170);
+                        
+                        let yPosition = 50;
+                        lines.forEach(line => {
+                            pdf.text(line, 105, yPosition, { align: 'center' });
+                            yPosition += 12;
+                        });
+                        
+                        // Lesson box
+                        pdf.setFillColor(255, 248, 220); // Light yellow background
+                        pdf.rect(20, yPosition + 20, 170, 30, 'F');
+                        
+                        pdf.setFontSize(14);
+                        pdf.setFont(undefined, 'italic');
+                        pdf.text('💡 What we learned:', 25, yPosition + 35);
+                        
+                        pdf.setFontSize(12);
+                        pdf.setFont(undefined, 'normal');
+                        const lessonLines = pdf.splitTextToSize(page.lesson, 160);
+                        pdf.text(lessonLines, 25, yPosition + 45);
+                        
+                        // Add decorative elements for toddlers
+                        pdf.setFontSize(20);
+                        pdf.text('⭐', 180, yPosition + 10);
+                        pdf.text('🌟', 25, yPosition + 10);
+                    });
+                    
+                    // Back cover with all lessons summary
+                    pdf.addPage();
+                    pdf.setFontSize(20);
+                    pdf.setFont(undefined, 'bold');
+                    pdf.text('What We Learned Together! 📚', 105, 30, { align: 'center' });
+                    
                     pdf.setFontSize(12);
                     pdf.setFont(undefined, 'normal');
                     
-                    // Clean text (remove HTML tags)
-                    const cleanText = currentStoryData.text.replace(/<[^>]*>/g, '');
-                    const lines = pdf.splitTextToSize(cleanText, 180);
+                    let lessonY = 60;
+                    currentStoryData.pages.forEach((page, index) => {
+                        pdf.text(`${index + 1}. ${page.lesson}`, 20, lessonY);
+                        lessonY += 15;
+                    });
                     
-                    pdf.text(lines, 15, 220);
-                    
-                    // Add footer
+                    // Footer
                     pdf.setFontSize(10);
                     pdf.setFont(undefined, 'italic');
-                    pdf.text('Created with StoryMagic Pro - Personalized AI Stories', 105, 280, { align: 'center' });
+                    pdf.text('Created with love by StoryMagic Pro 💖', 105, 280, { align: 'center' });
                     
                     // Download the PDF
-                    pdf.save(`${currentStoryData.name}_Story_${currentStoryData.theme}.pdf`);
+                    pdf.save(`${currentStoryData.name}_${currentStoryData.theme}_StoryBook.pdf`);
                 };
                 
                 img.onerror = function() {
-                    // Fallback: Create PDF without image
-                    pdf.setFontSize(12);
-                    pdf.text('Story image will be available after purchase.', 15, 60);
+                    // Fallback: Create PDF without image but with all story content
+                    currentStoryData.pages.forEach((page, index) => {
+                        if (index > 0) pdf.addPage();
+                        
+                        pdf.setFontSize(18);
+                        pdf.setFont(undefined, 'bold');
+                        pdf.text(`Page ${index + 1}`, 105, 30, { align: 'center' });
+                        
+                        const cleanText = page.text.replace(/<[^>]*>/g, '');
+                        const lines = pdf.splitTextToSize(cleanText, 170);
+                        pdf.text(lines, 20, 60);
+                        
+                        pdf.setFontSize(12);
+                        pdf.text(`Lesson: ${page.lesson}`, 20, 120);
+                    });
                     
-                    const cleanText = currentStoryData.text.replace(/<[^>]*>/g, '');
-                    const lines = pdf.splitTextToSize(cleanText, 180);
-                    pdf.text(lines, 15, 80);
-                    
-                    pdf.save(`${currentStoryData.name}_Story_${currentStoryData.theme}.pdf`);
+                    pdf.save(`${currentStoryData.name}_${currentStoryData.theme}_StoryBook.pdf`);
                 };
                 
                 img.src = currentStoryData.imageUrl;
