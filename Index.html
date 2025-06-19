@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StoryMagic - AI Children's Books</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(45deg, #ff6b6b, #ffa726);
+            color: white;
+            text-align: center;
+            padding: 30px;
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .form-section {
+            padding: 30px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #333;
+            font-size: 1.1em;
+        }
+        
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-size: 1em;
+            font-family: inherit;
+        }
+        
+        .generate-btn {
+            background: linear-gradient(45deg, #4ecdc4, #44a08d);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-size: 1.2em;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            margin: 20px 0;
+        }
+        
+        .generate-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+        
+        .result-section {
+            padding: 30px;
+            background: #f8f9fa;
+            text-align: center;
+        }
+        
+        .generated-image {
+            max-width: 100%;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            margin: 20px 0;
+        }
+        
+        .loading {
+            display: none;
+            padding: 20px;
+            text-align: center;
+            color: #666;
+        }
+        
+        .error {
+            background: #ffebee;
+            color: #c62828;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            display: none;
+        }
+        
+        .success {
+            background: #e8f5e8;
+            color: #2e7d32;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎨 StoryMagic</h1>
+            <p>Create AI-powered children's books!</p>
+        </div>
+        
+        <div class="form-section">
+            <div class="form-group">
+                <label for="childName">Child's Name</label>
+                <input type="text" id="childName" placeholder="Enter child's name" value="Emma">
+            </div>
+            
+            <div class="form-group">
+                <label for="storyTheme">Story Theme</label>
+                <select id="storyTheme">
+                    <option value="garden">🌻 Magical Garden</option>
+                    <option value="space">🚀 Space Adventure</option>
+                    <option value="princess">👑 Royal Adventure</option>
+                    <option value="ocean">🌊 Ocean Explorer</option>
+                </select>
+            </div>
+            
+            <button class="generate-btn" onclick="generateImage()" id="generateBtn">
+                🎨 Generate AI Image!
+            </button>
+            
+            <div class="loading" id="loading">
+                <p>🎨 Creating your AI image...</p>
+                <p>This may take 10-30 seconds</p>
+            </div>
+            
+            <div class="error" id="error"></div>
+            <div class="success" id="success"></div>
+        </div>
+        
+        <div class="result-section" id="resultSection" style="display: none;">
+            <h3>Your AI Generated Image!</h3>
+            <img id="generatedImage" class="generated-image" alt="Generated image">
+        </div>
+    </div>
+
+    <script>
+        async function generateImage() {
+            const childName = document.getElementById('childName').value || 'Emma';
+            const theme = document.getElementById('storyTheme').value;
+            
+            // Create prompt based on theme
+            const prompts = {
+                garden: `A cute cartoon child named ${childName} in a magical garden with colorful flowers, children's book illustration style`,
+                space: `A brave child ${childName} as an astronaut in space with stars and planets, children's book illustration style`,
+                princess: `A royal child ${childName} as a princess/prince in a beautiful castle, children's book illustration style`,
+                ocean: `An adventurous child ${childName} exploring underwater with sea creatures, children's book illustration style`
+            };
+            
+            const prompt = prompts[theme];
+            
+            // Show loading state
+            document.getElementById('generateBtn').disabled = true;
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('error').style.display = 'none';
+            document.getElementById('success').style.display = 'none';
+            document.getElementById('resultSection').style.display = 'none';
+            
+            try {
+                // Call your Vercel API
+                const response = await fetch('/api/generate-image', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ prompt: prompt })
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`Error: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                
+                // Display the generated image
+                const imageUrl = data.data[0].url;
+                document.getElementById('generatedImage').src = imageUrl;
+                document.getElementById('resultSection').style.display = 'block';
+                
+                // Show success message
+                document.getElementById('success').textContent = '🎉 AI image generated successfully!';
+                document.getElementById('success').style.display = 'block';
+                
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('error').textContent = `Failed to generate image: ${error.message}`;
+                document.getElementById('error').style.display = 'block';
+            } finally {
+                // Reset loading state
+                document.getElementById('generateBtn').disabled = false;
+                document.getElementById('loading').style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>
