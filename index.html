@@ -484,6 +484,17 @@
                     <h4>👶 Child Information</h4>
                     
                     <div class="form-group">
+                        <label for="childPhoto">Upload Child's Photo</label>
+                        <input type="file" id="childPhoto" accept="image/*" onchange="handlePhotoUpload(event)">
+                        <small style="color: #666; font-size: 0.8em;">Upload a clear photo of your child's face for the best cartoon character!</small>
+                    </div>
+
+                    <div class="photo-preview" id="photoPreview" style="display: none;">
+                        <img id="uploadedPhoto" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 3px solid #4ecdc4; margin-top: 10px;">
+                        <p style="font-size: 0.8em; color: #28a745; margin-top: 5px;">✓ Photo uploaded! This will be cartoonized for your story.</p>
+                    </div>
+                    
+                    <div class="form-group">
                         <label for="childName">Child's Full Name</label>
                         <input type="text" id="childName" placeholder="Enter child's full name" value="Dom">
                     </div>
@@ -617,8 +628,8 @@
                 </div>
 
                 <div class="character-consistency">
-                    <h5>🎯 Ready to Generate!</h5>
-                    <p>Click the button below to create Dom's amazing personalized story book!</p>
+                    <h5>🎯 Photo-to-Cartoon Magic!</h5>
+                    <p>Upload your child's photo and we'll transform it into a cartoon character that appears in every scene! Or use detailed customization below.</p>
                 </div>
 
                 <button class="generate-btn" onclick="generatePremiumStory()" id="generateBtn">
@@ -636,14 +647,14 @@
                 </div>
 
                 <div class="premium-features">
-                    <h4>🚀 System Features</h4>
+                    <h4>🚀 Revolutionary Features</h4>
                     <ul>
+                        <li>Photo-to-cartoon transformation</li>
                         <li>DALL-E AI image generation</li>
                         <li>Professional book layout</li>
                         <li>Character consistency</li>
                         <li>6 story pages with morals</li>
                         <li>Print-ready PDF output</li>
-                        <li>Custom character creation</li>
                     </ul>
                 </div>
             </div>
@@ -670,7 +681,7 @@
                     <div class="preview-placeholder" id="previewPlaceholder">🌻</div>
                     <h3>Premium Story Preview</h3>
                     <p style="font-size: 1.2em; line-height: 1.6; margin-bottom: 20px;">Create a professional-quality personalized book!</p>
-                    <p style="font-size: 1em; opacity: 0.8;">Ready to generate Dom's amazing story with DALL-E images and custom illustrations.</p>
+                    <p style="font-size: 1em; opacity: 0.8;">Upload your child's photo for amazing cartoon transformation, or use our detailed character creator!</p>
                 </div>
             </div>
         </div>
@@ -680,6 +691,30 @@
     <script>
         let currentStoryData = {};
         let currentPage = 0;
+        let uploadedPhotoData = null;
+
+        // Handle photo upload
+        function handlePhotoUpload(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    uploadedPhotoData = e.target.result;
+                    
+                    // Show preview
+                    const preview = document.getElementById('photoPreview');
+                    const img = document.getElementById('uploadedPhoto');
+                    img.src = uploadedPhotoData;
+                    preview.style.display = 'block';
+                    
+                    // Update character consistency message
+                    const consistency = document.querySelector('.character-consistency p');
+                    consistency.textContent = 'Photo uploaded! Your child will be cartoonized and appear in every scene of the story!';
+                    consistency.style.color = '#28a745';
+                };
+                reader.readAsDataURL(file);
+            }
+        }
 
         // PREMIUM STORY TEMPLATES
         const premiumStories = {
@@ -936,7 +971,47 @@
                     showSuccess(`🎬 Generating Page ${i + 1}...`);
                     
                     try {
-                        // Try DALL-E first
+                        // Try PHOTO-TO-CARTOON first if photo uploaded
+                        if (uploadedPhotoData) {
+                            showSuccess(`📸 Cartoonizing ${name}'s photo for Page ${i + 1}...`);
+                            
+                            const sceneDescriptions = {
+                                character_introduction: `happy, welcoming scene showing personality`,
+                                problem_discovery: `discovering a problem, emotional expression visible, dramatic lighting`,
+                                taking_action: `taking brave action, determined expression, heroic pose`,
+                                collaboration: `working with others, teamwork scene, warm lighting`,
+                                transformation: `witnessing positive change, magical atmosphere`,
+                                lesson_learned: `having learned lesson, wise expression, celebratory scene`
+                            };
+                            
+                            const cartoonPrompt = `Transform this child's photo into a cartoon character in a ${sceneDescriptions[personalizedStory.pages[i].scene]}, children's book illustration style, maintain the child's facial features, cartoon/anime style, vibrant colors, professional illustration`;
+                            
+                            const response = await fetch('/api/cartoonize-photo', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({ 
+                                    photo: uploadedPhotoData,
+                                    prompt: cartoonPrompt,
+                                    scene: personalizedStory.pages[i].scene,
+                                    size: "1024x1024",
+                                    style: "cartoon"
+                                })
+                            });
+
+                            if (response.ok) {
+                                const data = await response.json();
+                                const imageUrl = data.url || data.data?.[0]?.url || data.image_url;
+                                if (imageUrl) {
+                                    pageImages.push(imageUrl);
+                                    showSuccess(`✅ Page ${i + 1} created with cartoonized photo!`);
+                                    await new Promise(resolve => setTimeout(resolve, 800));
+                                    continue; // Skip to next iteration
+                                }
+                            }
+                            // If photo cartoonization fails, fall through to DALL-E
+                        }
+                        
+                        // Try DALL-E if no photo or photo processing failed
                         const scenePrompts = {
                             character_introduction: `${characterDescription} in a happy, welcoming scene, children's book illustration`,
                             problem_discovery: `${characterDescription} discovering a problem, emotional scene, children's book illustration`,
@@ -977,7 +1052,14 @@
                     } catch (error) {
                         console.log(`Page ${i + 1} using fallback:`, error.message);
                         showSuccess(`🎨 Page ${i + 1}: Creating custom illustration...`);
-                        pageImages.push(createCustomCharacter(name, age, gender, hairStyle, hairColor, eyeColor, skinTone, storyTheme, i));
+                        
+                        // Use photo-based fallback if photo available
+                        if (uploadedPhotoData) {
+                            pageImages.push(createPhotoBasedCharacter(uploadedPhotoData, name, storyTheme, i));
+                        } else {
+                            pageImages.push(createCustomCharacter(name, age, gender, hairStyle, hairColor, eyeColor, skinTone, storyTheme, i));
+                        }
+                        
                         await new Promise(resolve => setTimeout(resolve, 400));
                     }
                 }
@@ -1050,7 +1132,101 @@
                 .replace(/{age}/g, document.getElementById('childAge').value);
         }
 
-        function createCustomCharacter(name, age, gender, hairStyle, hairColor, eyeColor, skinTone, theme, pageIndex) {
+        function createPhotoBasedCharacter(photoData, name, theme, pageIndex) {
+            const canvas = document.createElement('canvas');
+            canvas.width = 1024;
+            canvas.height = 1024;
+            const ctx = canvas.getContext('2d');
+
+            // Scene backgrounds
+            const sceneColors = [
+                ['#FFE4B5', '#FFB6C1'], // Introduction
+                ['#B0C4DE', '#D8BFD8'], // Problem
+                ['#FFD700', '#FFA500'], // Action
+                ['#98FB98', '#90EE90'], // Collaboration
+                ['#DDA0DD', '#9370DB'], // Transformation
+                ['#FF69B4', '#FFB6C1']  // Lesson
+            ];
+
+            const colors = sceneColors[pageIndex] || sceneColors[0];
+            
+            // Background
+            const gradient = ctx.createLinearGradient(0, 0, 1024, 1024);
+            gradient.addColorStop(0, colors[0]);
+            gradient.addColorStop(1, colors[1]);
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, 1024, 1024);
+
+            // Load and draw the uploaded photo
+            const img = new Image();
+            img.onload = function() {
+                // Draw circular photo frame
+                const centerX = 512;
+                const centerY = 300;
+                const radius = 150;
+                
+                ctx.save();
+                ctx.beginPath();
+                ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
+                ctx.clip();
+                
+                // Draw the photo, scaled to fit the circle
+                const size = radius * 2;
+                ctx.drawImage(img, centerX - radius, centerY - radius, size, size);
+                ctx.restore();
+                
+                // Add cartoon border
+                ctx.strokeStyle = '#4ecdc4';
+                ctx.lineWidth = 8;
+                ctx.beginPath();
+                ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
+                ctx.stroke();
+                
+                // Add cartoon body
+                const outfitColors = {
+                    kindness: '#FF69B4',
+                    courage: '#9370DB', 
+                    sharing: '#FFD700',
+                    honesty: '#87CEEB',
+                    friendship: '#98FB98',
+                    perseverance: '#FF7F50'
+                };
+
+                ctx.fillStyle = outfitColors[theme] || '#FF69B4';
+                ctx.beginPath();
+                ctx.arc(centerX, centerY + 200, 120, 0, Math.PI);
+                ctx.fill();
+                
+                // Add cartoon arms
+                ctx.fillStyle = '#F4C2A1';
+                ctx.beginPath();
+                ctx.arc(centerX - 100, centerY + 100, 30, 0, 2 * Math.PI);
+                ctx.fill();
+                ctx.beginPath();
+                ctx.arc(centerX + 100, centerY + 100, 30, 0, 2 * Math.PI);
+                ctx.fill();
+                
+                // Add scene elements
+                const sceneEmojis = ['😊', '😟', '💪', '🤝', '✨', '🎉'];
+                ctx.font = '60px serif';
+                ctx.fillText(sceneEmojis[pageIndex], centerX + 200, centerY - 100);
+                ctx.fillText(sceneEmojis[pageIndex], centerX - 250, centerY + 50);
+                
+                // Add name
+                ctx.fillStyle = '#FFFFFF';
+                ctx.strokeStyle = '#000000';
+                ctx.lineWidth = 4;
+                ctx.font = 'bold 40px Georgia';
+                ctx.textAlign = 'center';
+                ctx.strokeText(name, centerX, 900);
+                ctx.fillText(name, centerX, 900);
+            };
+            
+            img.src = photoData;
+            
+            // Return immediately, the onload will update it
+            return canvas.toDataURL('image/png');
+        }
             const canvas = document.createElement('canvas');
             canvas.width = 1024;
             canvas.height = 1024;
