@@ -654,11 +654,43 @@
                     }))
                 };
 
-                // Generate images for all scenes
+                // STEP 1: Generate the main character reference image first
+                showSuccess(`Creating ${name}'s character design... Please wait! ✨`);
+                
+                const characterReferencePrompt = `A ${age}-year-old ${gender} with ${hairColor} hair and ${eyeColor} eyes, standing in a neutral pose, smiling, full body, children's book illustration style, consistent character design, character sheet, simple background, high detail character reference`;
+                
+                let characterReferenceImage = null;
+                try {
+                    const charResponse = await fetch('/api/generate-image', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ 
+                            prompt: characterReferencePrompt,
+                            size: "1024x1024",
+                            quality: "hd",
+                            style: "vivid"
+                        })
+                    });
+
+                    if (charResponse.ok) {
+                        const charData = await charResponse.json();
+                        characterReferenceImage = charData.url || charData.data?.[0]?.url || charData.image_url;
+                    }
+                } catch (error) {
+                    console.log('Character reference failed, will use consistent fallback');
+                }
+
+                // STEP 2: Generate story scenes with character consistency
                 const sceneImages = [];
                 for (let i = 0; i < personalizedStory.scenes.length; i++) {
                     try {
-                        showSuccess(`Creating scene ${i + 1} of 5... Please wait for cinematic magic! ✨`);
+                        showSuccess(`Creating scene ${i + 1} of 5 with consistent ${name}... Please wait! ✨`);
+                        
+                        // Enhanced prompt for character consistency
+                        const consistentPrompt = personalizedStory.scenes[i].prompt + 
+                            `, IMPORTANT: The ${gender} character must have the EXACT same appearance as described: ${age} years old, ${hairColor} hair, ${eyeColor} eyes, same facial features, same body proportions, consistent character design throughout, children's book illustration style`;
                         
                         const response = await fetch('/api/generate-image', {
                             method: 'POST',
@@ -666,7 +698,7 @@
                                 'Content-Type': 'application/json'
                             },
                             body: JSON.stringify({ 
-                                prompt: personalizedStory.scenes[i].prompt,
+                                prompt: consistentPrompt,
                                 size: "1024x1024",
                                 quality: "hd",
                                 style: "vivid"
@@ -681,16 +713,16 @@
                             throw new Error(`Scene ${i + 1} generation failed`);
                         }
                         
-                        // Add small delay between requests
-                        await new Promise(resolve => setTimeout(resolve, 500));
+                        // Add delay between requests
+                        await new Promise(resolve => setTimeout(resolve, 800));
                         
                     } catch (error) {
-                        console.log(`Scene ${i + 1} failed, using fallback`);
-                        sceneImages.push(createCinematicFallback(name, age, gender, hairColor, eyeColor, theme, i));
+                        console.log(`Scene ${i + 1} failed, using consistent fallback`);
+                        // Use consistent fallback that maintains character appearance
+                        sceneImages.push(createConsistentCharacterFallback(name, age, gender, hairColor, eyeColor, theme, i));
                     }
                 }
 
-                // Store complete story data
                 currentStoryData = {
                     name,
                     age,
@@ -700,6 +732,7 @@
                     theme,
                     title: personalizedStory.title,
                     moral: personalizedStory.moral,
+                    characterReference: characterReferenceImage,
                     scenes: personalizedStory.scenes.map((scene, index) => ({
                         text: scene.text,
                         imageUrl: sceneImages[index]
@@ -733,43 +766,63 @@
                 .replace(/{he_she}/g, pronouns.he_she);
         }
 
-        function createCinematicFallback(name, age, gender, hairColor, eyeColor, theme, sceneIndex) {
+        function createConsistentCharacterFallback(name, age, gender, hairColor, eyeColor, theme, sceneIndex) {
             const canvas = document.createElement('canvas');
             canvas.width = 1024;
             canvas.height = 1024;
             const ctx = canvas.getContext('2d');
 
-            // Cinematic backgrounds based on scene
-            const sceneColors = [
-                ['#87CEEB', '#FFB6C1'], // Scene 1 - Discovery
-                ['#FFD700', '#FFA500'], // Scene 2 - Decision  
-                ['#98FB98', '#90EE90'], // Scene 3 - Action
-                ['#DDA0DD', '#9370DB'], // Scene 4 - Transformation
-                ['#FF69B4', '#FFB6C1']  // Scene 5 - Resolution
-            ];
+            // Consistent character dimensions and positioning
+            const characterSpecs = {
+                centerX: 512,
+                centerY: 450,
+                headRadius: 85,
+                bodyWidth: 120,
+                bodyHeight: 160,
+                scale: 1.6
+            };
 
-            const colors = sceneColors[sceneIndex] || sceneColors[0];
+            // Scene-specific backgrounds (different environments, same character)
+            const sceneBackgrounds = {
+                0: { colors: ['#87CEEB', '#FFB6C1'], setting: 'discovery' },     // Discovery scene
+                1: { colors: ['#FFD700', '#FFA500'], setting: 'decision' },      // Decision moment
+                2: { colors: ['#98FB98', '#90EE90'], setting: 'action' },        // Taking action
+                3: { colors: ['#DDA0DD', '#9370DB'], setting: 'transformation' }, // Magic moment
+                4: { colors: ['#FF69B4', '#FFB6C1'], setting: 'celebration' }    // Happy ending
+            };
+
+            const scene = sceneBackgrounds[sceneIndex] || sceneBackgrounds[0];
             
-            // Cinematic gradient background
+            // Create environment background
             const gradient = ctx.createLinearGradient(0, 0, 1024, 1024);
-            gradient.addColorStop(0, colors[0]);
-            gradient.addColorStop(1, colors[1]);
+            gradient.addColorStop(0, scene.colors[0]);
+            gradient.addColorStop(1, scene.colors[1]);
             ctx.fillStyle = gradient;
             ctx.fillRect(0, 0, 1024, 1024);
 
-            // Draw cinematic character
-            const centerX = 512;
-            const centerY = 400;
-            const scale = 1.5;
+            // CONSISTENT CHARACTER DRAWING
+            const { centerX, centerY, headRadius, scale } = characterSpecs;
 
-            // Character illustration (more detailed for cinematic feel)
+            // Always same head shape and skin tone
             ctx.fillStyle = '#F4C2A1';
             ctx.beginPath();
-            ctx.arc(centerX, centerY - 100 * scale, 80 * scale, 0, 2 * Math.PI);
+            ctx.arc(centerX, centerY - 120 * scale, headRadius * scale, 0, 2 * Math.PI);
             ctx.fill();
 
-            // Hair with more detail
-            const hairColors = {
+            // Add consistent face shading
+            const faceGradient = ctx.createRadialGradient(
+                centerX - 30 * scale, centerY - 150 * scale, 0,
+                centerX, centerY - 120 * scale, headRadius * scale
+            );
+            faceGradient.addColorStop(0, '#F8D7A1');
+            faceGradient.addColorStop(1, '#E8B888');
+            ctx.fillStyle = faceGradient;
+            ctx.beginPath();
+            ctx.arc(centerX, centerY - 120 * scale, headRadius * scale, 0, 2 * Math.PI);
+            ctx.fill();
+
+            // EXACT same hair every time
+            const hairColorMap = {
                 'shoulder-length black': '#1C1C1C',
                 'curly brown': '#8B4513',
                 'straight blonde': '#FFD700',
@@ -778,13 +831,43 @@
                 'long black': '#1C1C1C'
             };
             
-            ctx.fillStyle = hairColors[hairColor] || '#1C1C1C';
-            ctx.beginPath();
-            ctx.arc(centerX, centerY - 130 * scale, 90 * scale, 0, Math.PI);
-            ctx.fill();
+            ctx.fillStyle = hairColorMap[hairColor] || '#1C1C1C';
+            
+            // Consistent hair shape based on style
+            if (hairColor.includes('curly')) {
+                // Curly hair - multiple small circles
+                for (let i = 0; i < 8; i++) {
+                    const angle = (i * Math.PI) / 4;
+                    const x = centerX + Math.cos(angle) * 70 * scale;
+                    const y = centerY - 150 * scale + Math.sin(angle) * 40 * scale;
+                    ctx.beginPath();
+                    ctx.arc(x, y, 25 * scale, 0, 2 * Math.PI);
+                    ctx.fill();
+                }
+            } else if (hairColor.includes('long')) {
+                // Long hair
+                ctx.beginPath();
+                ctx.arc(centerX, centerY - 150 * scale, 100 * scale, 0, Math.PI);
+                ctx.fill();
+                // Side hair extending down
+                ctx.fillRect(centerX - 100 * scale, centerY - 50 * scale, 80 * scale, 100 * scale);
+                ctx.fillRect(centerX + 20 * scale, centerY - 50 * scale, 80 * scale, 100 * scale);
+            } else {
+                // Standard shoulder-length hair
+                ctx.beginPath();
+                ctx.arc(centerX, centerY - 150 * scale, 95 * scale, 0, Math.PI);
+                ctx.fill();
+                // Side sections for shoulder length
+                ctx.beginPath();
+                ctx.arc(centerX - 70 * scale, centerY - 80 * scale, 35 * scale, 0, 2 * Math.PI);
+                ctx.fill();
+                ctx.beginPath();
+                ctx.arc(centerX + 70 * scale, centerY - 80 * scale, 35 * scale, 0, 2 * Math.PI);
+                ctx.fill();
+            }
 
-            // Expressive eyes
-            const eyeColors = {
+            // EXACT same eyes every time
+            const eyeColorMap = {
                 'warm brown': '#8B4513',
                 'bright blue': '#4169E1',
                 'emerald green': '#228B22',
@@ -792,27 +875,150 @@
                 'dark brown': '#654321'
             };
             
-            ctx.fillStyle = eyeColors[eyeColor];
+            // Eye whites
+            ctx.fillStyle = '#FFFFFF';
             ctx.beginPath();
-            ctx.arc(centerX - 30 * scale, centerY - 120 * scale, 12 * scale, 0, 2 * Math.PI);
+            ctx.arc(centerX - 30 * scale, centerY - 130 * scale, 18 * scale, 0, 2 * Math.PI);
             ctx.fill();
             ctx.beginPath();
-            ctx.arc(centerX + 30 * scale, centerY - 120 * scale, 12 * scale, 0, 2 * Math.PI);
+            ctx.arc(centerX + 30 * scale, centerY - 130 * scale, 18 * scale, 0, 2 * Math.PI);
+            ctx.fill();
+            
+            // Colored iris - always same size and position
+            ctx.fillStyle = eyeColorMap[eyeColor] || '#8B4513';
+            ctx.beginPath();
+            ctx.arc(centerX - 30 * scale, centerY - 130 * scale, 12 * scale, 0, 2 * Math.PI);
+            ctx.fill();
+            ctx.beginPath();
+            ctx.arc(centerX + 30 * scale, centerY - 130 * scale, 12 * scale, 0, 2 * Math.PI);
             ctx.fill();
 
-            // Scene-specific expressions and poses
-            const emotions = ['😟', '😊', '💪', '✨', '🎉'];
-            ctx.font = `${60 * scale}px serif`;
-            ctx.textAlign = 'center';
-            ctx.fillText(emotions[sceneIndex], centerX + 150, centerY - 50);
+            // Pupils - always same
+            ctx.fillStyle = '#000000';
+            ctx.beginPath();
+            ctx.arc(centerX - 30 * scale, centerY - 130 * scale, 6 * scale, 0, 2 * Math.PI);
+            ctx.fill();
+            ctx.beginPath();
+            ctx.arc(centerX + 30 * scale, centerY - 130 * scale, 6 * scale, 0, 2 * Math.PI);
+            ctx.fill();
 
-            // Character name with cinematic styling
+            // Eye highlights - always same sparkle
+            ctx.fillStyle = '#FFFFFF';
+            ctx.beginPath();
+            ctx.arc(centerX - 26 * scale, centerY - 134 * scale, 3 * scale, 0, 2 * Math.PI);
+            ctx.fill();
+            ctx.beginPath();
+            ctx.arc(centerX + 34 * scale, centerY - 134 * scale, 3 * scale, 0, 2 * Math.PI);
+            ctx.fill();
+
+            // Consistent eyelashes
+            ctx.strokeStyle = '#000000';
+            ctx.lineWidth = 2 * scale;
+            for (let i = 0; i < 3; i++) {
+                const offsetX = (i - 1) * 10 * scale;
+                // Left eye lashes
+                ctx.beginPath();
+                ctx.moveTo(centerX - 30 * scale + offsetX, centerY - 145 * scale);
+                ctx.lineTo(centerX - 30 * scale + offsetX, centerY - 152 * scale);
+                ctx.stroke();
+                // Right eye lashes
+                ctx.beginPath();
+                ctx.moveTo(centerX + 30 * scale + offsetX, centerY - 145 * scale);
+                ctx.lineTo(centerX + 30 * scale + offsetX, centerY - 152 * scale);
+                ctx.stroke();
+            }
+
+            // Same rosy cheeks every time
+            ctx.fillStyle = '#FFB6C1';
+            ctx.globalAlpha = 0.6;
+            ctx.beginPath();
+            ctx.arc(centerX - 55 * scale, centerY - 110 * scale, 20 * scale, 0, 2 * Math.PI);
+            ctx.fill();
+            ctx.beginPath();
+            ctx.arc(centerX + 55 * scale, centerY - 110 * scale, 20 * scale, 0, 2 * Math.PI);
+            ctx.fill();
+            ctx.globalAlpha = 1.0;
+
+            // Scene-specific expressions but same mouth shape
+            const expressions = [
+                { mouth: 'concerned', eyebrows: 'worried' },    // Discovery
+                { mouth: 'determined', eyebrows: 'focused' },   // Decision
+                { mouth: 'brave', eyebrows: 'confident' },      // Action
+                { mouth: 'amazed', eyebrows: 'surprised' },     // Transformation
+                { mouth: 'happy', eyebrows: 'joyful' }          // Celebration
+            ];
+
+            const expr = expressions[sceneIndex] || expressions[4];
+
+            // Draw mouth based on expression
+            ctx.strokeStyle = '#D2691E';
+            ctx.lineWidth = 4 * scale;
+            ctx.beginPath();
+            
+            if (expr.mouth === 'happy') {
+                ctx.arc(centerX, centerY - 95 * scale, 25 * scale, 0, Math.PI);
+            } else if (expr.mouth === 'concerned') {
+                ctx.arc(centerX, centerY - 85 * scale, 15 * scale, Math.PI, 2 * Math.PI);
+            } else if (expr.mouth === 'determined') {
+                ctx.moveTo(centerX - 20 * scale, centerY - 95 * scale);
+                ctx.lineTo(centerX + 20 * scale, centerY - 95 * scale);
+            } else if (expr.mouth === 'brave') {
+                ctx.arc(centerX, centerY - 95 * scale, 20 * scale, 0, Math.PI);
+            } else {
+                ctx.arc(centerX, centerY - 90 * scale, 30 * scale, 0, Math.PI);
+            }
+            ctx.stroke();
+
+            // Same body proportions and position every time
+            const bodyColors = {
+                kindness: '#FF69B4',
+                courage: '#9370DB',
+                sharing: '#FFD700',
+                honesty: '#87CEEB',
+                friendship: '#98FB98'
+            };
+
+            ctx.fillStyle = bodyColors[theme] || '#FF69B4';
+            // Consistent dress/shirt shape
+            ctx.beginPath();
+            ctx.arc(centerX, centerY + 40 * scale, 110 * scale, 0, Math.PI);
+            ctx.fill();
+
+            // Same arm positions (just slightly different poses per scene)
+            ctx.fillStyle = '#F4C2A1';
+            const armPositions = [
+                { left: [-80, 10], right: [80, 10] },      // Arms at sides
+                { left: [-90, 0], right: [70, -10] },      // One arm reaching
+                { left: [-70, -20], right: [70, -20] },    // Both arms up
+                { left: [-85, -15], right: [85, -15] },    // Arms spread wide
+                { left: [-75, -30], right: [75, -30] }     // Arms raised in joy
+            ];
+
+            const armPos = armPositions[sceneIndex] || armPositions[0];
+            
+            // Left arm
+            ctx.beginPath();
+            ctx.arc(centerX + armPos.left[0] * scale, centerY + armPos.left[1] * scale, 28 * scale, 0, 2 * Math.PI);
+            ctx.fill();
+            
+            // Right arm
+            ctx.beginPath();
+            ctx.arc(centerX + armPos.right[0] * scale, centerY + armPos.right[1] * scale, 28 * scale, 0, 2 * Math.PI);
+            ctx.fill();
+
+            // Consistent name styling
             ctx.fillStyle = '#FFFFFF';
             ctx.strokeStyle = '#000000';
-            ctx.lineWidth = 4;
-            ctx.font = `bold ${48 * scale}px Comic Sans MS`;
-            ctx.strokeText(name, centerX, 950);
-            ctx.fillText(name, centerX, 950);
+            ctx.lineWidth = 4 * scale;
+            ctx.font = `bold ${45 * scale}px Comic Sans MS`;
+            ctx.textAlign = 'center';
+            ctx.strokeText(name, centerX, 980);
+            ctx.fillText(name, centerX, 980);
+
+            // Add scene number for reference
+            ctx.fillStyle = 'rgba(255,255,255,0.8)';
+            ctx.font = `${20 * scale}px Arial`;
+            ctx.fillText(`Scene ${sceneIndex + 1}`, 80, 80);
 
             return canvas.toDataURL('image/png');
         }
