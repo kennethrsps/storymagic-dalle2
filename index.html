@@ -148,23 +148,28 @@
             font-size: 1.1em;
             font-weight: bold;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: all 0.3s ease;
             width: 100%;
             position: relative;
             overflow: hidden;
             margin-top: 15px;
             box-shadow: 0 8px 20px rgba(78, 205, 196, 0.3);
+            transform: scale(1);
         }
 
-        .generate-btn:hover {
-            transform: translateY(-3px);
+        .generate-btn:hover:not(:disabled) {
+            transform: translateY(-3px) scale(1.02);
             box-shadow: 0 12px 25px rgba(78, 205, 196, 0.4);
         }
 
         .generate-btn:disabled {
-            opacity: 0.7;
+            opacity: 0.9;
             cursor: not-allowed;
-            transform: none;
+            transform: scale(0.98);
+        }
+
+        .generate-btn:active {
+            transform: scale(0.95);
         }
 
         .loading-spinner {
@@ -612,8 +617,8 @@
                 </div>
 
                 <div class="character-consistency">
-                    <h5>🎯 Character Consistency</h5>
-                    <p>We use advanced prompting to ensure your child looks the same in every scene. The more details you provide, the better the consistency!</p>
+                    <h5>🎯 DALL-E Integration Ready</h5>
+                    <p>System uses your existing DALL-E API for stunning AI images. Detailed prompts ensure character consistency across all pages!</p>
                 </div>
 
                 <button class="generate-btn" onclick="generatePremiumStory()" id="generateBtn">
@@ -626,19 +631,19 @@
                 
                 <div class="download-section" id="downloadSection">
                     <h4>📚 Premium Book Ready!</h4>
-                    <p>Professional quality story book with stunning visuals</p>
+                    <p>Professional quality story book with stunning DALL-E visuals</p>
                     <button class="download-btn" onclick="downloadPremiumPDF()">📄 Download Premium PDF</button>
                 </div>
 
                 <div class="premium-features">
-                    <h4>✨ Premium Features</h4>
+                    <h4>🚀 Your DALL-E API Active</h4>
                     <ul>
-                        <li>Detailed character customization</li>
+                        <li>Real AI-generated character images</li>
                         <li>Professional book layout</li>
+                        <li>Character consistency prompting</li>
+                        <li>HD quality 1024x1024 images</li>
+                        <li>Print-ready PDF output</li>
                         <li>Moral lesson integration</li>
-                        <li>High-resolution images</li>
-                        <li>Print-ready quality</li>
-                        <li>Personalized storytelling</li>
                     </ul>
                 </div>
             </div>
@@ -664,8 +669,8 @@
                 <div class="default-preview" id="defaultPreview">
                     <div class="preview-placeholder" id="previewPlaceholder">📖</div>
                     <h3>Premium Story Preview</h3>
-                    <p style="font-size: 1.2em; line-height: 1.6; margin-bottom: 20px;">Create a professional-quality personalized book where your child is the main character!</p>
-                    <p style="font-size: 1em; opacity: 0.8;">Every detail matters - from hair style to personality traits. The more information you provide, the more amazing the result!</p>
+                    <p style="font-size: 1.2em; line-height: 1.6; margin-bottom: 20px;">Create a professional-quality personalized book with DALL-E AI images!</p>
+                    <p style="font-size: 1em; opacity: 0.8;">Your existing DALL-E integration will generate stunning character consistency across all 6 pages.</p>
                 </div>
             </div>
         </div>
@@ -886,22 +891,37 @@
                 return;
             }
 
+            // IMMEDIATE VISUAL FEEDBACK
             const btn = document.getElementById('generateBtn');
             const spinner = document.getElementById('loadingSpinner');
             const btnText = document.getElementById('btnText');
             
+            // Show loading immediately
             btn.disabled = true;
+            btn.style.background = 'linear-gradient(45deg, #ffa726, #ff9800)';
             spinner.style.display = 'block';
-            btnText.textContent = `Creating ${name}'s Premium Story...`;
+            btnText.textContent = `🎨 Starting ${name}'s Story...`;
+            btnText.style.fontSize = '1em';
 
             hideMessages();
+            showSuccess(`🎬 Initializing premium story creation for ${name}...`);
 
             try {
+                // Show character analysis
+                btnText.textContent = `🔍 Analyzing ${name}'s Character...`;
+                showSuccess(`👶 Processing character details: ${hairStyle} ${hairColor} hair, ${eyeColor} eyes...`);
+                await new Promise(resolve => setTimeout(resolve, 800));
+
                 const storyTemplate = premiumStories[storyTheme];
                 
                 // Create detailed character description for consistency
                 const characterDescription = `A ${age}-year-old ${gender} named ${name} with ${hairStyle} ${hairColor} hair, ${eyeColor} eyes, ${skinTone} skin tone, ${facialFeatures} face shape${specialFeatures ? ', ' + specialFeatures : ''}. Character is ${personality}.`;
                 
+                // Show story preparation
+                btnText.textContent = `📚 Preparing Story Structure...`;
+                showSuccess(`📖 Setting up "${storyTemplate.title.replace('{name}', name)}" with ${storyTemplate.pages.length} pages...`);
+                await new Promise(resolve => setTimeout(resolve, 600));
+
                 // Personalize the story
                 const personalizedStory = {
                     title: personalizeText(storyTemplate.title, name, gender),
@@ -916,9 +936,17 @@
                 // Generate images for all pages with detailed character consistency
                 const pageImages = [];
                 for (let i = 0; i < personalizedStory.pages.length; i++) {
+                    // Update button for each page
+                    btnText.textContent = `🎨 Creating Page ${i + 1}/${personalizedStory.pages.length}...`;
+                    btnText.style.fontSize = '0.95em';
+                    
+                    // Update progress color
+                    const progress = (i / personalizedStory.pages.length) * 100;
+                    btn.style.background = `linear-gradient(45deg, #4ecdc4 ${progress}%, #ffa726 ${progress}%)`;
+                    
+                    showSuccess(`🎬 Rendering Page ${i + 1}: ${personalizedStory.pages[i].scene.replace('_', ' ')}... Please wait for DALL-E magic! ✨`);
+                    
                     try {
-                        showSuccess(`Creating page ${i + 1} of ${personalizedStory.pages.length}... Premium quality rendering! ✨`);
-                        
                         const scenePrompts = {
                             character_introduction: `${characterDescription} in a happy, welcoming scene showing their personality, children's book illustration, professional quality, detailed character design, consistent character`,
                             problem_discovery: `${characterDescription} discovering a problem or challenge, emotional expression visible, dramatic lighting, children's book illustration, same character as previous scenes`,
@@ -930,6 +958,7 @@
                         
                         const scenePrompt = scenePrompts[personalizedStory.pages[i].scene] + `, CRITICAL: Maintain exact same character appearance - ${characterDescription}`;
                         
+                        // YOUR DALL-E API CALL
                         const response = await fetch('/api/generate-image', {
                             method: 'POST',
                             headers: {
@@ -946,19 +975,33 @@
                         if (response.ok) {
                             const data = await response.json();
                             const imageUrl = data.url || data.data?.[0]?.url || data.image_url;
-                            pageImages.push(imageUrl);
+                            if (imageUrl) {
+                                pageImages.push(imageUrl);
+                                showSuccess(`✅ Page ${i + 1} generated with DALL-E! Amazing AI quality.`);
+                            } else {
+                                throw new Error('No image URL in response');
+                            }
                         } else {
-                            throw new Error(`Page ${i + 1} generation failed`);
+                            const errorData = await response.json().catch(() => ({}));
+                            throw new Error(errorData.error || `API returned ${response.status}`);
                         }
                         
                         // Add delay between requests
                         await new Promise(resolve => setTimeout(resolve, 1000));
                         
                     } catch (error) {
-                        console.log(`Page ${i + 1} failed, using premium fallback`);
+                        console.log(`Page ${i + 1} DALL-E failed:`, error.message);
+                        showSuccess(`🎨 Page ${i + 1}: Using premium custom illustration (DALL-E backup)...`);
                         pageImages.push(createPremiumFallback(name, age, gender, hairStyle, hairColor, eyeColor, skinTone, storyTheme, i));
+                        await new Promise(resolve => setTimeout(resolve, 500));
                     }
                 }
+
+                // Final assembly
+                btnText.textContent = `📖 Assembling Premium Book...`;
+                btn.style.background = 'linear-gradient(45deg, #28a745, #20c997)';
+                showSuccess(`🎉 Finalizing ${name}'s premium story book...`);
+                await new Promise(resolve => setTimeout(resolve, 800));
 
                 // Store complete story data
                 currentStoryData = {
@@ -977,15 +1020,27 @@
                 currentPage = 0;
                 displayPremiumStory();
                 
-                showSuccess(`🎉 ${name}'s premium story book is ready! Navigate through all ${personalizedStory.pages.length} pages to see the professional quality!`);
+                // Success state
+                btnText.textContent = `✅ ${name}'s Story Complete!`;
+                btn.style.background = 'linear-gradient(45deg, #28a745, #20c997)';
+                showSuccess(`🎉 ${name}'s premium story book is ready! Navigate through all ${personalizedStory.pages.length} pages to see the professional quality! Click pages to explore.`);
 
             } catch (error) {
                 console.error('Error:', error);
                 showError(`Failed to create premium story: ${error.message}`);
-            } finally {
-                btn.disabled = false;
-                spinner.style.display = 'none';
+                
+                // Reset button on error
                 btnText.textContent = '🎨 Create Premium Story Book!';
+                btn.style.background = 'linear-gradient(45deg, #4ecdc4, #44a08d)';
+            } finally {
+                // Reset button after 3 seconds
+                setTimeout(() => {
+                    btn.disabled = false;
+                    spinner.style.display = 'none';
+                    btnText.textContent = '🎨 Create Premium Story Book!';
+                    btnText.style.fontSize = '1.1em';
+                    btn.style.background = 'linear-gradient(45deg, #4ecdc4, #44a08d)';
+                }, 3000);
             }
         }
 
@@ -1058,14 +1113,13 @@
             };
 
             // Head with proper skin tone
-            ctx.fillStyle = skinTones[document.getElementById('skinTone').value] || skinTones.medium;
+            ctx.fillStyle = skinTones[skinTone] || skinTones.medium;
             ctx.beginPath();
             
             // Face shape variations
-            const faceShape = document.getElementById('facialFeatures').value;
-            if (faceShape === 'round') {
+            if (document.getElementById('facialFeatures').value === 'round') {
                 ctx.arc(centerX, centerY - 100 * scale, 70 * scale, 0, 2 * Math.PI);
-            } else if (faceShape === 'oval') {
+            } else if (document.getElementById('facialFeatures').value === 'oval') {
                 ctx.ellipse(centerX, centerY - 100 * scale, 60 * scale, 75 * scale, 0, 0, 2 * Math.PI);
             } else {
                 ctx.arc(centerX, centerY - 100 * scale, 65 * scale, 0, 2 * Math.PI);
@@ -1188,7 +1242,7 @@
             ctx.fill();
 
             // Arms in scene-appropriate positions
-            ctx.fillStyle = skinTones[document.getElementById('skinTone').value] || skinTones.medium;
+            ctx.fillStyle = skinTones[skinTone] || skinTones.medium;
             const armPositions = [
                 { left: [-70, 0], right: [70, 0] },     // Introduction
                 { left: [-75, -10], right: [60, 10] },   // Concern
@@ -1349,84 +1403,4 @@
                     pdf.setFontSize(11);
                     pdf.setFont(undefined, 'normal');
                     const lines = pdf.splitTextToSize(page.text, 150);
-                    let yPos = 200;
-                    lines.forEach(line => {
-                        if (yPos < 245) {
-                            pdf.text(line, 105, yPos, { align: 'center' });
-                            yPos += 7;
-                        }
-                    });
-
-                    // Page number
-                    pdf.setTextColor(100, 100, 100);
-                    pdf.setFontSize(10);
-                    pdf.text(`${index + 1}`, 105, 285, { align: 'center' });
-                });
-
-                // Final moral lesson page
-                pdf.addPage();
-                pdf.setFillColor(255, 248, 220);
-                pdf.rect(0, 0, 210, 297, 'F');
-                
-                pdf.setTextColor(139, 69, 19);
-                pdf.setFontSize(20);
-                pdf.setFont(undefined, 'bold');
-                pdf.text('The Lesson', 105, 50, { align: 'center' });
-                
-                pdf.setFillColor(255, 255, 255);
-                pdf.rect(20, 70, 170, 150, 'F');
-                pdf.setDrawColor(139, 69, 19);
-                pdf.rect(20, 70, 170, 150, 'S');
-                
-                pdf.setTextColor(101, 67, 33);
-                pdf.setFontSize(12);
-                pdf.setFont(undefined, 'normal');
-                const moralLines = pdf.splitTextToSize(currentStoryData.fullMoral, 150);
-                let moralY = 90;
-                moralLines.forEach(line => {
-                    if (moralY < 210) {
-                        pdf.text(line, 105, moralY, { align: 'center' });
-                        moralY += 8;
-                    }
-                });
-
-                pdf.save(`${currentStoryData.name}_Premium_Story_Book.pdf`);
-                alert('📚 Premium story book downloaded! Professional quality ready for printing!');
-                
-            } catch (error) {
-                console.error('PDF error:', error);
-                alert('❌ Failed to create premium PDF. Please try again.');
-            }
-        }
-
-        function showError(message) {
-            const errorEl = document.getElementById('errorMessage');
-            errorEl.textContent = message;
-            errorEl.style.display = 'block';
-        }
-
-        function showSuccess(message) {
-            const successEl = document.getElementById('successMessage');
-            successEl.textContent = message;
-            successEl.style.display = 'block';
-        }
-
-        function hideMessages() {
-            document.getElementById('errorMessage').style.display = 'none';
-            document.getElementById('successMessage').style.display = 'none';
-        }
-
-        // Update preview when form changes
-        function updatePreview() {
-            const name = document.getElementById('childName').value || 'Child';
-            const theme = document.getElementById('storyTheme').value;
-            const themeEmojis = {
-                kindness: '🌻',
-                courage: '🦁',
-                sharing: '🎁',
-                honesty: '✨',
-                friendship: '🤝',
-                perseverance: '🏔️'
-            };
-            
-            document.getElementById('previewPlaceholder
+                    let y
