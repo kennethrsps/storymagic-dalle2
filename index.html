@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>StoryMagic Pro - Premium Custom Books</title>
+    <title>StoryMagic Pro - The Garden of Kindness</title>
     <style>
         * {
             margin: 0;
@@ -103,6 +103,90 @@
             resize: vertical;
         }
 
+        .photo-upload-section {
+            background: linear-gradient(135deg, #e8f5e8, #c8e6c9);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 15px;
+            border-left: 5px solid #4caf50;
+            text-align: center;
+        }
+
+        .photo-upload-section h4 {
+            color: #2e7d32;
+            margin-bottom: 15px;
+            font-weight: 700;
+            font-size: 1.1em;
+        }
+
+        .upload-area {
+            border: 3px dashed #4caf50;
+            border-radius: 12px;
+            padding: 30px 20px;
+            background: rgba(255, 255, 255, 0.8);
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-bottom: 15px;
+        }
+
+        .upload-area:hover {
+            border-color: #2e7d32;
+            background: rgba(255, 255, 255, 0.9);
+            transform: translateY(-2px);
+        }
+
+        .upload-area.dragover {
+            border-color: #1b5e20;
+            background: rgba(76, 175, 80, 0.1);
+        }
+
+        .upload-icon {
+            font-size: 3em;
+            color: #4caf50;
+            margin-bottom: 10px;
+        }
+
+        .upload-text {
+            color: #2e7d32;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .upload-subtext {
+            color: #388e3c;
+            font-size: 0.85em;
+        }
+
+        .photo-preview {
+            display: none;
+            max-width: 150px;
+            max-height: 150px;
+            border-radius: 12px;
+            margin: 15px auto;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .character-analysis {
+            display: none;
+            background: #fff3e0;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+            border-left: 4px solid #ff9800;
+        }
+
+        .character-analysis h5 {
+            color: #f57c00;
+            margin-bottom: 8px;
+            font-size: 0.9em;
+        }
+
+        .character-analysis p {
+            color: #ef6c00;
+            font-size: 0.8em;
+            margin: 5px 0;
+        }
+
         .detail-section {
             background: #e3f2fd;
             padding: 15px;
@@ -113,21 +197,6 @@
 
         .detail-section h4 {
             color: #1976d2;
-            margin-bottom: 10px;
-            font-size: 1em;
-            font-weight: 700;
-        }
-
-        .character-details {
-            background: #fff3e0;
-            padding: 15px;
-            border-radius: 12px;
-            margin-bottom: 15px;
-            border-left: 5px solid #ff9800;
-        }
-
-        .character-details h4 {
-            color: #f57c00;
             margin-bottom: 10px;
             font-size: 1em;
             font-weight: 700;
@@ -166,10 +235,6 @@
             opacity: 0.9;
             cursor: not-allowed;
             transform: scale(0.98);
-        }
-
-        .generate-btn:active {
-            transform: scale(0.95);
         }
 
         .loading-spinner {
@@ -393,59 +458,25 @@
             50% { transform: translateY(-15px) rotate(2deg); }
         }
 
-        .premium-features {
-            background: linear-gradient(135deg, #e8f5e8, #c8e6c9);
-            padding: 20px;
-            border-radius: 15px;
-            margin-top: 20px;
-            border-left: 5px solid #4caf50;
+        #fileInput {
+            display: none;
         }
 
-        .premium-features h4 {
-            color: #2e7d32;
-            margin-bottom: 10px;
-            font-weight: 700;
-        }
-
-        .premium-features ul {
-            list-style: none;
-            padding: 0;
-        }
-
-        .premium-features li {
-            color: #388e3c;
-            margin-bottom: 5px;
-            font-size: 0.9em;
-            padding-left: 20px;
-            position: relative;
-        }
-
-        .premium-features li:before {
-            content: "✓";
-            position: absolute;
-            left: 0;
-            color: #4caf50;
-            font-weight: bold;
-        }
-
-        .character-consistency {
-            background: #fff8e1;
-            padding: 15px;
-            border-radius: 10px;
-            margin-top: 15px;
-            border-left: 4px solid #ffc107;
-        }
-
-        .character-consistency h5 {
-            color: #f57c00;
-            margin-bottom: 8px;
-            font-size: 0.9em;
-        }
-
-        .character-consistency p {
-            color: #ef6c00;
+        .remove-photo-btn {
+            background: #f44336;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 20px;
             font-size: 0.8em;
-            margin: 0;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: all 0.3s;
+        }
+
+        .remove-photo-btn:hover {
+            background: #d32f2f;
+            transform: translateY(-1px);
         }
 
         @media (max-width: 1200px) {
@@ -472,20 +503,37 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>📚 StoryMagic Pro</h1>
-            <p>Premium Custom Children's Books - Professional Quality</p>
+            <h1>🌻 The Garden of Kindness</h1>
+            <p>Create Your Child's Personalized Kindness Story</p>
         </div>
 
         <div class="main-content">
             <div class="form-section">
-                <h2 style="color: #333; margin-bottom: 20px; text-align: center; font-weight: 700;">Create Premium Custom Book</h2>
+                <h2 style="color: #333; margin-bottom: 20px; text-align: center; font-weight: 700;">Create Your Story</h2>
                 
+                <div class="photo-upload-section">
+                    <h4>📸 Upload Your Child's Photo</h4>
+                    <div class="upload-area" id="uploadArea" onclick="document.getElementById('fileInput').click()">
+                        <div class="upload-icon">📷</div>
+                        <div class="upload-text">Click or drag photo here</div>
+                        <div class="upload-subtext">JPG, PNG, or HEIC • Max 10MB</div>
+                    </div>
+                    <input type="file" id="fileInput" accept="image/*" onchange="handleFileUpload(event)">
+                    <img id="photoPreview" class="photo-preview" alt="Child's photo">
+                    <button class="remove-photo-btn" id="removePhotoBtn" onclick="removePhoto()" style="display: none;">Remove Photo</button>
+                    
+                    <div class="character-analysis" id="characterAnalysis">
+                        <h5>🎨 AI Character Analysis</h5>
+                        <p id="analysisText">Analyzing photo to create character...</p>
+                    </div>
+                </div>
+
                 <div class="detail-section">
                     <h4>👶 Child Information</h4>
                     
                     <div class="form-group">
-                        <label for="childName">Child's Full Name</label>
-                        <input type="text" id="childName" placeholder="Enter child's full name" value="Dom">
+                        <label for="childName">Child's Name</label>
+                        <input type="text" id="childName" placeholder="Enter child's name" value="Alex">
                     </div>
 
                     <div class="row">
@@ -504,100 +552,16 @@
                         <div class="form-group">
                             <label for="childGender">Gender</label>
                             <select id="childGender">
-                                <option value="girl" selected>Girl</option>
-                                <option value="boy">Boy</option>
+                                <option value="girl">Girl</option>
+                                <option value="boy" selected>Boy</option>
                             </select>
                         </div>
-                    </div>
-                </div>
-
-                <div class="character-details">
-                    <h4>🎨 Character Appearance</h4>
-                    
-                    <div class="form-group">
-                        <label for="hairStyle">Hair Style & Length</label>
-                        <select id="hairStyle">
-                            <option value="shoulder-length straight" selected>Shoulder-length Straight</option>
-                            <option value="long wavy">Long Wavy</option>
-                            <option value="short curly">Short Curly</option>
-                            <option value="medium curly">Medium Curly</option>
-                            <option value="bob cut">Bob Cut</option>
-                            <option value="pigtails">Pigtails</option>
-                            <option value="ponytail">Ponytail</option>
-                        </select>
-                    </div>
-
-                    <div class="row">
-                        <div class="form-group">
-                            <label for="hairColor">Hair Color</label>
-                            <select id="hairColor">
-                                <option value="black" selected>Black</option>
-                                <option value="dark brown">Dark Brown</option>
-                                <option value="light brown">Light Brown</option>
-                                <option value="blonde">Blonde</option>
-                                <option value="strawberry blonde">Strawberry Blonde</option>
-                                <option value="red">Red</option>
-                                <option value="auburn">Auburn</option>
-                            </select>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="eyeColor">Eye Color</label>
-                            <select id="eyeColor">
-                                <option value="brown" selected>Brown</option>
-                                <option value="dark brown">Dark Brown</option>
-                                <option value="hazel">Hazel</option>
-                                <option value="blue">Blue</option>
-                                <option value="green">Green</option>
-                                <option value="gray">Gray</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="form-group">
-                            <label for="skinTone">Skin Tone</label>
-                            <select id="skinTone">
-                                <option value="light">Light</option>
-                                <option value="medium" selected>Medium</option>
-                                <option value="tan">Tan</option>
-                                <option value="dark">Dark</option>
-                                <option value="olive">Olive</option>
-                            </select>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="facialFeatures">Face Shape</label>
-                            <select id="facialFeatures">
-                                <option value="round" selected>Round (child-like)</option>
-                                <option value="oval">Oval</option>
-                                <option value="heart">Heart-shaped</option>
-                                <option value="square">Square</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="specialFeatures">Special Features (Optional)</label>
-                        <textarea id="specialFeatures" placeholder="e.g., dimples, freckles, glasses, birthmarks..."></textarea>
                     </div>
                 </div>
 
                 <div class="detail-section">
-                    <h4>📖 Story Customization</h4>
+                    <h4>🎯 Story Settings</h4>
                     
-                    <div class="form-group">
-                        <label for="storyTheme">Story Theme</label>
-                        <select id="storyTheme">
-                            <option value="kindness">🌻 The Power of Kindness</option>
-                            <option value="courage">🦁 Finding Inner Courage</option>
-                            <option value="sharing">🎁 The Joy of Sharing</option>
-                            <option value="honesty">✨ The Strength of Honesty</option>
-                            <option value="friendship">🤝 Building True Friendship</option>
-                            <option value="perseverance">🏔️ Never Give Up</option>
-                        </select>
-                    </div>
-
                     <div class="form-group">
                         <label for="childPersonality">Child's Personality</label>
                         <select id="childPersonality">
@@ -611,40 +575,23 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="favoriteThings">Favorite Things (Optional)</label>
-                        <textarea id="favoriteThings" placeholder="e.g., loves unicorns, plays soccer, has a pet cat..."></textarea>
+                        <label for="favoriteThings">Favorite Activities (Optional)</label>
+                        <textarea id="favoriteThings" placeholder="e.g., loves flowers, plays with toys, helps others..."></textarea>
                     </div>
                 </div>
 
-                <div class="character-consistency">
-                    <h5>🎯 Ready to Generate!</h5>
-                    <p>Click the button below to create Dom's amazing personalized story book!</p>
-                </div>
-
-                <button class="generate-btn" onclick="generatePremiumStory()" id="generateBtn">
+                <button class="generate-btn" onclick="generateKindnessStory()" id="generateBtn">
                     <div class="loading-spinner" id="loadingSpinner"></div>
-                    <span id="btnText">🎨 Create Premium Story Book!</span>
+                    <span id="btnText">🌻 Create Kindness Story!</span>
                 </button>
 
                 <div class="message success-message" id="successMessage"></div>
                 <div class="message error-message" id="errorMessage"></div>
                 
                 <div class="download-section" id="downloadSection">
-                    <h4>📚 Premium Book Ready!</h4>
-                    <p>Professional quality story book created!</p>
-                    <button class="download-btn" onclick="downloadPremiumPDF()">📄 Download Premium PDF</button>
-                </div>
-
-                <div class="premium-features">
-                    <h4>🚀 System Features</h4>
-                    <ul>
-                        <li>DALL-E AI image generation</li>
-                        <li>Professional book layout</li>
-                        <li>Character consistency</li>
-                        <li>6 story pages with morals</li>
-                        <li>Print-ready PDF output</li>
-                        <li>Custom character creation</li>
-                    </ul>
+                    <h4>📚 Story Complete!</h4>
+                    <p>Your child's kindness adventure is ready!</p>
+                    <button class="download-btn" onclick="downloadStoryPDF()">📄 Download Story Book</button>
                 </div>
             </div>
 
@@ -655,8 +602,8 @@
                         <div class="book-title" id="bookTitle">Story Title</div>
                         <div class="book-text" id="bookText">Story content...</div>
                         <div class="moral-lesson" id="moralLesson">
-                            <h5>📖 Life Lesson</h5>
-                            <p>Moral lesson will appear here</p>
+                            <h5>🌻 Kindness Lesson</h5>
+                            <p>Life lesson will appear here</p>
                         </div>
                     </div>
                     <div class="book-navigation">
@@ -667,10 +614,10 @@
                 </div>
 
                 <div class="default-preview" id="defaultPreview">
-                    <div class="preview-placeholder" id="previewPlaceholder">🌻</div>
-                    <h3>Premium Story Preview</h3>
-                    <p style="font-size: 1.2em; line-height: 1.6; margin-bottom: 20px;">Create a professional-quality personalized book!</p>
-                    <p style="font-size: 1em; opacity: 0.8;">Ready to generate Dom's amazing story with DALL-E images and custom illustrations.</p>
+                    <div class="preview-placeholder">🌻</div>
+                    <h3>The Garden of Kindness</h3>
+                    <p style="font-size: 1.2em; line-height: 1.6; margin-bottom: 20px;">Upload your child's photo to create a beautiful personalized story about kindness!</p>
+                    <p style="font-size: 1em; opacity: 0.8;">Watch your child become the hero of their own kindness adventure.</p>
                 </div>
             </div>
         </div>
@@ -680,273 +627,236 @@
     <script>
         let currentStoryData = {};
         let currentPage = 0;
+        let uploadedPhoto = null;
+        let characterDescription = '';
 
-        // PREMIUM STORY TEMPLATES
-        const premiumStories = {
-            kindness: {
-                title: "{name}'s Garden of Kindness",
-                shortMoral: "Small acts of kindness create big changes",
-                fullMoral: "This story teaches that even the smallest acts of kindness can transform not just others, but ourselves too. When we choose kindness, we plant seeds that grow into beautiful friendships and positive change.",
-                pages: [
-                    {
-                        text: "Meet {name}, a {personality} {age}-year-old who loves to {favorite_things}. One sunny morning, {name} discovered something that would change everything.",
-                        scene: "character_introduction"
-                    },
-                    {
-                        text: "{name} found an old, forgotten garden where an elderly gardener sat alone among wilting flowers. The poor man looked so sad that {name}'s heart filled with compassion.",
-                        scene: "problem_discovery"
-                    },
-                    {
-                        text: "Even though {name} was {personality}, {he_she} gathered courage and approached the lonely gardener. '{name} would like to help make your garden beautiful again,' {he_she} said with a gentle smile.",
-                        scene: "taking_action"
-                    },
-                    {
-                        text: "Working side by side, {name} and the gardener planted new seeds, watered the flowers, and shared stories. The gardener's face lit up with joy as they worked together.",
-                        scene: "collaboration"
-                    },
-                    {
-                        text: "As if by magic, the garden began to bloom in brilliant colors! Other children saw the beautiful garden and joined in, creating a community space filled with laughter and friendship.",
-                        scene: "transformation"
-                    },
-                    {
-                        text: "{name} learned that kindness is like planting seeds - it grows and spreads, creating beauty everywhere. The garden became a symbol of what happens when we care for others.",
-                        scene: "lesson_learned"
-                    }
-                ]
-            },
-            courage: {
-                title: "{name} Finds Inner Courage",
-                shortMoral: "True courage means doing what's right when you're scared",
-                fullMoral: "This story shows that courage isn't about not being afraid - it's about doing the right thing even when your heart is racing. Every act of bravery, no matter how small, makes the world a better place.",
-                pages: [
-                    {
-                        text: "{name} was known for being {personality}, but today would test {his_her} courage in ways {he_she} never imagined. Sometimes heroes come in small packages.",
-                        scene: "character_introduction"
-                    },
-                    {
-                        text: "On the playground, {name} witnessed something that made {his_her} stomach flutter with worry. A group of older kids were picking on a smaller child who looked scared and alone.",
-                        scene: "problem_discovery"
-                    },
-                    {
-                        text: "{name}'s hands were shaking and {his_her} heart was beating fast, but {he_she} remembered what it felt like to be scared. Taking a deep breath, {name} stepped forward.",
-                        scene: "taking_action"
-                    },
-                    {
-                        text: "'Please stop,' {name} said with a trembling but determined voice. 'Everyone deserves to feel safe and happy.' The bullies were surprised by {name}'s brave words.",
-                        scene: "collaboration"
-                    },
-                    {
-                        text: "Other children saw {name}'s courage and joined in to support the scared child. Together, they created a circle of protection and friendship around those who needed it most.",
-                        scene: "transformation"
-                    },
-                    {
-                        text: "From that day forward, {name} was known as someone who stood up for others. {He_She} learned that courage grows stronger each time you use it to help someone else.",
-                        scene: "lesson_learned"
-                    }
-                ]
-            },
-            sharing: {
-                title: "{name} Discovers the Magic of Sharing",
-                shortMoral: "Sharing creates abundance and brings people together",
-                fullMoral: "This story reveals the beautiful truth that when we share what we have, we don't lose anything - we gain friendship, joy, and the wonderful feeling that comes from making others happy.",
-                pages: [
-                    {
-                        text: "{name}, a {personality} child who loves {favorite_things}, brought {his_her} most special lunch to school. It was {his_her} absolute favorite meal!",
-                        scene: "character_introduction"
-                    },
-                    {
-                        text: "At lunchtime, {name} noticed a classmate sitting alone with no food. The child looked hungry and sad, glancing longingly at everyone else's meals.",
-                        scene: "problem_discovery"
-                    },
-                    {
-                        text: "{name} looked at {his_her} delicious lunch, then at the hungry child. Though it was hard to give up {his_her} favorite food, {name} knew what felt right in {his_her} heart.",
-                        scene: "taking_action"
-                    },
-                    {
-                        text: "Walking over with half of {his_her} lunch, {name} sat beside the lonely child. 'Would you like to share with me?' {name} asked with a warm smile.",
-                        scene: "collaboration"
-                    },
-                    {
-                        text: "Soon, other children saw {name}'s kindness and began sharing their lunches too. The table became a feast of friendship, with everyone contributing something special.",
-                        scene: "transformation"
-                    },
-                    {
-                        text: "{name} realized something amazing: by sharing {his_her} lunch, {he_she} had gained something even better - wonderful friends and the joy that comes from caring for others.",
-                        scene: "lesson_learned"
-                    }
-                ]
-            },
-            honesty: {
-                title: "{name} and the Power of Truth",
-                shortMoral: "Honesty builds trust and brings people closer",
-                fullMoral: "This story demonstrates that telling the truth, even when it's difficult or scary, always leads to better outcomes and stronger relationships than hiding behind lies.",
-                pages: [
-                    {
-                        text: "{name}, a {personality} {age}-year-old who enjoys {favorite_things}, was playing inside when something unexpected happened that would test {his_her} character.",
-                        scene: "character_introduction"
-                    },
-                    {
-                        text: "While playing, {name} accidentally knocked over {his_her} mother's favorite vase. It shattered into pieces on the floor, and {name} felt panic rising in {his_her} chest.",
-                        scene: "problem_discovery"
-                    },
-                    {
-                        text: "{name} thought about hiding the broken vase or blaming someone else. {His_Her} mind raced with different stories, but something inside told {him_her} what was right.",
-                        scene: "taking_action"
-                    },
-                    {
-                        text: "With trembling hands and a racing heart, {name} gathered the pieces and went to find {his_her} mother. 'Mom, I need to tell you something important,' {name} said bravely.",
-                        scene: "collaboration"
-                    },
-                    {
-                        text: "When {name} told the truth, {his_her} mother was initially sad about the vase but proud of {name}'s honesty. 'Thank you for telling me the truth,' she said, giving {name} a warm hug.",
-                        scene: "transformation"
-                    },
-                    {
-                        text: "Together, they cleaned up the pieces, and {name} learned that honesty brings people closer together. The truth had turned a scary moment into a lesson about trust and love.",
-                        scene: "lesson_learned"
-                    }
-                ]
-            },
-            friendship: {
-                title: "{name} Builds a Bridge of Friendship",
-                shortMoral: "True friendship requires effort, understanding, and forgiveness",
-                fullMoral: "This story teaches that friendships, like bridges, need to be built carefully with understanding, maintained with effort, and sometimes repaired with forgiveness.",
-                pages: [
-                    {
-                        text: "{name}, who is {personality} and loves {favorite_things}, had a best friend who meant the world to {him_her}. But even the strongest friendships face challenges.",
-                        scene: "character_introduction"
-                    },
-                    {
-                        text: "One day, {name} and {his_her} best friend had a terrible argument over something that seemed very important at the time. Both children walked away feeling hurt and angry.",
-                        scene: "problem_discovery"
-                    },
-                    {
-                        text: "As hours passed, {name} felt a growing emptiness inside. The fun games weren't fun anymore, and the beautiful day felt gray without {his_her} best friend to share it with.",
-                        scene: "taking_action"
-                    },
-                    {
-                        text: "Swallowing {his_her} pride, {name} decided to be the first to apologize. {He_She} created a special card that showed how much the friendship meant to {him_her}.",
-                        scene: "collaboration"
-                    },
-                    {
-                        text: "When {name} approached with the card, {his_her} friend's eyes filled with happy tears. They both said sorry at the same time and hugged tighter than ever before.",
-                        scene: "transformation"
-                    },
-                    {
-                        text: "{name} discovered that friendship becomes stronger when it's tested and repaired with love. Like a bridge rebuilt after a storm, their friendship was now unbreakable.",
-                        scene: "lesson_learned"
-                    }
-                ]
-            },
-            perseverance: {
-                title: "{name} Never Gives Up",
-                shortMoral: "Persistence and hard work lead to amazing achievements",
-                fullMoral: "This story shows that when we don't give up, even when things get difficult, we can achieve things that once seemed impossible. Every small step forward matters.",
-                pages: [
-                    {
-                        text: "{name}, a {personality} child who loves {favorite_things}, had a big dream that seemed almost impossible. But {name} believed that dreams are worth fighting for.",
-                        scene: "character_introduction"
-                    },
-                    {
-                        text: "{name} wanted to learn something very challenging, but every attempt ended in failure. Other kids made it look so easy, but for {name}, it felt like climbing a mountain.",
-                        scene: "problem_discovery"
-                    },
-                    {
-                        text: "When {name} felt like giving up, {he_she} remembered all the people who believed in {him_her}. 'I can do this,' {name} said, wiping away tears of frustration.",
-                        scene: "taking_action"
-                    },
-                    {
-                        text: "Day after day, {name} practiced. Sometimes {he_she} failed, sometimes {he_she} improved a little. A kind teacher noticed {name}'s effort and offered encouragement and help.",
-                        scene: "collaboration"
-                    },
-                    {
-                        text: "Finally, after weeks of trying, {name} achieved the goal! The feeling of success was even sweeter because of all the hard work it took to get there.",
-                        scene: "transformation"
-                    },
-                    {
-                        text: "{name} learned that the most amazing achievements come to those who never give up. Every failure had been a step closer to success, and every tear had been worth it.",
-                        scene: "lesson_learned"
-                    }
-                ]
-            }
+        // KINDNESS STORY TEMPLATE
+        const kindnessStory = {
+            title: "{name}'s Garden of Kindness",
+            shortMoral: "Small acts of kindness create big changes",
+            fullMoral: "This story teaches that even the smallest acts of kindness can transform not just others, but ourselves too. When we choose kindness, we plant seeds that grow into beautiful friendships and positive change in our community.",
+            scenes: [
+                {
+                    title: "Meet {name}",
+                    text: "Meet {name}, a {personality} {age}-year-old who loves to {favorite_things}. One sunny morning, {name} was playing outside when something caught {his_her} attention.",
+                    setting: "Child's home front yard with a cozy house, green lawn, and sunny sky. The child is playing happily outside their house.",
+                    prompt_template: "Children's book illustration of {character_description} playing happily in front of a cozy house with a green lawn and sunny sky. Whimsical, warm colors, friendly atmosphere."
+                },
+                {
+                    title: "The Forgotten Garden",
+                    text: "Walking down the street, {name} discovered an old, forgotten garden. Among the wilting flowers sat a sad elderly gardener who looked very lonely and discouraged.",
+                    setting: "Old neglected garden with wilting flowers, overgrown weeds, and a sad elderly gardener sitting on a bench looking discouraged.",
+                    prompt_template: "Children's book illustration showing {character_description} discovering an old, neglected garden with wilting flowers and weeds. An elderly gardener sits sadly on a bench. Muted colors showing sadness, but hope in the child's expression."
+                },
+                {
+                    title: "A Kind Offer",
+                    text: "Even though {name} felt a little {personality}, {his_her} heart filled with compassion. '{name} would like to help make your garden beautiful again,' {he_she} said with a gentle, caring smile.",
+                    setting: "The same garden, with the child approaching the elderly gardener with a kind, caring expression, offering to help.",
+                    prompt_template: "Children's book illustration of {character_description} approaching the elderly gardener with a kind, caring expression, offering help. The child shows compassion and determination. Warmer colors beginning to appear."
+                },
+                {
+                    title: "Working Together",
+                    text: "Side by side, {name} and the gardener planted new seeds, watered the flowers, and pulled weeds. They shared stories and laughter as they worked together to bring the garden back to life.",
+                    setting: "The garden being restored, with the child and elderly gardener working together planting flowers, watering plants, and sharing happy moments.",
+                    prompt_template: "Children's book illustration showing {character_description} and the elderly gardener working together in the garden, planting flowers and watering plants. Both are smiling and happy. Bright, cheerful colors as the garden comes alive."
+                },
+                {
+                    title: "The Garden Blooms",
+                    text: "As if by magic, the garden began to bloom in brilliant colors! Other children saw the beautiful transformation and came to help, creating a wonderful community garden full of friendship.",
+                    setting: "The garden now blooming magnificently with bright flowers, multiple children helping, and a sense of community and joy.",
+                    prompt_template: "Children's book illustration of a magnificent blooming garden with {character_description} and several other children working together. Bright, vibrant flowers everywhere, showing community and friendship. Joyful, celebration atmosphere."
+                },
+                {
+                    title: "Seeds of Kindness",
+                    text: "{name} learned that kindness is like planting seeds - it grows and spreads, creating beauty everywhere. The garden became a symbol of what happens when we care for others with open hearts.",
+                    setting: "The completed beautiful community garden with children and families enjoying it, showing the lasting impact of kindness.",
+                    prompt_template: "Children's book illustration showing {character_description} in the beautiful, thriving community garden surrounded by families and children enjoying the space. Golden sunset light, showing the lasting beauty created by kindness."
+                }
+            ]
         };
 
-        async function generatePremiumStory() {
-            console.log("Generate button clicked!"); // Debug
+        // FILE UPLOAD HANDLING
+        function handleFileUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
 
+            if (file.size > 10 * 1024 * 1024) {
+                showError('Photo must be smaller than 10MB');
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                uploadedPhoto = e.target.result;
+                document.getElementById('photoPreview').src = uploadedPhoto;
+                document.getElementById('photoPreview').style.display = 'block';
+                document.getElementById('removePhotoBtn').style.display = 'block';
+                
+                // Show analysis section
+                document.getElementById('characterAnalysis').style.display = 'block';
+                analyzePhoto(uploadedPhoto);
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function removePhoto() {
+            uploadedPhoto = null;
+            characterDescription = '';
+            document.getElementById('photoPreview').style.display = 'none';
+            document.getElementById('removePhotoBtn').style.display = 'none';
+            document.getElementById('characterAnalysis').style.display = 'none';
+            document.getElementById('fileInput').value = '';
+        }
+
+        // DRAG AND DROP
+        const uploadArea = document.getElementById('uploadArea');
+        
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.classList.add('dragover');
+        });
+
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.classList.remove('dragover');
+        });
+
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('dragover');
+            
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                document.getElementById('fileInput').files = files;
+                handleFileUpload({ target: { files: files } });
+            }
+        });
+
+        // PHOTO ANALYSIS WITH GPT-4 VISION
+        async function analyzePhoto(photoData) {
+            document.getElementById('analysisText').textContent = 'Analyzing photo features...';
+            
+            try {
+                const response = await fetch('/api/analyze-photo', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        image: photoData,
+                        age: document.getElementById('childAge').value,
+                        gender: document.getElementById('childGender').value
+                    })
+                });
+
+                if (response.ok) {
+                    const analysis = await response.json();
+                    characterDescription = analysis.character_description;
+                    
+                    // Auto-populate form fields if detected
+                    if (analysis.hair_color) updateFormField('hairColor', analysis.hair_color);
+                    if (analysis.eye_color) updateFormField('eyeColor', analysis.eye_color);
+                    if (analysis.skin_tone) updateFormField('skinTone', analysis.skin_tone);
+                    
+                    document.getElementById('analysisText').innerHTML = `
+                        <strong>Character Features Detected:</strong><br>
+                        ${analysis.description || 'Ready to create character!'}
+                    `;
+                } else {
+                    throw new Error('Analysis failed');
+                }
+            } catch (error) {
+                console.log('Photo analysis failed, using manual input:', error);
+                document.getElementById('analysisText').textContent = 'Using manual character details for story creation.';
+                characterDescription = createManualCharacterDescription();
+            }
+        }
+
+        function updateFormField(fieldId, value) {
+            const field = document.getElementById(fieldId);
+            if (field && field.tagName === 'SELECT') {
+                for (let option of field.options) {
+                    if (option.value.includes(value.toLowerCase()) || option.text.toLowerCase().includes(value.toLowerCase())) {
+                        field.value = option.value;
+                        break;
+                    }
+                }
+            }
+        }
+
+        function createManualCharacterDescription() {
             const name = document.getElementById('childName').value.trim() || 'Alex';
             const age = document.getElementById('childAge').value;
             const gender = document.getElementById('childGender').value;
-            const hairStyle = document.getElementById('hairStyle').value;
-            const hairColor = document.getElementById('hairColor').value;
-            const eyeColor = document.getElementById('eyeColor').value;
-            const skinTone = document.getElementById('skinTone').value;
-            const facialFeatures = document.getElementById('facialFeatures').value;
-            const specialFeatures = document.getElementById('specialFeatures').value.trim();
-            const storyTheme = document.getElementById('storyTheme').value;
             const personality = document.getElementById('childPersonality').value;
-            const favoriteThings = document.getElementById('favoriteThings').value.trim() || 'playing and learning';
+            
+            return `A ${age}-year-old ${gender} named ${name} who is ${personality}. The child has a friendly, warm expression and is dressed in casual, colorful clothing appropriate for a children's book illustration.`;
+        }
+
+        // STORY GENERATION
+        async function generateKindnessStory() {
+            const name = document.getElementById('childName').value.trim() || 'Alex';
             
             if (!name) {
                 showError('Please enter the child\'s name!');
                 return;
             }
 
-            // IMMEDIATE VISUAL FEEDBACK
             const btn = document.getElementById('generateBtn');
             const spinner = document.getElementById('loadingSpinner');
             const btnText = document.getElementById('btnText');
             
-            console.log("Starting generation process..."); // Debug
-            
             btn.disabled = true;
             btn.style.background = 'linear-gradient(45deg, #ffa726, #ff9800)';
             spinner.style.display = 'block';
-            btnText.textContent = `🎨 Starting ${name}'s Story...`;
+            btnText.textContent = `🌱 Creating ${name}'s Story...`;
 
             hideMessages();
-            showSuccess(`🎬 Creating premium story for ${name}...`);
+            showSuccess(`🎨 Creating "${name}'s Garden of Kindness"...`);
 
             try {
-                await new Promise(resolve => setTimeout(resolve, 1000));
+                const personality = document.getElementById('childPersonality').value;
+                const favoriteThings = document.getElementById('favoriteThings').value.trim() || 'helping others and playing outside';
+                const age = document.getElementById('childAge').value;
+                const gender = document.getElementById('childGender').value;
 
-                const storyTemplate = premiumStories[storyTheme];
-                const characterDescription = `A ${age}-year-old ${gender} named ${name} with ${hairStyle} ${hairColor} hair, ${eyeColor} eyes, ${skinTone} skin tone, ${facialFeatures} face shape${specialFeatures ? ', ' + specialFeatures : ''}. Character is ${personality}.`;
-                
-                btnText.textContent = `📚 Building Story...`;
-                showSuccess(`📖 Creating "${storyTemplate.title.replace('{name}', name)}"...`);
-                
-                const personalizedStory = {
-                    title: personalizeText(storyTemplate.title, name, gender),
-                    shortMoral: storyTemplate.shortMoral,
-                    fullMoral: storyTemplate.fullMoral,
-                    pages: storyTemplate.pages.map(page => ({
-                        text: personalizeAdvancedText(page.text, name, gender, personality, favoriteThings),
-                        scene: page.scene
-                    }))
-                };
+                // Use photo analysis or create manual description
+                if (!characterDescription) {
+                    characterDescription = createManualCharacterDescription();
+                }
 
-                // Generate images
-                const pageImages = [];
-                for (let i = 0; i < personalizedStory.pages.length; i++) {
-                    btnText.textContent = `🎨 Creating Page ${i + 1}/${personalizedStory.pages.length}...`;
-                    const progress = (i / personalizedStory.pages.length) * 100;
-                    btn.style.background = `linear-gradient(45deg, #4ecdc4 ${progress}%, #ffa726 ${progress}%)`;
-                    
-                    showSuccess(`🎬 Generating Page ${i + 1}...`);
+                // Generate master character portrait first
+                btnText.textContent = `🎨 Creating ${name}'s Character...`;
+                showSuccess(`👨‍🎨 Generating character portrait...`);
+
+                let masterCharacterImage = null;
+                try {
+                    const characterResponse = await fetch('/api/generate-image', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ 
+                            prompt: `Portrait of ${characterDescription}. Children's book illustration style, friendly and warm, high quality character design.`,
+                            size: "1024x1024",
+                            quality: "hd",
+                            style: "vivid"
+                        })
+                    });
+
+                    if (characterResponse.ok) {
+                        const characterData = await characterResponse.json();
+                        masterCharacterImage = characterData.url || characterData.data?.[0]?.url || characterData.image_url;
+                        showSuccess(`✅ Character portrait created!`);
+                    }
+                } catch (error) {
+                    console.log('Character portrait generation failed, proceeding with scenes');
+                }
+
+                // Generate all 6 scene images
+                const sceneImages = [];
+                for (let i = 0; i < kindnessStory.scenes.length; i++) {
+                    const scene = kindnessStory.scenes[i];
+                    btnText.textContent = `🎨 Creating Scene ${i + 1}/6...`;
+                    showSuccess(`🎬 Generating "${scene.title.replace('{name}', name)}"...`);
                     
                     try {
-                        // Try DALL-E first
-                        const scenePrompts = {
-                            character_introduction: `${characterDescription} in a happy, welcoming scene, children's book illustration`,
-                            problem_discovery: `${characterDescription} discovering a problem, emotional scene, children's book illustration`,
-                            taking_action: `${characterDescription} taking brave action, heroic scene, children's book illustration`,
-                            collaboration: `${characterDescription} working with others, teamwork scene, children's book illustration`,
-                            transformation: `${characterDescription} witnessing positive change, magical scene, children's book illustration`,
-                            lesson_learned: `${characterDescription} learning lesson, wise expression, children's book illustration`
-                        };
-                        
-                        const prompt = scenePrompts[personalizedStory.pages[i].scene];
+                        const prompt = scene.prompt_template.replace('{character_description}', characterDescription);
                         
                         const response = await fetch('/api/generate-image', {
                             method: 'POST',
@@ -963,8 +873,8 @@
                             const data = await response.json();
                             const imageUrl = data.url || data.data?.[0]?.url || data.image_url;
                             if (imageUrl) {
-                                pageImages.push(imageUrl);
-                                showSuccess(`✅ Page ${i + 1} created with DALL-E!`);
+                                sceneImages.push(imageUrl);
+                                showSuccess(`✅ Scene ${i + 1} complete!`);
                             } else {
                                 throw new Error('No image URL');
                             }
@@ -972,50 +882,48 @@
                             throw new Error('DALL-E failed');
                         }
                         
-                        await new Promise(resolve => setTimeout(resolve, 800));
+                        await new Promise(resolve => setTimeout(resolve, 1000));
                         
                     } catch (error) {
-                        console.log(`Page ${i + 1} using fallback:`, error.message);
-                        showSuccess(`🎨 Page ${i + 1}: Creating custom illustration...`);
-                        pageImages.push(createCustomCharacter(name, age, gender, hairStyle, hairColor, eyeColor, skinTone, storyTheme, i));
+                        console.log(`Scene ${i + 1} using fallback:`, error.message);
+                        sceneImages.push(createFallbackScene(name, i));
+                        showSuccess(`🎨 Scene ${i + 1}: Using backup illustration`);
                         await new Promise(resolve => setTimeout(resolve, 400));
                     }
                 }
 
-                // Final assembly
-                btnText.textContent = `📖 Assembling Book...`;
-                btn.style.background = 'linear-gradient(45deg, #28a745, #20c997)';
-                showSuccess(`🎉 Finalizing ${name}'s story book...`);
+                // Assemble final story
+                btnText.textContent = `📖 Assembling Story...`;
+                showSuccess(`🎉 Finalizing ${name}'s kindness adventure...`);
                 
                 currentStoryData = {
-                    name, age, gender, hairStyle, hairColor, eyeColor, skinTone, 
-                    facialFeatures, specialFeatures, personality, favoriteThings,
-                    title: personalizedStory.title,
-                    shortMoral: personalizedStory.shortMoral,
-                    fullMoral: personalizedStory.fullMoral,
-                    pages: personalizedStory.pages.map((page, index) => ({
-                        text: page.text,
-                        scene: page.scene,
-                        imageUrl: pageImages[index]
+                    name, age, gender, personality, favoriteThings,
+                    title: personalizeText(kindnessStory.title, name, gender),
+                    shortMoral: kindnessStory.shortMoral,
+                    fullMoral: kindnessStory.fullMoral,
+                    pages: kindnessStory.scenes.map((scene, index) => ({
+                        title: personalizeText(scene.title, name, gender),
+                        text: personalizeAdvancedText(scene.text, name, gender, personality, favoriteThings),
+                        imageUrl: sceneImages[index]
                     }))
                 };
 
                 currentPage = 0;
-                displayPremiumStory();
+                displayStory();
                 
-                btnText.textContent = `✅ ${name}'s Story Complete!`;
-                showSuccess(`🎉 ${name}'s premium story book is ready! Navigate through all pages.`);
+                btnText.textContent = `✅ ${name}'s Story Ready!`;
+                showSuccess(`🎉 "${currentStoryData.title}" is complete! Navigate through all pages.`);
 
             } catch (error) {
                 console.error('Generation error:', error);
                 showError(`Failed to create story: ${error.message}`);
-                btnText.textContent = '🎨 Create Premium Story Book!';
+                btnText.textContent = '🌻 Create Kindness Story!';
                 btn.style.background = 'linear-gradient(45deg, #4ecdc4, #44a08d)';
             } finally {
                 setTimeout(() => {
                     btn.disabled = false;
                     spinner.style.display = 'none';
-                    btnText.textContent = '🎨 Create Premium Story Book!';
+                    btnText.textContent = '🌻 Create Kindness Story!';
                     btn.style.background = 'linear-gradient(45deg, #4ecdc4, #44a08d)';
                 }, 2000);
             }
@@ -1050,23 +958,23 @@
                 .replace(/{age}/g, document.getElementById('childAge').value);
         }
 
-        function createCustomCharacter(name, age, gender, hairStyle, hairColor, eyeColor, skinTone, theme, pageIndex) {
+        function createFallbackScene(name, sceneIndex) {
             const canvas = document.createElement('canvas');
             canvas.width = 1024;
             canvas.height = 1024;
             const ctx = canvas.getContext('2d');
 
-            // Scene backgrounds
+            // Scene-specific backgrounds
             const sceneColors = [
-                ['#FFE4B5', '#FFB6C1'], // Introduction
-                ['#B0C4DE', '#D8BFD8'], // Problem
-                ['#FFD700', '#FFA500'], // Action
-                ['#98FB98', '#90EE90'], // Collaboration
-                ['#DDA0DD', '#9370DB'], // Transformation
-                ['#FF69B4', '#FFB6C1']  // Lesson
+                ['#87CEEB', '#98FB98'], // Introduction - sky blue to light green
+                ['#D3D3D3', '#F0E68C'], // Garden discovery - gray to khaki  
+                ['#FFE4E1', '#FFA07A'], // Offering help - misty rose to light salmon
+                ['#90EE90', '#32CD32'], // Working together - light green to lime green
+                ['#FF69B4', '#FFB6C1'], // Garden blooms - hot pink to light pink
+                ['#FFD700', '#FFA500']  // Lesson learned - gold to orange
             ];
 
-            const colors = sceneColors[pageIndex] || sceneColors[0];
+            const colors = sceneColors[sceneIndex] || sceneColors[0];
             
             const gradient = ctx.createLinearGradient(0, 0, 1024, 1024);
             gradient.addColorStop(0, colors[0]);
@@ -1074,130 +982,42 @@
             ctx.fillStyle = gradient;
             ctx.fillRect(0, 0, 1024, 1024);
 
-            // Character
-            const centerX = 512;
-            const centerY = 400;
-            const scale = 2;
+            // Add scene elements
+            const sceneTexts = [
+                `${name} at Home`,
+                'The Forgotten Garden',
+                'Offering Kindness',
+                'Working Together', 
+                'Garden Blooms',
+                'Kindness Grows'
+            ];
 
-            // Skin tones
-            const skinTones = {
-                light: '#F8D7A1',
-                medium: '#F4C2A1', 
-                tan: '#E8B888',
-                dark: '#D2B48C',
-                olive: '#E6D2AA'
-            };
-
-            // Head
-            ctx.fillStyle = skinTones[skinTone] || skinTones.medium;
-            ctx.beginPath();
-            ctx.arc(centerX, centerY - 100 * scale, 60 * scale, 0, 2 * Math.PI);
-            ctx.fill();
-
-            // Hair
-            const hairColors = {
-                black: '#1C1C1C',
-                'dark brown': '#3C2414',
-                'light brown': '#8B4513',
-                blonde: '#FFD700',
-                'strawberry blonde': '#FFA500',
-                red: '#CD5C5C',
-                auburn: '#A0522D'
-            };
-            
-            ctx.fillStyle = hairColors[hairColor] || '#1C1C1C';
-            ctx.beginPath();
-            ctx.arc(centerX, centerY - 130 * scale, 70 * scale, 0, Math.PI);
-            ctx.fill();
-
-            // Eyes
-            const eyeColors = {
-                brown: '#8B4513',
-                'dark brown': '#654321',
-                hazel: '#8B7355',
-                blue: '#4169E1',
-                green: '#228B22',
-                gray: '#708090'
-            };
-            
-            // Eye whites
-            ctx.fillStyle = '#FFFFFF';
-            ctx.beginPath();
-            ctx.arc(centerX - 20 * scale, centerY - 110 * scale, 12 * scale, 0, 2 * Math.PI);
-            ctx.fill();
-            ctx.beginPath();
-            ctx.arc(centerX + 20 * scale, centerY - 110 * scale, 12 * scale, 0, 2 * Math.PI);
-            ctx.fill();
-            
-            // Iris
-            ctx.fillStyle = eyeColors[eyeColor] || '#8B4513';
-            ctx.beginPath();
-            ctx.arc(centerX - 20 * scale, centerY - 110 * scale, 8 * scale, 0, 2 * Math.PI);
-            ctx.fill();
-            ctx.beginPath();
-            ctx.arc(centerX + 20 * scale, centerY - 110 * scale, 8 * scale, 0, 2 * Math.PI);
-            ctx.fill();
-
-            // Pupils
-            ctx.fillStyle = '#000000';
-            ctx.beginPath();
-            ctx.arc(centerX - 20 * scale, centerY - 110 * scale, 4 * scale, 0, 2 * Math.PI);
-            ctx.fill();
-            ctx.beginPath();
-            ctx.arc(centerX + 20 * scale, centerY - 110 * scale, 4 * scale, 0, 2 * Math.PI);
-            ctx.fill();
-
-            // Smile
-            ctx.strokeStyle = '#D2691E';
-            ctx.lineWidth = 3 * scale;
-            ctx.beginPath();
-            ctx.arc(centerX, centerY - 80 * scale, 15 * scale, 0, Math.PI);
-            ctx.stroke();
-
-            // Body
-            const outfitColors = {
-                kindness: '#FF69B4',
-                courage: '#9370DB', 
-                sharing: '#FFD700',
-                honesty: '#87CEEB',
-                friendship: '#98FB98',
-                perseverance: '#FF7F50'
-            };
-
-            ctx.fillStyle = outfitColors[theme] || '#FF69B4';
-            ctx.beginPath();
-            ctx.arc(centerX, centerY + 20 * scale, 80 * scale, 0, Math.PI);
-            ctx.fill();
-
-            // Arms
-            ctx.fillStyle = skinTones[skinTone] || skinTones.medium;
-            ctx.beginPath();
-            ctx.arc(centerX - 60 * scale, centerY, 20 * scale, 0, 2 * Math.PI);
-            ctx.fill();
-            ctx.beginPath();
-            ctx.arc(centerX + 60 * scale, centerY, 20 * scale, 0, 2 * Math.PI);
-            ctx.fill();
-
-            // Name
+            // Text
             ctx.fillStyle = '#FFFFFF';
             ctx.strokeStyle = '#000000';
-            ctx.lineWidth = 2 * scale;
-            ctx.font = `bold ${30 * scale}px Georgia`;
+            ctx.lineWidth = 3;
+            ctx.font = 'bold 48px Georgia';
             ctx.textAlign = 'center';
-            ctx.strokeText(name, centerX, 900);
-            ctx.fillText(name, centerX, 900);
+            ctx.strokeText(sceneTexts[sceneIndex], 512, 512);
+            ctx.fillText(sceneTexts[sceneIndex], 512, 512);
+
+            // Character representation
+            ctx.fillStyle = '#FF69B4';
+            ctx.beginPath();
+            ctx.arc(512, 300, 80, 0, 2 * Math.PI);
+            ctx.fill();
 
             return canvas.toDataURL('image/png');
         }
 
-        function displayPremiumStory() {
+        function displayStory() {
             document.getElementById('defaultPreview').style.display = 'none';
             document.getElementById('bookDisplay').style.display = 'block';
             document.getElementById('downloadSection').style.display = 'block';
-            updatePremiumPage();
+            updatePage();
         }
 
-        function updatePremiumPage() {
+        function updatePage() {
             const image = document.getElementById('bookImage');
             const title = document.getElementById('bookTitle');
             const text = document.getElementById('bookText');
@@ -1214,7 +1034,7 @@
             
             if (currentPage === currentStoryData.pages.length - 1) {
                 moral.style.display = 'block';
-                moral.innerHTML = `<h5>📖 Life Lesson</h5><p>${currentStoryData.fullMoral}</p>`;
+                moral.innerHTML = `<h5>🌻 Kindness Lesson</h5><p>${currentStoryData.fullMoral}</p>`;
             } else {
                 moral.style.display = 'none';
             }
@@ -1228,20 +1048,20 @@
         function previousPage() {
             if (currentPage > 0) {
                 currentPage--;
-                updatePremiumPage();
+                updatePage();
             }
         }
 
         function nextPage() {
             if (currentPage < currentStoryData.pages.length - 1) {
                 currentPage++;
-                updatePremiumPage();
+                updatePage();
             }
         }
 
-        async function downloadPremiumPDF() {
+        async function downloadStoryPDF() {
             if (!currentStoryData.title) {
-                alert('Please generate a premium story first!');
+                alert('Please generate a story first!');
                 return;
             }
 
@@ -1260,14 +1080,7 @@
                 
                 pdf.setFontSize(16);
                 pdf.setTextColor(255, 255, 255);
-                pdf.text(`A Premium Story for ${currentStoryData.name}`, 105, 70, { align: 'center' });
-
-                try {
-                    pdf.addImage(currentStoryData.pages[0].imageUrl, 'PNG', 30, 120, 150, 120);
-                } catch (e) {
-                    pdf.setFillColor(244, 194, 161);
-                    pdf.circle(105, 180, 40, 'F');
-                }
+                pdf.text(`A Story About Kindness`, 105, 70, { align: 'center' });
 
                 // Story pages
                 currentStoryData.pages.forEach((page, index) => {
@@ -1281,7 +1094,7 @@
                     pdf.setTextColor(255, 255, 255);
                     pdf.setFontSize(14);
                     pdf.setFont(undefined, 'bold');
-                    pdf.text(`Chapter ${index + 1}`, 105, 17, { align: 'center' });
+                    pdf.text(page.title, 105, 17, { align: 'center' });
                     
                     try {
                         pdf.addImage(page.imageUrl, 'PNG', 15, 35, 180, 140);
@@ -1309,8 +1122,8 @@
                     });
                 });
 
-                pdf.save(`${currentStoryData.name}_Premium_Story_Book.pdf`);
-                alert('📚 Premium story book downloaded!');
+                pdf.save(`${currentStoryData.name}_Garden_of_Kindness.pdf`);
+                alert('🌻 Your kindness story has been downloaded!');
                 
             } catch (error) {
                 console.error('PDF error:', error);
@@ -1335,22 +1148,7 @@
             document.getElementById('successMessage').style.display = 'none';
         }
 
-        // Update preview when theme changes
-        document.getElementById('storyTheme').addEventListener('change', function() {
-            const theme = this.value;
-            const themeEmojis = {
-                kindness: '🌻',
-                courage: '🦁',
-                sharing: '🎁',
-                honesty: '✨',
-                friendship: '🤝',
-                perseverance: '🏔️'
-            };
-            
-            document.getElementById('previewPlaceholder').textContent = themeEmojis[theme];
-        });
-
-        console.log("Script loaded successfully!"); // Debug
+        console.log("Kindness Story Generator loaded successfully!");
     </script>
 </body>
 </html>
