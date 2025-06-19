@@ -450,29 +450,65 @@
                 const story = stories[theme];
                 const prompt = story.prompt.replace(/Dom/g, name);
                 
-                // For demonstration, we'll use a placeholder image
-                // In real implementation, this would call your image generation API
-                const imageUrl = "data:image/svg+xml;base64," + btoa(`
-                    <svg width="400" height="400" xmlns="http://www.w3.org/2000/svg">
-                        <defs>
-                            <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
-                                <stop offset="0%" style="stop-color:#87CEEB;stop-opacity:1" />
-                                <stop offset="100%" style="stop-color:#98FB98;stop-opacity:1" />
-                            </linearGradient>
-                        </defs>
-                        <rect width="400" height="400" fill="url(#bg)"/>
-                        <circle cx="200" cy="150" r="40" fill="#FDBCB4"/>
-                        <rect x="180" y="120" width="40" height="30" fill="#8B4513"/>
-                        <circle cx="190" cy="140" r="3" fill="#000"/>
-                        <circle cx="210" cy="140" r="3" fill="#000"/>
-                        <path d="M 185 150 Q 200 160 215 150" stroke="#000" stroke-width="2" fill="none"/>
-                        <rect x="160" y="190" width="80" height="100" fill="#FF69B4"/>
-                        <rect x="140" y="240" width="30" height="50" fill="#FDBCB4"/>
-                        <rect x="230" y="240" width="30" height="50" fill="#FDBCB4"/>
-                        <text x="200" y="320" text-anchor="middle" font-family="Comic Sans MS" font-size="16" fill="#4B0082">${name}</text>
-                        <text x="200" y="340" text-anchor="middle" font-family="Comic Sans MS" font-size="12" fill="#4B0082">${getThemeEmoji(theme)} ${story.title.replace(/Dom/g, name)}</text>
-                    </svg>
-                `);
+                // Create a simple character image using Canvas
+                const canvas = document.createElement('canvas');
+                canvas.width = 400;
+                canvas.height = 400;
+                const ctx = canvas.getContext('2d');
+                
+                // Background gradient
+                const gradient = ctx.createLinearGradient(0, 0, 400, 400);
+                gradient.addColorStop(0, '#87CEEB');
+                gradient.addColorStop(1, '#98FB98');
+                ctx.fillStyle = gradient;
+                ctx.fillRect(0, 0, 400, 400);
+                
+                // Character head
+                ctx.fillStyle = '#FDBCB4';
+                ctx.beginPath();
+                ctx.arc(200, 150, 40, 0, 2 * Math.PI);
+                ctx.fill();
+                
+                // Hair
+                ctx.fillStyle = '#8B4513';
+                ctx.fillRect(180, 120, 40, 30);
+                
+                // Eyes
+                ctx.fillStyle = '#000';
+                ctx.beginPath();
+                ctx.arc(190, 140, 3, 0, 2 * Math.PI);
+                ctx.fill();
+                ctx.beginPath();
+                ctx.arc(210, 140, 3, 0, 2 * Math.PI);
+                ctx.fill();
+                
+                // Smile
+                ctx.strokeStyle = '#000';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.arc(200, 150, 10, 0, Math.PI);
+                ctx.stroke();
+                
+                // Body
+                ctx.fillStyle = '#FF69B4';
+                ctx.fillRect(160, 190, 80, 100);
+                
+                // Arms
+                ctx.fillStyle = '#FDBCB4';
+                ctx.fillRect(140, 240, 30, 50);
+                ctx.fillRect(230, 240, 30, 50);
+                
+                // Add name text
+                ctx.fillStyle = '#4B0082';
+                ctx.font = 'bold 16px Comic Sans MS';
+                ctx.textAlign = 'center';
+                ctx.fillText(name, 200, 320);
+                
+                // Add theme text
+                ctx.font = '12px Comic Sans MS';
+                ctx.fillText(story.title.replace(/Dom/g, name), 200, 340);
+                
+                const imageUrl = canvas.toDataURL('image/png');
 
                 // Store for PDF and navigation
                 currentStoryData = {
@@ -595,30 +631,36 @@
                 pdf.setFontSize(16);
                 pdf.text(`A Story for ${currentStoryData.name}`, 105, 60, { align: 'center' });
                 
-                // Add the character image on cover if it's not too large
+                // Add the character image on cover
                 try {
-                    if (currentStoryData.imageUrl.startsWith('data:image/svg+xml')) {
-                        // For SVG data URLs, we'll create a simple representation
-                        pdf.setFillColor(255, 255, 255);
+                    if (currentStoryData.imageUrl.startsWith('data:image/png')) {
+                        // Add the canvas-generated image
+                        pdf.addImage(currentStoryData.imageUrl, 'PNG', 55, 70, 100, 100);
+                    } else {
+                        // Fallback representation
+                        pdf.setFillColor(255, 182, 193);
                         pdf.circle(105, 120, 50, 'F');
-                        pdf.setTextColor(100, 100, 100);
-                        pdf.setFontSize(60);
-                        pdf.text('👧', 105, 130, { align: 'center' });
+                        pdf.setFillColor(139, 69, 19);
+                        pdf.rect(80, 95, 50, 25, 'F');
+                        pdf.setFillColor(253, 188, 180);
+                        pdf.circle(105, 120, 35, 'F');
+                        pdf.setFillColor(0, 0, 0);
+                        pdf.circle(95, 115, 3, 'F');
+                        pdf.circle(115, 115, 3, 'F');
                         
                         pdf.setFontSize(14);
                         pdf.setTextColor(50, 50, 50);
                         pdf.text(`${currentStoryData.name} with beautiful black hair`, 105, 180, { align: 'center' });
-                    } else {
-                        // For actual image URLs, try to include them
-                        pdf.addImage(currentStoryData.imageUrl, 'JPEG', 55, 70, 100, 100);
                     }
                 } catch (imageError) {
-                    console.log('Using text representation for image');
-                    pdf.setFillColor(255, 255, 255);
-                    pdf.circle(105, 120, 50, 'F');
-                    pdf.setTextColor(100, 100, 100);
-                    pdf.setFontSize(60);
-                    pdf.text('👧', 105, 130, { align: 'center' });
+                    console.log('Using simple representation for image');
+                    pdf.setFillColor(255, 182, 193);
+                    pdf.circle(105, 120, 40, 'F');
+                    pdf.setFillColor(139, 69, 19);
+                    pdf.rect(85, 100, 40, 20, 'F');
+                    pdf.setFontSize(14);
+                    pdf.setTextColor(50, 50, 50);
+                    pdf.text(`${currentStoryData.name}`, 105, 180, { align: 'center' });
                 }
                 
                 // Add story pages
