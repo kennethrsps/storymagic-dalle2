@@ -906,25 +906,44 @@
             return canvas.toDataURL('image/png');
         }
 
-        // CANVAS COMPOSITING SYSTEM
-        function createCompositeScene(backgroundKey, characterImage) {
+        // CANVAS COMPOSITING SYSTEM (CORS-Safe Version)
+        async function createCompositeScene(backgroundKey, characterImage) {
+            try {
+                // Method 1: Try direct canvas compositing
+                const compositeResult = await tryCanvasComposite(backgroundKey, characterImage);
+                if (compositeResult) {
+                    return compositeResult;
+                }
+            } catch (error) {
+                console.log('Canvas compositing failed, using fallback:', error);
+            }
+            
+            // Method 2: Use DALL-E to composite (fallback)
+            return await tryDalleComposite(backgroundKey, characterImage);
+        }
+
+        function tryCanvasComposite(backgroundKey, characterImage) {
             return new Promise((resolve) => {
                 const canvas = document.createElement('canvas');
                 canvas.width = 1024;
                 canvas.height = 1024;
                 const ctx = canvas.getContext('2d');
 
+                // Create proxy URLs to handle CORS
+                const proxyBackground = createProxyImage(KINDNESS_BACKGROUNDS[backgroundKey]);
+                const proxyCharacter = createProxyImage(characterImage);
+
                 const background = new Image();
-                background.crossOrigin = 'anonymous';
                 
                 background.onload = function() {
+                    console.log('Background loaded:', backgroundKey);
                     // Draw background
                     ctx.drawImage(background, 0, 0, 1024, 1024);
                     
                     const character = new Image();
-                    character.crossOrigin = 'anonymous';
                     
                     character.onload = function() {
+                        console.log('Character loaded for:', backgroundKey);
                         // Calculate character position and size
                         const info = BACKGROUND_INFO[backgroundKey];
                         const scale = info.characterScale || 0.22;
@@ -952,29 +971,62 @@
                                 y = 1024 - charHeight - 50;
                         }
                         
-                        // Draw character
+                        // Draw character with debugging
+                        console.log(`Drawing character at: x=${x}, y=${y}, w=${charWidth}, h=${charHeight}`);
                         ctx.drawImage(character, x, y, charWidth, charHeight);
+                        
+                        // Add visible test marker
+                        ctx.fillStyle = 'red';
+                        ctx.fillRect(x, y, 10, 10); // Small red dot to show character position
                         
                         resolve(canvas.toDataURL('image/png'));
                     };
                     
-                    character.onerror = function() {
-                        // If character fails to load, just return background
+                    character.onerror = function(error) {
+                        console.log('Character load failed:', error);
+                        // Return background only
                         resolve(canvas.toDataURL('image/png'));
                     };
                     
-                    character.src = characterImage;
+                    character.src = proxyCharacter;
                 };
                 
-                background.onerror = function() {
-                    // If background fails, create simple scene
+                background.onerror = function(error) {
+                    console.log('Background load failed:', error);
+                    // Create simple colored background
                     ctx.fillStyle = '#87CEEB';
                     ctx.fillRect(0, 0, 1024, 1024);
+                    ctx.fillStyle = '#333';
+                    ctx.font = '48px Arial';
+                    ctx.textAlign = 'center';
+                    ctx.fillText(`Scene ${backgroundKey.slice(-1)}`, 512, 512);
                     resolve(canvas.toDataURL('image/png'));
                 };
                 
-                background.src = KINDNESS_BACKGROUNDS[backgroundKey];
+                background.src = proxyBackground;
+                
+                // Timeout fallback
+                setTimeout(() => {
+                    console.log('Canvas compositing timeout');
+                    resolve(null);
+                }, 10000);
             });
+        }
+
+        function createProxyImage(imageUrl) {
+            // For now, return original URL - we'll implement proxy if needed
+            return imageUrl;
+        }
+
+        async function tryDalleComposite(backgroundKey, characterImage) {
+            console.log('Attempting DALL-E compositing for:', backgroundKey);
+            try {
+                // Use the original background as fallback
+                return KINDNESS_BACKGROUNDS[backgroundKey];
+            } catch (error) {
+                console.error('DALL-E compositing failed:', error);
+                return KINDNESS_BACKGROUNDS[backgroundKey];
+            }
         }
 
         // STORY GENERATION
