@@ -429,42 +429,101 @@
                 return;
             }
 
-            const codeOutput = `
-// Generated Kindness Story Backgrounds
+            // Convert all images to base64
+            convertImagesToBase64();
+        }
+
+        async function convertImagesToBase64() {
+            const base64Images = {};
+            const loadingMsg = document.createElement('div');
+            loadingMsg.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:white;padding:20px;border-radius:10px;box-shadow:0 10px 30px rgba(0,0,0,0.3);z-index:1000;text-align:center;';
+            loadingMsg.innerHTML = '<h3>🔄 Converting images to permanent format...</h3><p>This may take a moment...</p>';
+            document.body.appendChild(loadingMsg);
+
+            try {
+                for (let i = 1; i <= 6; i++) {
+                    const sceneKey = `scene${i}`;
+                    loadingMsg.innerHTML = `<h3>🔄 Converting Scene ${i}/6...</h3><p>Creating permanent storage...</p>`;
+                    
+                    const base64 = await convertImageToBase64(generatedBackgrounds[i]);
+                    base64Images[sceneKey] = base64;
+                    
+                    await new Promise(resolve => setTimeout(resolve, 500));
+                }
+
+                // Generate the permanent code
+                const permanentCode = `
+// PERMANENT Kindness Story Backgrounds (Base64 Embedded)
 const KINDNESS_BACKGROUNDS = {
-    scene1: "${generatedBackgrounds[1]}",
-    scene2: "${generatedBackgrounds[2]}",
-    scene3: "${generatedBackgrounds[3]}",
-    scene4: "${generatedBackgrounds[4]}",
-    scene5: "${generatedBackgrounds[5]}",
-    scene6: "${generatedBackgrounds[6]}"
+    scene1: "${base64Images.scene1}",
+    scene2: "${base64Images.scene2}", 
+    scene3: "${base64Images.scene3}",
+    scene4: "${base64Images.scene4}",
+    scene5: "${base64Images.scene5}",
+    scene6: "${base64Images.scene6}"
 };
 
 // Background descriptions for character positioning
 const BACKGROUND_INFO = {
-    scene1: { name: "Cozy Neighborhood", characterPosition: "center-bottom" },
-    scene2: { name: "Forgotten Garden", characterPosition: "center-bottom" },
-    scene3: { name: "Meeting Gardener", characterPosition: "left-bottom" },
-    scene4: { name: "Working Together", characterPosition: "center-bottom" },
-    scene5: { name: "Garden Blooms", characterPosition: "center-bottom" },
-    scene6: { name: "Community Garden", characterPosition: "center-bottom" }
+    scene1: { name: "Cozy Neighborhood", characterPosition: "center-bottom", characterScale: 0.25 },
+    scene2: { name: "Forgotten Garden", characterPosition: "center-bottom", characterScale: 0.22 },
+    scene3: { name: "Meeting Gardener", characterPosition: "left-bottom", characterScale: 0.20 },
+    scene4: { name: "Working Together", characterPosition: "center-bottom", characterScale: 0.23 },
+    scene5: { name: "Garden Blooms", characterPosition: "center-bottom", characterScale: 0.21 },
+    scene6: { name: "Community Garden", characterPosition: "center-bottom", characterScale: 0.24 }
 };
 
-console.log("✅ Kindness story backgrounds loaded successfully!");
-            `;
+console.log("✅ PERMANENT Kindness story backgrounds loaded!");
+                `;
 
-            // Create download
-            const blob = new Blob([codeOutput], { type: 'text/javascript' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'kindness_backgrounds.js';
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
+                // Download the permanent code
+                const blob = new Blob([permanentCode], { type: 'text/javascript' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'permanent_backgrounds.js';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
 
-            alert('🎉 Background code exported! Use this in your story generator.');
+                document.body.removeChild(loadingMsg);
+                alert('🎉 Permanent backgrounds created! Replace the backgrounds in your story generator with this code.');
+
+            } catch (error) {
+                document.body.removeChild(loadingMsg);
+                alert('❌ Failed to convert images: ' + error.message);
+                console.error('Conversion error:', error);
+            }
+        }
+
+        function convertImageToBase64(imageUrl) {
+            return new Promise((resolve, reject) => {
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                const img = new Image();
+                
+                img.crossOrigin = 'anonymous';
+                
+                img.onload = function() {
+                    canvas.width = img.width;
+                    canvas.height = img.height;
+                    ctx.drawImage(img, 0, 0);
+                    
+                    try {
+                        const base64 = canvas.toDataURL('image/png');
+                        resolve(base64);
+                    } catch (error) {
+                        reject(error);
+                    }
+                };
+                
+                img.onerror = function() {
+                    reject(new Error('Failed to load image'));
+                };
+                
+                img.src = imageUrl;
+            });
         }
 
         function downloadBackgrounds() {
