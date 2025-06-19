@@ -762,162 +762,32 @@
         // Global variables to store current story data
         let currentStoryData = {};
 
-        // Enhanced story templates - Multi-page stories with lessons for toddlers
+        // Enhanced story templates with more detailed character descriptions
         const storyTemplates = {
             garden: {
-                title: "{name}'s Magical Garden",
-                pages: [
-                    {
-                        text: "<span class='highlight'>{name}</span> found a sad, dry garden.",
-                        lesson: "Sometimes things look broken, but we can help fix them!",
-                        prompt: "A {age}-year-old {gender} named {name} with {hair} and {eyes} looking at a sad wilted garden with drooping flowers, accompanied by a {animalFriend}, children's book illustration, simple and clear, toddler-friendly art style"
-                    },
-                    {
-                        text: "The flowers whispered, 'We need water, please help us!'",
-                        lesson: "It's important to listen when others ask for help.",
-                        prompt: "Talking flowers with sad faces speaking to {name}, a {age}-year-old {gender} with {hair} and {eyes}, {animalFriend} listening too, magical garden scene, children's book illustration, expressive flowers, toddler-friendly"
-                    },
-                    {
-                        text: "<span class='highlight'>{name}</span> and {animalFriend} brought water for every flower.",
-                        lesson: "Helping others makes everyone happy!",
-                        prompt: "{name}, a {age}-year-old {gender} with {hair} and {eyes}, watering colorful flowers with a watering can, {animalFriend} helping carry water, bright happy garden, children's book illustration, cheerful and vibrant"
-                    },
-                    {
-                        text: "The garden bloomed! 'Thank you!' sang the happy flowers.",
-                        lesson: "When we help others, beautiful things happen!",
-                        prompt: "A magnificent blooming garden with smiling flowers, {name} a {age}-year-old {gender} with {hair} and {eyes} celebrating with {animalFriend}, rainbow colors, butterflies, children's book illustration, joyful celebration scene"
-                    },
-                    {
-                        text: "<span class='highlight'>{name}</span> learned that kindness makes the world more beautiful.",
-                        lesson: "Being kind is the most magical thing we can do!",
-                        prompt: "{name} a {age}-year-old {gender} with {hair} and {eyes} smiling in a beautiful magical garden, {animalFriend} beside them, hearts and sparkles in the air, children's book illustration, warm and loving, toddler-friendly final scene"
-                    }
-                ],
-                mainPrompt: "A beautiful magical garden with talking flowers, colorful butterflies, and a happy {age}-year-old {gender} named {name} with {hair} and {eyes}, accompanied by a {animalFriend}, watering glowing plants, fantasy children's book illustration, vibrant colors, whimsical and enchanting"
+                title: "{name}'s Magical Garden Adventure",
+                text: "Once upon a time, <span class='highlight'>{name}</span>, a {age}-year-old {gender} with beautiful {hair} and sparkling {eyes}, discovered a magical garden where flowers could talk and butterflies granted wishes. Together with {animalFriend}, {name} helped save the garden from a terrible drought, learning that caring for others brings the greatest magic of all.",
+                prompt: "A beautiful magical garden with talking flowers, colorful butterflies, and a happy {age}-year-old {gender} named {name} with {hair} and {eyes}, accompanied by a {animalFriend}, watering glowing plants, fantasy children's book illustration, vibrant colors, whimsical and enchanting, detailed character features, professional storybook art style"
             },
             space: {
-                title: "{name} Goes to Space",
-                pages: [
-                    {
-                        text: "<span class='highlight'>{name}</span> wanted to visit the stars.",
-                        lesson: "It's good to dream big!",
-                        prompt: "{name} a {age}-year-old {gender} with {hair} and {eyes} looking up at twinkling stars from their bedroom window, {animalFriend} beside them, children's book illustration, dreamy nighttime scene"
-                    },
-                    {
-                        text: "A friendly rocket said, 'Hop in! Let's go explore!'",
-                        lesson: "Sometimes adventures come when we least expect them!",
-                        prompt: "A colorful smiling rocket ship talking to {name} a {age}-year-old {gender} with {hair} and {eyes}, {animalFriend} excited too, children's book illustration, friendly and inviting"
-                    },
-                    {
-                        text: "In space, they met a lonely planet who had no friends.",
-                        lesson: "Everyone needs friendship, even planets!",
-                        prompt: "{name} a {age}-year-old {gender} with {hair} and {eyes} in a cute space suit floating near a sad planet with a face, {animalFriend} in tiny space helmet, stars around, children's book illustration"
-                    },
-                    {
-                        text: "<span class='highlight'>{name}</span> said, 'We can be your friends!'",
-                        lesson: "Offering friendship is always the right thing to do!",
-                        prompt: "{name} a {age}-year-old {gender} with {hair} and {eyes} reaching out to shake hands with a smiling planet, {animalFriend} giving planet a hug, space background, children's book illustration, heartwarming scene"
-                    },
-                    {
-                        text: "Now the planet was happy and had many star friends too!",
-                        lesson: "When we share friendship, it grows and spreads!",
-                        prompt: "Happy planet surrounded by smiling stars, {name} a {age}-year-old {gender} with {hair} and {eyes} and {animalFriend} celebrating, colorful space party, children's book illustration, joyful cosmic celebration"
-                    }
-                ],
-                mainPrompt: "A young {age}-year-old {gender} astronaut named {name} with {hair} and {eyes} in a colorful space suit floating among stars, planets, and nebulas, accompanied by a {animalFriend} in a tiny space helmet, children's book illustration, cosmic and magical"
+                title: "Commander {name}'s Space Mission",
+                text: "Brave astronaut <span class='highlight'>{name}</span>, a courageous {age}-year-old {gender} with {hair} and bright {eyes}, received an urgent mission to save a distant planet. Flying through sparkling nebulas with {animalFriend} as co-pilot, {name} discovered that friendship and teamwork were the greatest powers in the universe.",
+                prompt: "A young {age}-year-old {gender} astronaut named {name} with {hair} and {eyes} in a colorful space suit floating among stars, planets, and nebulas, accompanied by a {animalFriend} in a tiny space helmet, children's book illustration, cosmic and magical, detailed facial features"
             },
             princess: {
-                title: "{name} the Kind Princess",
-                pages: [
-                    {
-                        text: "Princess <span class='highlight'>{name}</span> lived in a beautiful castle.",
-                        lesson: "Even princesses have responsibilities!",
-                        prompt: "Princess {name} a {age}-year-old {gender} with {hair} and {eyes} in a pretty dress standing in front of a colorful castle, {animalFriend} wearing a tiny crown, children's book illustration, magical and royal"
-                    },
-                    {
-                        text: "She heard someone crying in the forest.",
-                        lesson: "Good people listen when others are sad.",
-                        prompt: "Princess {name} with {hair} and {eyes} listening carefully, hand to ear, {animalFriend} beside her, forest in background with crying sounds, children's book illustration, caring expression"
-                    },
-                    {
-                        text: "A little dragon was stuck under a big rock!",
-                        lesson: "Sometimes those who look scary just need help!",
-                        prompt: "A small cute dragon trapped under a rock looking sad, Princess {name} a {age}-year-old {gender} with {hair} and {eyes} and {animalFriend} discovering them, children's book illustration, empathetic scene"
-                    },
-                    {
-                        text: "Princess <span class='highlight'>{name}</span> and {animalFriend} moved the rock together.",
-                        lesson: "Working together makes us stronger!",
-                        prompt: "Princess {name} with {hair} and {eyes} and {animalFriend} pushing a big rock together to free the dragon, teamwork scene, children's book illustration, cooperation and effort"
-                    },
-                    {
-                        text: "The dragon became their best friend forever!",
-                        lesson: "Helping others creates the best friendships!",
-                        prompt: "Princess {name} a {age}-year-old {gender} with {hair} and {eyes}, {animalFriend}, and a happy little dragon playing together in a meadow, friendship and joy, children's book illustration, heartwarming ending"
-                    }
-                ],
-                mainPrompt: "A young {age}-year-old royal {gender} named {name} with {hair} and {eyes} in a beautiful crystal palace with rainbow reflections, wearing elegant royal clothes, accompanied by a {animalFriend}, surrounded by magical crystal formations, children's book illustration, sparkly and majestic"
+                title: "Royal {name} and the Crystal Kingdom",
+                text: "In a kingdom made of shimmering crystals, Royal <span class='highlight'>{name}</span>, a noble {age}-year-old {gender} with magnificent {hair} and wise {eyes}, embarked on a quest to restore the kingdom's lost colors. With {animalFriend} as a trusted companion, {name} learned that true royalty comes from helping others.",
+                prompt: "A young {age}-year-old royal {gender} named {name} with {hair} and {eyes} in a beautiful crystal palace with rainbow reflections, wearing elegant royal clothes, accompanied by a {animalFriend}, surrounded by magical crystal formations, children's book illustration, sparkly and majestic, detailed character portrait"
             },
             ocean: {
-                title: "{name}'s Ocean Adventure",
-                pages: [
-                    {
-                        text: "<span class='highlight'>{name}</span> found a magic seashell at the beach.",
-                        lesson: "Magic can be found in simple things!",
-                        prompt: "{name} a {age}-year-old {gender} with {hair} and {eyes} holding a glowing seashell on a sunny beach, {animalFriend} beside them, waves in background, children's book illustration, magical discovery"
-                    },
-                    {
-                        text: "The shell said, 'I can take you underwater to meet my friends!'",
-                        lesson: "New experiences can be exciting!",
-                        prompt: "A magical talking seashell with sparkles speaking to {name} with {hair} and {eyes}, {animalFriend} listening amazed, beach setting, children's book illustration, wonder and magic"
-                    },
-                    {
-                        text: "Under the sea, the fish were very sad and scared.",
-                        lesson: "Sometimes others need our help to feel safe.",
-                        prompt: "{name} a {age}-year-old {gender} with {hair} and {eyes} underwater in a bubble, {animalFriend} beside them, surrounded by sad scared fish, coral reef, children's book illustration, underwater empathy scene"
-                    },
-                    {
-                        text: "'Don't worry,' said <span class='highlight'>{name}</span>. 'We'll help clean your home!'",
-                        lesson: "Taking care of our world is everyone's job!",
-                        prompt: "{name} with {hair} and {eyes} and {animalFriend} underwater picking up trash and cleaning the ocean, fish watching hopefully, children's book illustration, environmental care, helping hands"
-                    },
-                    {
-                        text: "The ocean became clean and beautiful again!",
-                        lesson: "When we take care of nature, everyone is happy!",
-                        prompt: "Crystal clear ocean with happy colorful fish swimming around {name} a {age}-year-old {gender} with {hair} and {eyes} and {animalFriend}, coral reef blooming, children's book illustration, environmental success, joy and celebration"
-                    }
-                ],
-                mainPrompt: "A cheerful {age}-year-old {gender} named {name} with {hair} and {eyes} swimming underwater with colorful fish, dolphins, and sea turtles, accompanied by a {animalFriend}, in a vibrant coral reef, magical underwater scene, children's book illustration, bright and oceanic"
+                title: "{name}'s Underwater Adventure",
+                text: "Deep beneath the ocean waves, <span class='highlight'>{name}</span>, an adventurous {age}-year-old {gender} with flowing {hair} and ocean-blue {eyes}, discovered an underwater city filled with friendly sea creatures. Together with {animalFriend} and dolphins, seahorses, and wise old turtles, {name} helped protect the ocean's greatest treasure.",
+                prompt: "A cheerful {age}-year-old {gender} named {name} with {hair} and {eyes} swimming underwater with colorful fish, dolphins, and sea turtles, accompanied by a {animalFriend}, in a vibrant coral reef, magical underwater scene, children's book illustration, bright and oceanic, detailed character swimming"
             },
             forest: {
-                title: "{name} and the Lost Animals",
-                pages: [
-                    {
-                        text: "<span class='highlight'>{name}</span> heard crying sounds in the dark forest.",
-                        lesson: "Brave people help others even when they're scared!",
-                        prompt: "{name} a {age}-year-old {gender} with {hair} and {eyes} at the edge of a forest, {animalFriend} beside them, listening to sad sounds, children's book illustration, brave and caring"
-                    },
-                    {
-                        text: "Three baby animals had lost their way home.",
-                        lesson: "Everyone gets lost sometimes and needs help!",
-                        prompt: "Three cute baby animals (bunny, squirrel, bird) looking lost and sad, {name} with {hair} and {eyes} and {animalFriend} finding them in the forest, children's book illustration, discovery scene"
-                    },
-                    {
-                        text: "'Don't cry,' said <span class='highlight'>{name}</span>. 'We'll help you find home!'",
-                        lesson: "Kind words help others feel better!",
-                        prompt: "{name} a {age}-year-old {gender} with {hair} and {eyes} kneeling down to comfort three baby animals, {animalFriend} being supportive, forest setting, children's book illustration, compassion and kindness"
-                    },
-                    {
-                        text: "They followed the animal tracks through the forest together.",
-                        lesson: "Working as a team helps solve problems!",
-                        prompt: "{name} with {hair} and {eyes}, {animalFriend}, and three baby animals following paw prints through a sunny forest path, teamwork adventure, children's book illustration, problem-solving together"
-                    },
-                    {
-                        text: "The mama animals were so happy to see their babies safe!",
-                        lesson: "Helping others brings joy to everyone!",
-                        prompt: "Happy reunion scene with mama animals hugging their babies, {name} a {age}-year-old {gender} with {hair} and {eyes} and {animalFriend} watching joyfully, forest clearing, children's book illustration, love and family joy"
-                    }
-                ],
-                mainPrompt: "A brave {age}-year-old {gender} named {name} with {hair} and {eyes} in an enchanted forest with talking animals like rabbits, deer, and owls, accompanied by a {animalFriend}, magical trees with glowing leaves, children's book illustration, warm and mystical"
+                title: "{name} and the Enchanted Forest",
+                text: "When <span class='highlight'>{name}</span>, a brave {age}-year-old {gender} with beautiful {hair} and kind {eyes}, wandered into an enchanted forest, they met talking animals who needed help finding their lost home. With {animalFriend} leading the way, {name} guided them through magical adventures to safety.",
+                prompt: "A brave {age}-year-old {gender} named {name} with {hair} and {eyes} in an enchanted forest with talking animals like rabbits, deer, and owls, accompanied by a {animalFriend}, magical trees with glowing leaves, children's book illustration, warm and mystical, detailed character in forest setting"
             },
             castle: {
                 title: "Knight {name} and the Medieval Quest",
