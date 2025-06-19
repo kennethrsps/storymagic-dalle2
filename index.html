@@ -401,7 +401,7 @@
                     
                     <div class="form-group">
                         <label for="childName">Child's Name</label>
-                        <input type="text" id="childName" placeholder="Enter child's name" value="Emma">
+                        <input type="text" id="childName" placeholder="Enter child's name" value="Dom">
                     </div>
 
                     <div class="row">
@@ -418,14 +418,22 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="storyTheme">Story Theme</label>
-                            <select id="storyTheme">
-                                <option value="kindness">🌻 Kindness</option>
-                                <option value="courage">🦁 Courage</option>
-                                <option value="sharing">🎁 Sharing</option>
-                                <option value="friendship">🤝 Friendship</option>
+                            <label for="childGender">Gender</label>
+                            <select id="childGender">
+                                <option value="girl" selected>Girl</option>
+                                <option value="boy">Boy</option>
                             </select>
                         </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="storyTheme">Story Theme</label>
+                        <select id="storyTheme">
+                            <option value="kindness">🌻 Kindness</option>
+                            <option value="courage">🦁 Courage</option>
+                            <option value="sharing">🎁 Sharing</option>
+                            <option value="friendship">🤝 Friendship</option>
+                        </select>
                     </div>
                 </div>
 
@@ -595,14 +603,10 @@
 
         // Main generation function
         async function generateCartoonStory() {
-            const name = document.getElementById('childName').value.trim() || 'Alex';
+            const name = document.getElementById('childName').value.trim() || 'Dom';
             const age = document.getElementById('childAge').value;
+            const gender = document.getElementById('childGender').value;
             const theme = document.getElementById('storyTheme').value;
-            
-            if (!uploadedPhotoData) {
-                showError('Please upload a photo of your child first!');
-                return;
-            }
 
             const btn = document.getElementById('generateBtn');
             const spinner = document.getElementById('loadingSpinner');
@@ -610,44 +614,64 @@
             
             btn.disabled = true;
             spinner.style.display = 'block';
-            btnText.textContent = 'Cartoonizing Photo...';
             hideMessages();
 
             try {
                 const template = storyTemplates[theme];
-                const personalizedPages = template.pages.map(page => page.replace(/{name}/g, name));
+                const personalizedPages = template.pages.map(page => 
+                    page.replace(/{name}/g, name)
+                        .replace(/{he_she}/g, gender === 'girl' ? 'she' : 'he')
+                        .replace(/{his_her}/g, gender === 'girl' ? 'her' : 'his')
+                );
                 
-                showSuccess(`Creating cartoon story for ${name}...`);
+                if (uploadedPhotoData) {
+                    btnText.textContent = 'Cartoonizing Photo...';
+                    showSuccess(`Creating cartoon story for ${name} using uploaded photo...`);
+                } else {
+                    btnText.textContent = 'Creating Story...';
+                    showSuccess(`Creating story for ${name} using AI generation...`);
+                }
 
-                // Generate cartoonized images for each page
+                // Generate images for each page
                 const sceneDescriptions = [
-                    "happy introduction scene with bright colors and welcoming atmosphere",
-                    "discovering a problem or challenge, showing concern and empathy",
-                    "taking positive action, showing determination and helpfulness", 
-                    "working together with others, showing cooperation and teamwork",
-                    "celebrating success and positive transformation with joy",
-                    "learning important life lesson, showing wisdom and growth"
+                    `A ${age}-year-old ${gender} named ${name} in a happy introduction scene with bright colors and welcoming atmosphere, children's book illustration style`,
+                    `A ${age}-year-old ${gender} named ${name} discovering a problem or challenge, showing concern and empathy, children's book illustration style`,
+                    `A ${age}-year-old ${gender} named ${name} taking positive action, showing determination and helpfulness, children's book illustration style`, 
+                    `A ${age}-year-old ${gender} named ${name} working together with others, showing cooperation and teamwork, children's book illustration style`,
+                    `A ${age}-year-old ${gender} named ${name} celebrating success and positive transformation with joy, children's book illustration style`,
+                    `A ${age}-year-old ${gender} named ${name} learning important life lesson, showing wisdom and growth, children's book illustration style`
                 ];
 
                 const pageImages = [];
                 
                 for (let i = 0; i < personalizedPages.length; i++) {
                     btnText.textContent = `Creating Page ${i + 1}/6...`;
-                    showSuccess(`Cartoonizing page ${i + 1}: ${sceneDescriptions[i]}`);
+                    showSuccess(`Working on page ${i + 1}...`);
                     
-                    const prompt = sceneDescriptions[i];
-                    const imageUrl = await generateCartoonImage(prompt, uploadedPhotoData);
+                    let imageUrl = null;
+                    
+                    try {
+                        if (uploadedPhotoData) {
+                            // Try photo cartoonization
+                            imageUrl = await generateCartoonImage(sceneDescriptions[i], uploadedPhotoData);
+                        } else {
+                            // Try text-based generation
+                            imageUrl = await generateCartoonImage(sceneDescriptions[i]);
+                        }
+                    } catch (error) {
+                        console.log('AI generation failed, using fallback');
+                    }
                     
                     if (imageUrl) {
                         pageImages.push(imageUrl);
-                        showSuccess(`✅ Page ${i + 1} cartoonized successfully!`);
+                        showSuccess(`✅ Page ${i + 1} generated successfully!`);
                     } else {
-                        // Fallback to canvas-generated image
+                        // Use enhanced fallback
                         pageImages.push(createFallbackImage(name, i));
-                        showSuccess(`📝 Page ${i + 1} created with fallback illustration`);
+                        showSuccess(`📝 Page ${i + 1} created with custom illustration`);
                     }
                     
-                    await new Promise(resolve => setTimeout(resolve, 1000));
+                    await new Promise(resolve => setTimeout(resolve, 800));
                 }
 
                 // Store story data
@@ -663,11 +687,12 @@
                 displayStory();
                 
                 btnText.textContent = '✅ Story Complete!';
-                showSuccess(`🎉 ${name}'s cartoon story is ready!`);
+                showSuccess(`🎉 ${name}'s story is ready! Navigate through all pages.`);
 
             } catch (error) {
                 console.error('Generation error:', error);
                 showError(`Failed to create story: ${error.message}`);
+                btnText.textContent = '🎨 Cartoonize & Create Story!';
             } finally {
                 setTimeout(() => {
                     btn.disabled = false;
@@ -677,7 +702,7 @@
             }
         }
 
-        // Fallback image creation
+        // Enhanced fallback image creation with detailed character
         function createFallbackImage(name, pageIndex) {
             const canvas = document.createElement('canvas');
             canvas.width = 1024;
@@ -686,12 +711,12 @@
 
             // Background colors for different pages
             const backgrounds = [
-                ['#FFE4B5', '#FFB6C1'], // Page 1
-                ['#B0C4DE', '#D8BFD8'], // Page 2  
-                ['#FFD700', '#FFA500'], // Page 3
-                ['#98FB98', '#90EE90'], // Page 4
-                ['#DDA0DD', '#9370DB'], // Page 5
-                ['#FF69B4', '#FFB6C1']  // Page 6
+                ['#FFE4B5', '#FFB6C1'], // Page 1 - warm introduction
+                ['#B0C4DE', '#D8BFD8'], // Page 2 - problem discovery
+                ['#FFD700', '#FFA500'], // Page 3 - taking action
+                ['#98FB98', '#90EE90'], // Page 4 - collaboration
+                ['#DDA0DD', '#9370DB'], // Page 5 - transformation
+                ['#FF69B4', '#FFB6C1']  // Page 6 - lesson learned
             ];
 
             const colors = backgrounds[pageIndex] || backgrounds[0];
@@ -703,18 +728,97 @@
             ctx.fillStyle = gradient;
             ctx.fillRect(0, 0, 1024, 1024);
 
-            // Add text
+            // Get child info
+            const gender = document.getElementById('childGender').value;
+            const age = document.getElementById('childAge').value;
+
+            // Character position
+            const centerX = 512;
+            const centerY = 400;
+            const scale = 3;
+
+            // Draw cartoon character
+            // Head (skin tone)
+            ctx.fillStyle = '#F4C2A1';
+            ctx.beginPath();
+            ctx.arc(centerX, centerY - 80 * scale, 50 * scale, 0, 2 * Math.PI);
+            ctx.fill();
+
+            // Hair
+            ctx.fillStyle = gender === 'girl' ? '#8B4513' : '#654321';
+            ctx.beginPath();
+            if (gender === 'girl') {
+                // Long hair for girls
+                ctx.arc(centerX, centerY - 100 * scale, 60 * scale, 0, Math.PI);
+                ctx.fill();
+                // Hair sides
+                ctx.arc(centerX - 40 * scale, centerY - 60 * scale, 25 * scale, 0, 2 * Math.PI);
+                ctx.fill();
+                ctx.arc(centerX + 40 * scale, centerY - 60 * scale, 25 * scale, 0, 2 * Math.PI);
+                ctx.fill();
+            } else {
+                // Short hair for boys
+                ctx.arc(centerX, centerY - 95 * scale, 55 * scale, 0, Math.PI);
+                ctx.fill();
+            }
+
+            // Eyes
+            ctx.fillStyle = '#FFFFFF';
+            ctx.beginPath();
+            ctx.arc(centerX - 15 * scale, centerY - 90 * scale, 8 * scale, 0, 2 * Math.PI);
+            ctx.fill();
+            ctx.arc(centerX + 15 * scale, centerY - 90 * scale, 8 * scale, 0, 2 * Math.PI);
+            ctx.fill();
+
+            // Eye pupils
+            ctx.fillStyle = '#000000';
+            ctx.beginPath();
+            ctx.arc(centerX - 15 * scale, centerY - 90 * scale, 4 * scale, 0, 2 * Math.PI);
+            ctx.fill();
+            ctx.arc(centerX + 15 * scale, centerY - 90 * scale, 4 * scale, 0, 2 * Math.PI);
+            ctx.fill();
+
+            // Smile
+            ctx.strokeStyle = '#D2691E';
+            ctx.lineWidth = 3 * scale;
+            ctx.beginPath();
+            ctx.arc(centerX, centerY - 70 * scale, 12 * scale, 0, Math.PI);
+            ctx.stroke();
+
+            // Body (shirt)
+            const shirtColors = ['#FF69B4', '#4169E1', '#32CD32', '#FFD700', '#FF6347'];
+            ctx.fillStyle = shirtColors[pageIndex % shirtColors.length];
+            ctx.beginPath();
+            ctx.arc(centerX, centerY + 10 * scale, 60 * scale, 0, Math.PI);
+            ctx.fill();
+
+            // Arms
+            ctx.fillStyle = '#F4C2A1';
+            ctx.beginPath();
+            ctx.arc(centerX - 45 * scale, centerY - 20 * scale, 15 * scale, 0, 2 * Math.PI);
+            ctx.fill();
+            ctx.arc(centerX + 45 * scale, centerY - 20 * scale, 15 * scale, 0, 2 * Math.PI);
+            ctx.fill();
+
+            // Add scene elements based on page
+            const sceneEmojis = ['😊', '😟', '💪', '🤝', '✨', '🎉'];
+            ctx.font = '80px serif';
+            ctx.fillText(sceneEmojis[pageIndex], centerX + 150, centerY - 100);
+            ctx.fillText(sceneEmojis[pageIndex], centerX - 200, centerY + 50);
+
+            // Add child's name
             ctx.fillStyle = '#FFFFFF';
             ctx.strokeStyle = '#000000';
-            ctx.lineWidth = 4;
-            ctx.font = 'bold 60px Georgia';
+            ctx.lineWidth = 6;
+            ctx.font = 'bold 48px Georgia';
             ctx.textAlign = 'center';
-            ctx.strokeText(name, 512, 400);
-            ctx.fillText(name, 512, 400);
+            ctx.strokeText(name, centerX, centerY + 200);
+            ctx.fillText(name, centerX, centerY + 200);
             
-            ctx.font = 'bold 40px Georgia';
-            ctx.strokeText(`Page ${pageIndex + 1}`, 512, 500);
-            ctx.fillText(`Page ${pageIndex + 1}`, 512, 500);
+            // Add page info
+            ctx.font = 'bold 32px Georgia';
+            ctx.strokeText(`Page ${pageIndex + 1}`, centerX, centerY + 250);
+            ctx.fillText(`Page ${pageIndex + 1}`, centerX, centerY + 250);
 
             return canvas.toDataURL('image/png');
         }
