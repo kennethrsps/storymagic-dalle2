@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>StoryMagic Pro - AI-Powered Personalized Children's Books</title>
+    <title>StoryMagic Pro - Visual Story Books</title>
     <style>
         * {
             margin: 0;
@@ -12,186 +12,100 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-family: 'Comic Sans MS', cursive, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
-            overflow-x: hidden;
-        }
-
-        .hero-section {
-            text-align: center;
-            padding: 60px 20px;
-            background: linear-gradient(135deg, #ff6b6b 0%, #ffa726 100%);
-            color: white;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .hero-section::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 20"><defs><radialGradient id="a"><stop offset="20%" stop-color="%23FFF" stop-opacity="0.1"/><stop offset="100%" stop-color="%23FFF" stop-opacity="0"/></radialGradient></defs><circle fill="url(%23a)" cx="10" cy="10" r="10"/><circle fill="url(%23a)" cx="30" cy="5" r="8"/><circle fill="url(%23a)" cx="60" cy="15" r="6"/><circle fill="url(%23a)" cx="80" cy="8" r="12"/></svg>') repeat;
-            animation: sparkle 3s linear infinite;
-        }
-
-        @keyframes sparkle {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(100px); }
-        }
-
-        .hero-title {
-            font-size: 3.5em;
-            font-weight: bold;
-            margin-bottom: 20px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-            position: relative;
-            z-index: 1;
-        }
-
-        .hero-subtitle {
-            font-size: 1.3em;
-            margin-bottom: 15px;
-            opacity: 0.95;
-            position: relative;
-            z-index: 1;
-        }
-
-        .hero-tagline {
-            font-size: 1.1em;
-            font-weight: 300;
-            margin-bottom: 30px;
-            position: relative;
-            z-index: 1;
-        }
-
-        .pricing-badge {
-            display: inline-block;
-            background: rgba(255,255,255,0.2);
-            padding: 10px 20px;
-            border-radius: 50px;
-            font-size: 1.1em;
-            font-weight: bold;
-            margin-bottom: 20px;
-            backdrop-filter: blur(10px);
-            border: 2px solid rgba(255,255,255,0.3);
-            position: relative;
-            z-index: 1;
+            padding: 20px;
         }
 
         .container {
-            max-width: 1200px;
-            margin: -30px auto 0;
+            max-width: 900px;
+            margin: 0 auto;
             background: white;
-            border-radius: 30px 30px 0 0;
-            box-shadow: 0 -10px 50px rgba(0,0,0,0.2);
-            position: relative;
-            z-index: 2;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(45deg, #ff6b6b, #ffa726);
+            color: white;
+            text-align: center;
+            padding: 30px;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
         }
 
         .main-content {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 0;
-            min-height: 700px;
+            min-height: 600px;
         }
 
         .form-section {
-            padding: 50px 40px;
-            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            padding: 40px;
+            background: #f8f9fa;
         }
 
         .preview-section {
-            padding: 50px 40px;
+            padding: 40px;
             background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            position: relative;
-        }
-
-        .section-title {
-            font-size: 2em;
-            font-weight: bold;
-            color: #333;
-            margin-bottom: 30px;
-            text-align: center;
-            position: relative;
-        }
-
-        .section-title::after {
-            content: '';
-            position: absolute;
-            bottom: -10px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 50px;
-            height: 3px;
-            background: linear-gradient(45deg, #ff6b6b, #ffa726);
-            border-radius: 2px;
         }
 
         .form-group {
             margin-bottom: 25px;
-            position: relative;
         }
 
         .form-group label {
             display: block;
             margin-bottom: 8px;
-            font-weight: 600;
+            font-weight: bold;
             color: #333;
             font-size: 1.1em;
         }
 
-        .form-group input, .form-group select, .form-group textarea {
+        .form-group input, .form-group select {
             width: 100%;
-            padding: 15px;
-            border: 2px solid #e9ecef;
-            border-radius: 12px;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
             font-size: 1em;
             font-family: inherit;
-            transition: all 0.3s ease;
-            background: white;
+            transition: border-color 0.3s;
         }
 
-        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+        .form-group input:focus, .form-group select:focus {
             outline: none;
             border-color: #ff6b6b;
-            box-shadow: 0 0 0 3px rgba(255, 107, 107, 0.1);
-            transform: translateY(-2px);
-        }
-
-        .character-customization {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin-bottom: 25px;
         }
 
         .generate-btn {
             background: linear-gradient(45deg, #4ecdc4, #44a08d);
             color: white;
             border: none;
-            padding: 18px 30px;
+            padding: 15px 30px;
             border-radius: 25px;
-            font-size: 1.3em;
+            font-size: 1.2em;
             font-weight: bold;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: transform 0.3s, box-shadow 0.3s;
             width: 100%;
             position: relative;
             overflow: hidden;
-            box-shadow: 0 8px 25px rgba(78, 205, 196, 0.3);
         }
 
         .generate-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 12px 35px rgba(78, 205, 196, 0.4);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
         }
 
         .generate-btn:disabled {
@@ -203,13 +117,13 @@
         .loading-spinner {
             display: none;
             position: absolute;
-            left: 20px;
+            left: 15px;
             top: 50%;
             transform: translateY(-50%);
-            width: 24px;
-            height: 24px;
-            border: 3px solid transparent;
-            border-top: 3px solid white;
+            width: 20px;
+            height: 20px;
+            border: 2px solid transparent;
+            border-top: 2px solid white;
             border-radius: 50%;
             animation: spin 1s linear infinite;
         }
@@ -222,17 +136,11 @@
         .story-book {
             display: none;
             width: 100%;
-            height: 550px;
-            border-radius: 20px;
+            height: 500px;
+            border-radius: 15px;
             overflow: hidden;
             position: relative;
-            box-shadow: 0 15px 50px rgba(0,0,0,0.3);
-            cursor: pointer;
-            transition: transform 0.3s ease;
-        }
-
-        .story-book:hover {
-            transform: scale(1.02);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
         }
 
         .story-page {
@@ -248,327 +156,148 @@
         }
 
         .story-overlay {
-            background: rgba(0,0,0,0.6);
+            background: rgba(0,0,0,0.4);
             color: white;
-            padding: 40px;
-            border-radius: 20px;
-            max-width: 85%;
+            padding: 30px;
+            border-radius: 15px;
+            max-width: 80%;
             text-align: center;
-            backdrop-filter: blur(10px);
-            border: 2px solid rgba(255,255,255,0.2);
-            animation: fadeInUp 0.8s ease;
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            backdrop-filter: blur(5px);
+            border: 2px solid rgba(255,255,255,0.3);
         }
 
         .story-title {
-            font-size: 2.2em;
-            margin-bottom: 20px;
+            font-size: 2em;
+            margin-bottom: 15px;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
-            font-weight: bold;
         }
 
         .story-text {
-            font-size: 1.2em;
-            line-height: 1.8;
+            font-size: 1.1em;
+            line-height: 1.6;
             text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
         }
 
-        .highlight {
-            background: linear-gradient(120deg, #a8edea 0%, #fed6e3 100%);
-            padding: 4px 10px;
-            border-radius: 8px;
-            font-weight: bold;
-            color: #333;
-            text-shadow: none;
-        }
-
         .character-preview {
-            width: 180px;
-            height: 180px;
+            width: 150px;
+            height: 150px;
             border-radius: 50%;
-            margin: 0 auto 30px;
+            margin: 0 auto 20px;
             background: linear-gradient(45deg, #ff9a9e, #fecfef);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 5em;
-            border: 6px solid white;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            font-size: 4em;
+            border: 5px solid white;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
             transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .character-preview::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-            transition: left 0.5s;
-        }
-
-        .character-preview:hover::before {
-            left: 100%;
-        }
-
-        .success-message, .error-message {
-            padding: 20px;
-            border-radius: 12px;
-            margin-top: 20px;
-            display: none;
-            font-weight: 500;
-        }
-
-        .success-message {
-            background: linear-gradient(135deg, #d4edda, #c3e6cb);
-            color: #155724;
-            border-left: 5px solid #28a745;
         }
 
         .error-message {
-            background: linear-gradient(135deg, #f8d7da, #f5c6cb);
-            color: #721c24;
-            border-left: 5px solid #dc3545;
+            background: #ffebee;
+            color: #c62828;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+            border-left: 5px solid #f44336;
+            display: none;
         }
 
-        .premium-features {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 20px;
-            border-radius: 15px;
-            margin-top: 30px;
-        }
-
-        .premium-features h4 {
-            margin-bottom: 15px;
-            font-size: 1.2em;
-        }
-
-        .premium-features ul {
-            list-style: none;
-            padding: 0;
-        }
-
-        .premium-features li {
-            padding: 8px 0;
-            position: relative;
-            padding-left: 25px;
-        }
-
-        .premium-features li::before {
-            content: '✨';
-            position: absolute;
-            left: 0;
+        .success-message {
+            background: #e8f5e8;
+            color: #2e7d32;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+            border-left: 5px solid #4caf50;
+            display: none;
         }
 
         .download-section {
             background: linear-gradient(135deg, #28a745, #20c997);
             color: white;
-            padding: 25px;
-            border-radius: 15px;
+            padding: 20px;
+            border-radius: 10px;
             margin-top: 20px;
             text-align: center;
             display: none;
-            animation: slideIn 0.5s ease;
-        }
-
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
         }
 
         .download-btn {
             background: white;
             color: #28a745;
             border: none;
-            padding: 15px 30px;
-            border-radius: 25px;
-            font-size: 1.1em;
+            padding: 12px 25px;
+            border-radius: 20px;
+            font-size: 1em;
             font-weight: bold;
             cursor: pointer;
-            margin: 10px;
+            margin: 5px;
             transition: all 0.3s ease;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
         }
 
         .download-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
         }
 
         @media (max-width: 768px) {
             .main-content {
                 grid-template-columns: 1fr;
             }
-            
-            .hero-title {
-                font-size: 2.5em;
-            }
-            
-            .character-customization {
-                grid-template-columns: 1fr;
-            }
-            
-            .story-overlay {
-                padding: 25px;
-                max-width: 95%;
-            }
-            
-            .story-title {
-                font-size: 1.8em;
-            }
         }
     </style>
 </head>
 <body>
-    <!-- Hero Section -->
-    <div class="hero-section">
-        <div class="pricing-badge">🎨 Professional AI Story Generator</div>
-        <h1 class="hero-title">StoryMagic Pro</h1>
-        <p class="hero-subtitle">Create Stunning Personalized Children's Books</p>
-        <p class="hero-tagline">Each story is uniquely crafted with AI-generated illustrations that bring your child's imagination to life</p>
-    </div>
-
     <div class="container">
+        <div class="header">
+            <h1>🎨 StoryMagic Pro</h1>
+            <p>Create Visual Story Books with AI Characters</p>
+        </div>
+
         <div class="main-content">
             <div class="form-section">
-                <h2 class="section-title">Create Your Story</h2>
+                <h2 style="color: #333; margin-bottom: 30px; text-align: center;">Create Your Story</h2>
                 
                 <div class="form-group">
                     <label for="childName">Child's Name</label>
-                    <input type="text" id="childName" placeholder="Enter your child's name" value="Emma">
-                </div>
-
-                <div class="character-customization">
-                    <div class="form-group">
-                        <label for="childAge">Age</label>
-                        <select id="childAge">
-                            <option value="3">3 years old</option>
-                            <option value="4">4 years old</option>
-                            <option value="5">5 years old</option>
-                            <option value="6" selected>6 years old</option>
-                            <option value="7">7 years old</option>
-                            <option value="8">8 years old</option>
-                            <option value="9">9 years old</option>
-                            <option value="10">10 years old</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="childGender">Character Type</label>
-                        <select id="childGender">
-                            <option value="child">Child</option>
-                            <option value="brave boy">Brave Boy</option>
-                            <option value="adventurous girl">Adventurous Girl</option>
-                            <option value="young hero">Young Hero</option>
-                            <option value="little explorer">Little Explorer</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="character-customization">
-                    <div class="form-group">
-                        <label for="hairColor">Hair Color</label>
-                        <select id="hairColor">
-                            <option value="brown">Brown Hair</option>
-                            <option value="blonde">Blonde Hair</option>
-                            <option value="black">Black Hair</option>
-                            <option value="red">Red Hair</option>
-                            <option value="curly brown">Curly Brown</option>
-                            <option value="long blonde">Long Blonde</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="eyeColor">Eye Color</label>
-                        <select id="eyeColor">
-                            <option value="brown">Brown Eyes</option>
-                            <option value="blue">Blue Eyes</option>
-                            <option value="green">Green Eyes</option>
-                            <option value="hazel">Hazel Eyes</option>
-                        </select>
-                    </div>
+                    <input type="text" id="childName" placeholder="Enter your child's name" value="Dom">
                 </div>
 
                 <div class="form-group">
-                    <label for="animalFriend">Animal Companion</label>
-                    <select id="animalFriend">
-                        <option value="magical butterfly">🦋 Magical Butterfly</option>
-                        <option value="wise rabbit">🐰 Wise Rabbit</option>
-                        <option value="loyal cat">🐱 Loyal Cat</option>
-                        <option value="playful dog">🐶 Playful Dog</option>
-                        <option value="friendly dragon">🐉 Friendly Dragon</option>
-                        <option value="wise owl">🦉 Wise Owl</option>
-                        <option value="gentle unicorn">🦄 Gentle Unicorn</option>
+                    <label for="childAge">Age</label>
+                    <select id="childAge">
+                        <option value="3">3 years old</option>
+                        <option value="4" selected>4 years old</option>
+                        <option value="5">5 years old</option>
+                        <option value="6">6 years old</option>
+                        <option value="7">7 years old</option>
                     </select>
                 </div>
 
                 <div class="form-group">
-                    <label for="storyTheme">Story Adventure</label>
+                    <label for="storyTheme">Choose Your Adventure</label>
                     <select id="storyTheme">
-                        <option value="garden">🌻 Magical Garden</option>
-                        <option value="space">🚀 Space Adventure</option>
-                        <option value="princess">👑 Royal Adventure</option>
-                        <option value="ocean">🌊 Ocean Explorer</option>
-                        <option value="forest">🌲 Enchanted Forest</option>
-                        <option value="castle">🏰 Medieval Castle</option>
-                        <option value="pirate">🏴‍☠️ Pirate Adventure</option>
-                        <option value="dinosaur">🦕 Dinosaur World</option>
+                        <option value="garden">🌻 Dom's Magic Garden</option>
+                        <option value="space">🚀 Dom Goes to Space</option>
+                        <option value="ocean">🌊 Dom's Ocean Adventure</option>
+                        <option value="castle">🏰 Dom the Brave Knight</option>
+                        <option value="pirate">🏴‍☠️ Captain Dom's Treasure</option>
                     </select>
                 </div>
 
-                <div class="form-group">
-                    <label for="customElements">Special Elements (Optional)</label>
-                    <textarea id="customElements" rows="3" placeholder="Add special details: favorite colors, hobbies, or magical elements you'd like included..."></textarea>
-                </div>
-
-                <button class="generate-btn" onclick="generateStoryWithImage()" id="generateBtn">
+                <button class="generate-btn" onclick="generateStory()" id="generateBtn">
                     <div class="loading-spinner" id="loadingSpinner"></div>
-                    <span id="btnText">🎨 Generate Your Magical Story!</span>
+                    <span id="btnText">🎨 Create Dom's Story!</span>
                 </button>
-
-                <div class="premium-features">
-                    <h4>✨ What You Get:</h4>
-                    <ul>
-                        <li>5-page personalized story book</li>
-                        <li>Educational lessons on every page</li>
-                        <li>Simple words perfect for toddlers</li>
-                        <li>AI-generated custom artwork</li>
-                        <li>Character looks like your child</li>
-                        <li>Downloadable PDF for printing</li>
-                        <li>Perfect bedtime story length</li>
-                    </ul>
-                </div>
 
                 <div class="success-message" id="successMessage"></div>
                 <div class="error-message" id="errorMessage"></div>
                 
-                <!-- Download Section -->
                 <div class="download-section" id="downloadSection">
-                    <h4 style="margin-bottom: 15px;">📥 Download Your Story</h4>
-                    <p style="margin-bottom: 20px;">Your personalized story is ready!</p>
-                    <button class="download-btn" onclick="downloadPDF()">📄 Download PDF Book</button>
-                    <button class="download-btn" onclick="downloadImage()">🖼️ Download Image Only</button>
-                    <p style="font-size: 0.9em; margin-top: 15px; opacity: 0.8;">Perfect for printing, sharing, or keeping as a digital keepsake!</p>
+                    <h4>📚 Your Story Book is Ready!</h4>
+                    <p>Download Dom's personalized story with beautiful visuals</p>
+                    <button class="download-btn" onclick="downloadPDF()">📄 Download PDF Story Book</button>
                 </div>
             </div>
 
@@ -580,16 +309,15 @@
                 <div class="story-book" id="storyBook">
                     <div class="story-page" id="storyPage">
                         <div class="story-overlay">
-                            <div class="story-title" id="storyTitle">Your Story Title</div>
-                            <div class="story-text" id="storyText">Your personalized story will appear here...</div>
+                            <div class="story-title" id="storyTitle">Dom's Adventure</div>
+                            <div class="story-text" id="storyText">Your story will appear here...</div>
                         </div>
                     </div>
                 </div>
 
                 <div id="defaultPreview" style="text-align: center;">
-                    <h3 style="color: #333; margin-bottom: 20px; font-size: 1.5em;">AI Story Preview</h3>
-                    <p style="color: #666; font-size: 1.1em; line-height: 1.6;">Generate your story to see the AI image as background with your personalized text overlay!</p>
-                    <p style="color: #999; font-size: 0.9em; margin-top: 15px;">Each story is completely unique and crafted specifically for your child.</p>
+                    <h3 style="color: #333; margin-bottom: 15px;">🎨 Story Preview</h3>
+                    <p style="color: #666;">Generate Dom's story to see the magic happen!</p>
                 </div>
             </div>
         </div>
@@ -597,278 +325,85 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script>
-        // Global variables to store current story data
         let currentStoryData = {};
 
-        // Story templates with complete structure
-        const storyTemplates = {
+        // 5 Simple Stories for Dom
+        const stories = {
             garden: {
-                title: "{name}'s Magic Garden",
+                title: "Dom's Magic Garden",
                 pages: [
-                    {
-                        text: "{name} found a sad garden. The flowers were wilting.",
-                        lesson: "Sometimes things need our help."
-                    },
-                    {
-                        text: "'{animalFriend}, how can we help?' asked {name}.",
-                        lesson: "It's good to ask for help and ideas."
-                    },
-                    {
-                        text: "{name} watered the flowers every day. Drop by drop.",
-                        lesson: "Small actions can make a big difference."
-                    },
-                    {
-                        text: "The flowers smiled! 'Thank you, {name}!' they said.",
-                        lesson: "Kindness makes others happy."
-                    },
-                    {
-                        text: "{name} learned that caring for others is magical!",
-                        lesson: "Taking care of others feels wonderful."
-                    }
+                    "Dom found a sad garden with wilting flowers.",
+                    "Dom watered the flowers every day with care.",
+                    "The flowers started to smile and grow tall!",
+                    "Dom made friends with talking butterflies.",
+                    "Dom learned that caring makes magic happen!"
                 ],
-                mainPrompt: "A beautiful magical garden with talking flowers, colorful butterflies, and a happy {age}-year-old {gender} named {name} with {hair} and {eyes}, accompanied by a {animalFriend}, watering glowing plants, fantasy children's book illustration, vibrant colors, whimsical and enchanting"
+                prompt: "A happy 4-year-old boy named Dom with a big smile in a magical garden with colorful flowers and butterflies, children's book illustration, bright and cheerful"
             },
             space: {
-                title: "Captain {name} Goes to Space",
+                title: "Dom Goes to Space",
                 pages: [
-                    {
-                        text: "{name} put on a special space suit. 'Ready for adventure!'",
-                        lesson: "Getting ready is important for big adventures."
-                    },
-                    {
-                        text: "The rocket went WHOOSH! Up, up, up to the stars!",
-                        lesson: "Dreams can take us far away."
-                    },
-                    {
-                        text: "{name} met friendly aliens. 'Hello!' they all said.",
-                        lesson: "Being friendly helps us make new friends."
-                    },
-                    {
-                        text: "Together they played space games and shared space snacks.",
-                        lesson: "Sharing makes friendship stronger."
-                    },
-                    {
-                        text: "{name} learned friendship works everywhere in the universe!",
-                        lesson: "Friends are special wherever you go."
-                    }
+                    "Dom put on a shiny space suit for adventure.",
+                    "Dom's rocket zoomed up to the twinkling stars!",
+                    "Dom met friendly aliens who said 'Hello!'",
+                    "Dom and the aliens played fun space games.",
+                    "Dom learned that friends are everywhere!"
                 ],
-                mainPrompt: "A young {age}-year-old {gender} astronaut named {name} with {hair} and {eyes} in a colorful space suit floating among stars, planets, and nebulas, accompanied by a {animalFriend} in a tiny space helmet, children's book illustration, cosmic and magical"
-            },
-            princess: {
-                title: "{name} the Kind Royal",
-                pages: [
-                    {
-                        text: "Princess {name} lived in a beautiful castle with {animalFriend}.",
-                        lesson: "Everyone has a special place they call home."
-                    },
-                    {
-                        text: "The kingdom's colors started fading away. Everything looked sad.",
-                        lesson: "Sometimes things go wrong and that's okay."
-                    },
-                    {
-                        text: "{name} decided to help. 'Let's spread kindness everywhere!'",
-                        lesson: "We can choose to help when things are difficult."
-                    },
-                    {
-                        text: "Every kind word brought colors back. Red! Blue! Yellow!",
-                        lesson: "Kind words have magical power."
-                    },
-                    {
-                        text: "{name} learned that kindness is the most royal thing of all!",
-                        lesson: "Being kind makes you truly special."
-                    }
-                ],
-                mainPrompt: "A young {age}-year-old royal {gender} named {name} with {hair} and {eyes} in a beautiful crystal palace with rainbow reflections, wearing elegant royal clothes, accompanied by a {animalFriend}, children's book illustration, sparkly and majestic"
+                prompt: "A cheerful 4-year-old boy named Dom in a colorful space suit floating with friendly aliens among stars and planets, children's book illustration, cosmic and fun"
             },
             ocean: {
-                title: "{name}'s Ocean Adventure",
+                title: "Dom's Ocean Adventure",
                 pages: [
-                    {
-                        text: "{name} and {animalFriend} dove into the blue ocean.",
-                        lesson: "It's fun to explore new places."
-                    },
-                    {
-                        text: "A little fish was crying. 'I'm lost!' she said.",
-                        lesson: "Sometimes others need our help."
-                    },
-                    {
-                        text: "'Don't worry,' said {name}. 'We'll help you find home.'",
-                        lesson: "Helping others feels good."
-                    },
-                    {
-                        text: "They swam together until they found the fish's family.",
-                        lesson: "Working together helps us succeed."
-                    },
-                    {
-                        text: "'Thank you!' said all the fish. {name} felt so happy!",
-                        lesson: "Helping others makes us happy too."
-                    }
+                    "Dom dove into the beautiful blue ocean.",
+                    "Dom found a little fish who was lost and sad.",
+                    "Dom helped the fish find her way back home.",
+                    "All the sea creatures thanked Dom with hugs!",
+                    "Dom learned that helping others feels wonderful!"
                 ],
-                mainPrompt: "A cheerful {age}-year-old {gender} named {name} with {hair} and {eyes} swimming underwater with colorful fish, dolphins, and sea turtles, accompanied by a {animalFriend}, in a vibrant coral reef, magical underwater scene, children's book illustration"
-            },
-            forest: {
-                title: "{name} and the Forest Friends",
-                pages: [
-                    {
-                        text: "{name} and {animalFriend} walked into the green forest.",
-                        lesson: "Nature is beautiful and full of life."
-                    },
-                    {
-                        text: "They heard crying. Baby animals couldn't find their way home.",
-                        lesson: "It's important to listen when others need help."
-                    },
-                    {
-                        text: "'Follow me!' said {name}. 'I know the way!'",
-                        lesson: "Being brave helps us help others."
-                    },
-                    {
-                        text: "One by one, each baby found their family. Hugs everywhere!",
-                        lesson: "Families love each other very much."
-                    },
-                    {
-                        text: "{name} learned that helping brings everyone together!",
-                        lesson: "Helping others creates a happy community."
-                    }
-                ],
-                mainPrompt: "A brave {age}-year-old {gender} named {name} with {hair} and {eyes} in an enchanted forest with talking animals, accompanied by a {animalFriend}, magical trees with glowing leaves, children's book illustration, warm and mystical"
+                prompt: "A joyful 4-year-old boy named Dom swimming underwater with colorful fish and sea creatures in a bright coral reef, children's book illustration, underwater adventure"
             },
             castle: {
-                title: "Brave Knight {name}",
+                title: "Dom the Brave Knight",
                 pages: [
-                    {
-                        text: "Knight {name} put on shiny armor. 'Time to help!'",
-                        lesson: "Getting ready helps us do our best."
-                    },
-                    {
-                        text: "A dragon was sad. 'Everyone runs away from me,' he cried.",
-                        lesson: "Sometimes others feel lonely and different."
-                    },
-                    {
-                        text: "'I won't run,' said {name}. 'Want to be friends?'",
-                        lesson: "Being brave means being kind, not fighting."
-                    },
-                    {
-                        text: "The dragon smiled! They played games and had so much fun.",
-                        lesson: "Friends can be different from us and that's wonderful."
-                    },
-                    {
-                        text: "{name} learned that real knights make friends, not enemies!",
-                        lesson: "True courage is about kindness and friendship."
-                    }
+                    "Knight Dom put on his shiny armor to help.",
+                    "Dom met a lonely dragon who felt very sad.",
+                    "Dom offered friendship instead of fighting.",
+                    "The dragon smiled and they became best friends!",
+                    "Dom learned that kindness is true bravery!"
                 ],
-                mainPrompt: "A young {age}-year-old {gender} knight named {name} with {hair} and {eyes} in medieval armor standing before a grand castle, accompanied by a {animalFriend}, medieval fantasy setting, children's book illustration"
+                prompt: "A brave 4-year-old boy named Dom in knight armor with a friendly smiling dragon in front of a colorful castle, children's book illustration, medieval and heartwarming"
             },
             pirate: {
-                title: "Captain {name}'s Treasure",
+                title: "Captain Dom's Treasure",
                 pages: [
-                    {
-                        text: "Captain {name} and {animalFriend} set sail on their boat.",
-                        lesson: "Adventures are more fun with friends."
-                    },
-                    {
-                        text: "They found a treasure map! 'X marks the spot!'",
-                        lesson: "Maps and clues help us find what we're looking for."
-                    },
-                    {
-                        text: "On the island, they met other pirates who looked hungry.",
-                        lesson: "Sometimes people need help even if they look different."
-                    },
-                    {
-                        text: "{name} shared their treasure food with everyone!",
-                        lesson: "Sharing treasure makes everyone happy."
-                    },
-                    {
-                        text: "{name} learned that sharing treasure is the best treasure of all!",
-                        lesson: "The best treasures are the ones we share."
-                    }
+                    "Captain Dom sailed the seas looking for treasure.",
+                    "Dom found a treasure map with a big X!",
+                    "Dom discovered hungry pirates on the island.",
+                    "Dom shared his treasure food with everyone.",
+                    "Dom learned that sharing is the best treasure!"
                 ],
-                mainPrompt: "A young {age}-year-old {gender} pirate captain named {name} with {hair} and {eyes} on a pirate ship with treasure chests, accompanied by a {animalFriend} wearing a tiny pirate hat, ocean adventure scene, children's book illustration"
-            },
-            dinosaur: {
-                title: "{name} Meets the Dinosaurs",
-                pages: [
-                    {
-                        text: "{name} found a magic door. Behind it were... DINOSAURS!",
-                        lesson: "New discoveries can be exciting and surprising."
-                    },
-                    {
-                        text: "A baby dinosaur was crying. 'I can't reach the tall leaves!'",
-                        lesson: "Sometimes being small makes things hard."
-                    },
-                    {
-                        text: "'I have an idea!' said {name}. 'Let's work together!'",
-                        lesson: "Good ideas come when we want to help."
-                    },
-                    {
-                        text: "{animalFriend} climbed on {name}, who climbed on the dinosaur!",
-                        lesson: "Teamwork helps us reach higher than we can alone."
-                    },
-                    {
-                        text: "They all munched leaves together. {name} learned teamwork is awesome!",
-                        lesson: "Working together makes everything better."
-                    }
-                ],
-                mainPrompt: "A {age}-year-old {gender} named {name} with {hair} and {eyes} surrounded by friendly dinosaurs in a prehistoric landscape, accompanied by a {animalFriend}, children's book illustration, exciting and educational"
+                prompt: "A happy 4-year-old boy named Dom as a pirate captain on a colorful ship with treasure chests and friendly pirates, children's book illustration, adventure and friendship"
             }
         };
 
-        function safeReplace(text, replacements) {
-            if (!text || typeof text !== 'string') {
-                return '';
-            }
+        async function generateStory() {
+            const name = document.getElementById('childName').value || 'Dom';
+            const theme = document.getElementById('storyTheme').value;
             
-            let result = text;
-            for (const [key, value] of Object.entries(replacements)) {
-                const regex = new RegExp(`{${key}}`, 'g');
-                result = result.replace(regex, value || '');
-            }
-            return result;
-        }
-
-        async function generateStoryWithImage() {
-            const name = document.getElementById('childName').value || 'Emma';
-            const age = document.getElementById('childAge').value || '6';
-            const gender = document.getElementById('childGender').value || 'child';
-            const hair = document.getElementById('hairColor').value || 'brown';
-            const eyes = document.getElementById('eyeColor').value || 'brown';
-            const animalFriend = document.getElementById('animalFriend').value || 'magical butterfly';
-            const theme = document.getElementById('storyTheme').value || 'garden';
-            const customElements = document.getElementById('customElements').value || '';
-            
-            // Show loading state
             const btn = document.getElementById('generateBtn');
             const spinner = document.getElementById('loadingSpinner');
             const btnText = document.getElementById('btnText');
             
             btn.disabled = true;
             spinner.style.display = 'block';
-            btnText.textContent = 'Creating Your Magical Story...';
+            btnText.textContent = 'Creating Dom\'s Story...';
 
-            // Hide messages
             document.getElementById('errorMessage').style.display = 'none';
             document.getElementById('successMessage').style.display = 'none';
 
             try {
-                const story = storyTemplates[theme];
-                
-                if (!story || !story.mainPrompt) {
-                    throw new Error('Story template not found');
-                }
-
-                const replacements = {
-                    name: name,
-                    age: age,
-                    gender: gender,
-                    hair: hair,
-                    eyes: eyes,
-                    animalFriend: animalFriend
-                };
-                
-                let prompt = safeReplace(story.mainPrompt, replacements);
-                
-                if (customElements.trim()) {
-                    prompt += `, ${customElements}`;
-                }
+                const story = stories[theme];
+                const prompt = story.prompt.replace(/Dom/g, name);
                 
                 const response = await fetch('/api/generate-image', {
                     method: 'POST',
@@ -880,60 +415,44 @@
 
                 if (!response.ok) {
                     const errorData = await response.json();
-                    throw new Error(errorData.error || `HTTP ${response.status}`);
+                    throw new Error(errorData.error || 'Failed to generate image');
                 }
 
                 const data = await response.json();
                 const imageUrl = data.data[0].url;
 
-                // Update story display
+                // Show the story
                 const storyPage = document.getElementById('storyPage');
                 const storyTitle = document.getElementById('storyTitle');
                 const storyText = document.getElementById('storyText');
                 
                 storyPage.style.backgroundImage = `url(${imageUrl})`;
-                storyTitle.textContent = safeReplace(story.title, replacements);
-                
-                // Show first page
-                if (story.pages && story.pages[0]) {
-                    const firstPageText = safeReplace(story.pages[0].text, replacements);
-                    storyText.innerHTML = `<span class='highlight'>${firstPageText}</span><br><br><small style="color: #ffeb3b; font-weight: bold;">📖 Page 1 of ${story.pages.length} • Download PDF for complete story!</small>`;
-                }
+                storyTitle.textContent = story.title.replace(/Dom/g, name);
+                storyText.innerHTML = `<strong>Page 1:</strong> ${story.pages[0].replace(/Dom/g, name)}<br><small style="color: #ffeb3b;">📖 Complete 5-page story in PDF download!</small>`;
 
-                // Show the story book
                 document.getElementById('defaultPreview').style.display = 'none';
                 document.getElementById('storyBook').style.display = 'block';
-
-                // Update character preview
                 document.getElementById('characterPreview').innerHTML = getThemeEmoji(theme);
 
-                // Store story data for download
+                // Store for PDF
                 currentStoryData = {
                     imageUrl: imageUrl,
-                    title: safeReplace(story.title, replacements),
-                    pages: story.pages ? story.pages.map(page => ({
-                        text: safeReplace(page.text, replacements),
-                        lesson: page.lesson || 'Learning through adventure!'
-                    })) : [],
+                    title: story.title.replace(/Dom/g, name),
+                    pages: story.pages.map(page => page.replace(/Dom/g, name)),
                     name: name,
-                    age: age,
                     theme: theme
                 };
                 
-                // Show download section
                 document.getElementById('downloadSection').style.display = 'block';
-
-                // Show success message
-                showSuccess('🎉 Your magical story book is ready! The complete 5-page story with lessons is available in the PDF download.');
+                showSuccess('🎉 Dom\'s story is ready! Download the PDF for the complete 5-page book.');
 
             } catch (error) {
                 console.error('Error:', error);
                 showError(`Failed to generate story: ${error.message}`);
             } finally {
-                // Reset button state
                 btn.disabled = false;
                 spinner.style.display = 'none';
-                btnText.textContent = '🎨 Generate Your Magical Story!';
+                btnText.textContent = '🎨 Create Dom\'s Story!';
             }
         }
 
@@ -941,12 +460,9 @@
             const emojis = {
                 garden: '🌻',
                 space: '🚀',
-                princess: '👑',
                 ocean: '🌊',
-                forest: '🌲',
                 castle: '🏰',
-                pirate: '🏴‍☠️',
-                dinosaur: '🦕'
+                pirate: '🏴‍☠️'
             };
             return emojis[theme] || '✨';
         }
@@ -955,18 +471,12 @@
             const errorEl = document.getElementById('errorMessage');
             errorEl.textContent = message;
             errorEl.style.display = 'block';
-            setTimeout(() => {
-                errorEl.style.display = 'none';
-            }, 8000);
         }
 
         function showSuccess(message) {
             const successEl = document.getElementById('successMessage');
             successEl.textContent = message;
             successEl.style.display = 'block';
-            setTimeout(() => {
-                successEl.style.display = 'none';
-            }, 5000);
         }
 
         async function downloadPDF() {
@@ -979,82 +489,74 @@
                 const { jsPDF } = window.jspdf;
                 const pdf = new jsPDF('p', 'mm', 'a4');
                 
-                // Cover page
-                pdf.setFontSize(28);
+                // Cover page with image
+                pdf.setFontSize(24);
                 pdf.setFont(undefined, 'bold');
-                pdf.text(currentStoryData.title || 'Your Story', 105, 40, { align: 'center' });
+                pdf.text(currentStoryData.title, 105, 30, { align: 'center' });
                 
-                pdf.setFontSize(16);
-                pdf.text(`A Story for ${currentStoryData.name}`, 105, 60, { align: 'center' });
+                // Add the character image
+                const img = new Image();
+                img.crossOrigin = 'anonymous';
                 
-                // Add story pages
-                if (currentStoryData.pages && currentStoryData.pages.length > 0) {
-                    currentStoryData.pages.forEach((page, index) => {
+                img.onload = function() {
+                    // Add main character image to cover
+                    pdf.addImage(img, 'JPEG', 55, 50, 100, 100);
+                    
+                    // Add each story page
+                    currentStoryData.pages.forEach((pageText, index) => {
                         pdf.addPage();
                         
                         // Page number
-                        pdf.setFontSize(12);
-                        pdf.text(`Page ${index + 1}`, 105, 20, { align: 'center' });
-                        
-                        // Story text
-                        pdf.setFontSize(18);
+                        pdf.setFontSize(16);
                         pdf.setFont(undefined, 'bold');
-                        const lines = pdf.splitTextToSize(page.text || '', 170);
-                        pdf.text(lines, 105, 50, { align: 'center' });
+                        pdf.text(`Page ${index + 1}`, 105, 30, { align: 'center' });
                         
-                        // Lesson
+                        // Add character image on each page (smaller)
+                        pdf.addImage(img, 'JPEG', 70, 50, 70, 70);
+                        
+                        // Story text below image
                         pdf.setFontSize(14);
-                        pdf.setFont(undefined, 'italic');
-                        pdf.text('💡 What we learned:', 25, 120);
-                        
-                        pdf.setFontSize(12);
                         pdf.setFont(undefined, 'normal');
-                        const lessonLines = pdf.splitTextToSize(page.lesson || '', 160);
-                        pdf.text(lessonLines, 25, 135);
+                        const lines = pdf.splitTextToSize(pageText, 160);
+                        pdf.text(lines, 25, 140);
+                        
+                        // Fun decorations
+                        pdf.setFontSize(20);
+                        pdf.text('⭐', 180, 50);
+                        pdf.text('🌟', 25, 50);
                     });
-                }
+                    
+                    // Save the PDF
+                    pdf.save(`${currentStoryData.name}_Story_Book.pdf`);
+                };
                 
-                pdf.save(`${currentStoryData.name}_${currentStoryData.theme}_StoryBook.pdf`);
+                img.onerror = function() {
+                    // Create PDF without image if there's an error
+                    currentStoryData.pages.forEach((pageText, index) => {
+                        if (index > 0) pdf.addPage();
+                        
+                        pdf.setFontSize(16);
+                        pdf.text(`Page ${index + 1}`, 105, 30, { align: 'center' });
+                        
+                        pdf.setFontSize(14);
+                        const lines = pdf.splitTextToSize(pageText, 160);
+                        pdf.text(lines, 25, 60);
+                    });
+                    
+                    pdf.save(`${currentStoryData.name}_Story_Book.pdf`);
+                };
+                
+                img.src = currentStoryData.imageUrl;
                 
             } catch (error) {
-                console.error('PDF generation error:', error);
-                alert('PDF generation failed. Please try again.');
+                console.error('PDF error:', error);
+                alert('PDF creation failed. Please try again.');
             }
         }
 
-        async function downloadImage() {
-            if (!currentStoryData.imageUrl) {
-                alert('Please generate a story first!');
-                return;
-            }
-
-            try {
-                const link = document.createElement('a');
-                link.href = currentStoryData.imageUrl;
-                link.download = `${currentStoryData.name}_${currentStoryData.theme}_story.jpg`;
-                link.click();
-            } catch (error) {
-                console.error('Image download error:', error);
-                alert('Image download failed. Please right-click the image and save it manually.');
-            }
-        }
-
-        // Update character preview when theme changes
+        // Update preview when theme changes
         document.getElementById('storyTheme').addEventListener('change', function() {
             document.getElementById('characterPreview').textContent = getThemeEmoji(this.value);
-        });
-
-        // Add interactive effects
-        document.addEventListener('DOMContentLoaded', function() {
-            const inputs = document.querySelectorAll('input, select, textarea');
-            inputs.forEach(input => {
-                input.addEventListener('focus', function() {
-                    this.parentElement.style.transform = 'translateY(-2px)';
-                });
-                input.addEventListener('blur', function() {
-                    this.parentElement.style.transform = 'translateY(0)';
-                });
-            });
         });
     </script>
 </body>
