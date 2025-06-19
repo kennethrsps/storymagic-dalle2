@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>StoryMagic Pro - Custom Children's Books</title>
+    <title>StoryMagic Pro - Cinematic Story Books</title>
     <style>
         * {
             margin: 0;
@@ -19,7 +19,7 @@
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
             background: white;
             border-radius: 20px;
@@ -35,16 +35,21 @@
         }
 
         .header h1 {
-            font-size: 2.5em;
+            font-size: 2.8em;
             margin-bottom: 10px;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
         }
 
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
         .main-content {
             display: grid;
-            grid-template-columns: 350px 1fr;
+            grid-template-columns: 380px 1fr;
             gap: 0;
-            min-height: 700px;
+            min-height: 800px;
         }
 
         .form-section {
@@ -54,7 +59,7 @@
         }
 
         .preview-section {
-            padding: 30px;
+            padding: 40px;
             background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
             display: flex;
             flex-direction: column;
@@ -64,23 +69,23 @@
         }
 
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 18px;
         }
 
         .form-group label {
             display: block;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
             font-weight: bold;
             color: #333;
-            font-size: 1em;
+            font-size: 0.95em;
         }
 
         .form-group input, .form-group select {
             width: 100%;
-            padding: 10px;
+            padding: 8px 12px;
             border: 2px solid #ddd;
             border-radius: 8px;
-            font-size: 1em;
+            font-size: 0.95em;
             font-family: inherit;
             transition: border-color 0.3s;
         }
@@ -100,22 +105,24 @@
 
         .child-details h4 {
             color: #1976d2;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
+            font-size: 1.1em;
         }
 
         .generate-btn {
             background: linear-gradient(45deg, #4ecdc4, #44a08d);
             color: white;
             border: none;
-            padding: 15px 25px;
+            padding: 18px 25px;
             border-radius: 25px;
-            font-size: 1.1em;
+            font-size: 1.2em;
             font-weight: bold;
             cursor: pointer;
             transition: all 0.3s;
             width: 100%;
             position: relative;
             overflow: hidden;
+            margin-top: 10px;
         }
 
         .generate-btn:hover {
@@ -151,103 +158,118 @@
         .story-display {
             display: none;
             width: 100%;
-            max-width: 600px;
+            max-width: 700px;
             background: white;
-            border-radius: 15px;
+            border-radius: 20px;
             overflow: hidden;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
         }
 
         .story-image {
             width: 100%;
-            height: 400px;
+            height: 500px;
             object-fit: cover;
             background: #f0f0f0;
+            border-radius: 20px 20px 0 0;
         }
 
         .story-content {
-            padding: 25px;
+            padding: 30px;
             text-align: center;
         }
 
         .story-title {
-            font-size: 1.8em;
+            font-size: 2.2em;
             color: #333;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
             font-weight: bold;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
         }
 
         .story-text {
-            font-size: 1.2em;
-            line-height: 1.6;
+            font-size: 1.3em;
+            line-height: 1.7;
             color: #555;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         .page-navigation {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-top: 20px;
-            padding: 15px;
-            background: #f8f9fa;
-            border-radius: 10px;
+            padding: 20px 30px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 0 0 20px 20px;
+            margin-top: 10px;
         }
 
         .nav-btn {
-            background: #4ecdc4;
+            background: rgba(255,255,255,0.2);
             color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 20px;
+            border: 2px solid rgba(255,255,255,0.3);
+            padding: 12px 24px;
+            border-radius: 25px;
             font-size: 1em;
+            font-weight: bold;
             cursor: pointer;
             transition: all 0.3s;
+            backdrop-filter: blur(10px);
         }
 
         .nav-btn:hover:not(:disabled) {
-            background: #44a08d;
-            transform: translateY(-1px);
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
         }
 
         .nav-btn:disabled {
-            background: #ccc;
+            opacity: 0.4;
             cursor: not-allowed;
             transform: none;
         }
 
         .page-indicator {
             font-weight: bold;
-            color: #333;
-            font-size: 1.1em;
+            color: white;
+            font-size: 1.2em;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
         }
 
         .download-section {
             background: linear-gradient(135deg, #28a745, #20c997);
             color: white;
-            padding: 20px;
-            border-radius: 10px;
-            margin-top: 20px;
+            padding: 25px;
+            border-radius: 15px;
+            margin-top: 25px;
             text-align: center;
             display: none;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        .download-section h4 {
+            font-size: 1.4em;
+            margin-bottom: 10px;
         }
 
         .download-btn {
             background: white;
             color: #28a745;
             border: none;
-            padding: 12px 25px;
-            border-radius: 20px;
-            font-size: 1em;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-size: 1.1em;
             font-weight: bold;
             cursor: pointer;
-            margin: 5px;
+            margin: 10px;
             transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
         }
 
         .download-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
         }
 
         .message {
@@ -255,6 +277,7 @@
             border-radius: 10px;
             margin-top: 15px;
             display: none;
+            font-weight: 500;
         }
 
         .error-message {
@@ -276,25 +299,51 @@
 
         .default-preview h3 {
             color: #333;
-            margin-bottom: 15px;
-            font-size: 1.5em;
+            margin-bottom: 20px;
+            font-size: 1.8em;
         }
 
         .preview-placeholder {
-            width: 200px;
-            height: 200px;
-            border-radius: 50%;
-            background: linear-gradient(45deg, #ff9a9e, #fecfef);
+            width: 250px;
+            height: 250px;
+            border-radius: 20px;
+            background: linear-gradient(45deg, #ff9a9e, #fecfef, #ffecd2);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 4em;
-            margin: 20px auto;
+            font-size: 5em;
+            margin: 30px auto;
             border: 5px solid white;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+            animation: float 3s ease-in-out infinite;
         }
 
-        @media (max-width: 768px) {
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .moral-indicator {
+            background: rgba(255,255,255,0.9);
+            padding: 15px;
+            border-radius: 15px;
+            margin-top: 15px;
+            border-left: 5px solid #ff6b6b;
+        }
+
+        .moral-indicator h5 {
+            color: #ff6b6b;
+            margin-bottom: 8px;
+            font-size: 1em;
+        }
+
+        .moral-indicator p {
+            color: #666;
+            font-size: 0.9em;
+            font-style: italic;
+        }
+
+        @media (max-width: 1024px) {
             .main-content {
                 grid-template-columns: 1fr;
             }
@@ -302,25 +351,29 @@
             .container {
                 margin: 10px;
             }
+            
+            .story-image {
+                height: 400px;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1>🎨 StoryMagic Pro</h1>
-            <p>Create Personalized Story Books for Any Child</p>
+            <h1>🎬 StoryMagic Pro</h1>
+            <p>Create Cinematic Story Books Where Every Page Tells The Story</p>
         </div>
 
         <div class="main-content">
             <div class="form-section">
-                <h2 style="color: #333; margin-bottom: 25px; text-align: center;">Customize Your Book</h2>
+                <h2 style="color: #333; margin-bottom: 25px; text-align: center;">Customize Your Character</h2>
                 
                 <div class="child-details">
-                    <h4>👶 Child Information</h4>
+                    <h4>👶 Character Details</h4>
                     
                     <div class="form-group">
-                        <label for="childName">Child's Name</label>
+                        <label for="childName">Character Name</label>
                         <input type="text" id="childName" placeholder="Enter child's name" value="Dom">
                     </div>
 
@@ -332,7 +385,6 @@
                             <option value="5">5 years old</option>
                             <option value="6">6 years old</option>
                             <option value="7">7 years old</option>
-                            <option value="8">8 years old</option>
                         </select>
                     </div>
 
@@ -345,23 +397,23 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="hairColor">Hair Color</label>
+                        <label for="hairColor">Hair Color & Style</label>
                         <select id="hairColor">
-                            <option value="black" selected>Black</option>
-                            <option value="brown">Brown</option>
-                            <option value="blonde">Blonde</option>
-                            <option value="red">Red/Auburn</option>
+                            <option value="shoulder-length black" selected>Shoulder-length Black</option>
                             <option value="curly brown">Curly Brown</option>
-                            <option value="curly black">Curly Black</option>
+                            <option value="straight blonde">Straight Blonde</option>
+                            <option value="wavy red">Wavy Red</option>
+                            <option value="short brown">Short Brown</option>
+                            <option value="long black">Long Black</option>
                         </select>
                     </div>
 
                     <div class="form-group">
                         <label for="eyeColor">Eye Color</label>
                         <select id="eyeColor">
-                            <option value="brown" selected>Brown</option>
-                            <option value="blue">Blue</option>
-                            <option value="green">Green</option>
+                            <option value="warm brown" selected>Warm Brown</option>
+                            <option value="bright blue">Bright Blue</option>
+                            <option value="emerald green">Emerald Green</option>
                             <option value="hazel">Hazel</option>
                             <option value="dark brown">Dark Brown</option>
                         </select>
@@ -369,51 +421,55 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="storyTheme">📚 Choose Adventure</label>
+                    <label for="storyTheme">🎬 Choose Cinematic Adventure</label>
                     <select id="storyTheme">
-                        <option value="garden">🌻 Magic Garden Adventure</option>
-                        <option value="space">🚀 Space Explorer Mission</option>
-                        <option value="ocean">🌊 Ocean Discovery Journey</option>
-                        <option value="castle">🏰 Brave Knight Quest</option>
-                        <option value="pirate">🏴‍☠️ Pirate Treasure Hunt</option>
+                        <option value="kindness">🌻 The Garden of Kindness</option>
+                        <option value="courage">🦁 The Courage to Stand Up</option>
+                        <option value="sharing">🎁 The Magic of Sharing</option>
+                        <option value="honesty">✨ The Power of Truth</option>
+                        <option value="friendship">🤝 The Bridge of Friendship</option>
                     </select>
                 </div>
 
-                <button class="generate-btn" onclick="generateStory()" id="generateBtn">
+                <div class="moral-indicator" id="moralIndicator">
+                    <h5>📚 Story Lesson</h5>
+                    <p>Shows how small acts of kindness can transform the world around us</p>
+                </div>
+
+                <button class="generate-btn" onclick="generateCinematicStory()" id="generateBtn">
                     <div class="loading-spinner" id="loadingSpinner"></div>
-                    <span id="btnText">🎨 Create Custom Story!</span>
+                    <span id="btnText">🎬 Create Cinematic Story!</span>
                 </button>
 
                 <div class="message success-message" id="successMessage"></div>
                 <div class="message error-message" id="errorMessage"></div>
                 
                 <div class="download-section" id="downloadSection">
-                    <h4>📚 Your Custom Book is Ready!</h4>
-                    <p>Download the personalized story book</p>
+                    <h4>🎬 Your Cinematic Story is Ready!</h4>
+                    <p>Professional quality story book with stunning visuals</p>
                     <button class="download-btn" onclick="downloadPDF()">📄 Download PDF Book</button>
                 </div>
             </div>
 
             <div class="preview-section">
                 <div class="story-display" id="storyDisplay">
-                    <img class="story-image" id="storyImage" alt="Story illustration">
+                    <img class="story-image" id="storyImage" alt="Story scene">
                     <div class="story-content">
                         <div class="story-title" id="storyTitle">Story Title</div>
-                        <div class="story-text" id="storyText">Story content will appear here...</div>
-                        
-                        <div class="page-navigation">
-                            <button class="nav-btn" onclick="previousPage()" id="prevBtn">← Previous</button>
-                            <span class="page-indicator" id="pageIndicator">Page 1 of 5</span>
-                            <button class="nav-btn" onclick="nextPage()" id="nextBtn">Next →</button>
-                        </div>
+                        <div class="story-text" id="storyText">Story content...</div>
+                    </div>
+                    <div class="page-navigation">
+                        <button class="nav-btn" onclick="previousPage()" id="prevBtn">← Previous Scene</button>
+                        <span class="page-indicator" id="pageIndicator">Scene 1 of 5</span>
+                        <button class="nav-btn" onclick="nextPage()" id="nextBtn">Next Scene →</button>
                     </div>
                 </div>
 
                 <div class="default-preview" id="defaultPreview">
-                    <div class="preview-placeholder" id="previewPlaceholder">📖</div>
-                    <h3>Custom Story Preview</h3>
-                    <p>Create a personalized story book with the child as the main character!</p>
-                    <p style="margin-top: 15px; font-size: 0.9em;">Fill in the child's details and choose an adventure to begin.</p>
+                    <div class="preview-placeholder" id="previewPlaceholder">🎬</div>
+                    <h3>Cinematic Story Preview</h3>
+                    <p style="font-size: 1.1em; line-height: 1.6;">Create a movie-like story where each page is a stunning visual scene that tells the story without words!</p>
+                    <p style="margin-top: 15px; font-size: 0.95em; opacity: 0.8;">Every scene features the same character in different dramatic moments with powerful moral lessons.</p>
                 </div>
             </div>
         </div>
@@ -424,65 +480,141 @@
         let currentStoryData = {};
         let currentPage = 0;
 
-        const storyTemplates = {
-            garden: {
-                title: "{name}'s Magic Garden",
-                pages: [
-                    "{name} discovered a forgotten garden behind {his_her} house, where all the flowers looked sad and droopy.",
-                    "With a special watering can, {name} carefully watered each flower, whispering words of encouragement.",
-                    "Magically, the flowers began to bloom in brilliant colors, and butterflies started dancing around {name}!",
-                    "{name} made friends with a wise old sunflower who taught {him_her} the secrets of caring for all living things.",
-                    "{name} learned that with love and care, even the saddest garden can become a place of wonder and joy!"
-                ],
-                prompt: "A {age}-year-old {gender} with {hair_color} hair and {eye_color} eyes, in a magical garden filled with colorful blooming flowers and butterflies, children's book illustration style, bright and cheerful"
+        // CINEMATIC STORY TEMPLATES - Each scene tells the story visually
+        const cinematicStories = {
+            kindness: {
+                title: "{name} and the Garden of Kindness",
+                moral: "Shows how small acts of kindness can transform the world around us",
+                scenes: [
+                    {
+                        text: "{name} discovers a withered garden where a lonely old gardener sits sadly among dying flowers, his shoulders slumped in defeat.",
+                        prompt: "A {age}-year-old {gender} with {hair_color} hair and {eye_color} eyes discovering a sad elderly gardener sitting alone in a dying garden with wilted flowers, dramatic lighting, emotional scene, children's book illustration, cinematic composition"
+                    },
+                    {
+                        text: "{name} approaches the gardener with a warm smile and offers to help, {his_her} eyes sparkling with determination and compassion.",
+                        prompt: "The same {age}-year-old {gender} with {hair_color} hair and {eye_color} eyes approaching the sad gardener with a bright smile, reaching out {his_her} hand in friendship, warm golden hour lighting, heartwarming scene, children's book illustration"
+                    },
+                    {
+                        text: "Together, {name} and the gardener work side by side, watering plants and planting new seeds, their faces glowing with joy and purpose.",
+                        prompt: "The {age}-year-old {gender} with {hair_color} hair and {eye_color} eyes working happily alongside the elderly gardener, both smiling as they water plants together, beautiful garden setting, collaborative teamwork, children's book illustration, uplifting scene"
+                    },
+                    {
+                        text: "Magical flowers begin to bloom in brilliant colors as {name}'s kindness spreads throughout the garden, with butterflies dancing in the air.",
+                        prompt: "The same {gender} character with {hair_color} hair standing in a now-magical garden full of vibrant blooming flowers and colorful butterflies, {his_her} arms outstretched in wonder, magical golden light, transformation scene, children's book illustration"
+                    },
+                    {
+                        text: "{name} and the gardener celebrate their beautiful garden as the whole neighborhood gathers, inspired by the power of kindness and working together.",
+                        prompt: "The {age}-year-old {gender} with {hair_color} hair and {eye_color} eyes celebrating with the happy gardener and many neighbors in the spectacular blooming garden, community celebration, joyful faces, children's book illustration, triumphant finale"
+                    }
+                ]
             },
-            space: {
-                title: "{name} the Space Explorer",
-                pages: [
-                    "{name} built a rocket ship in {his_her} backyard and zoomed off to explore the stars and planets.",
-                    "On {his_her} first stop, the Moon, {name} met friendly alien creatures who spoke in musical tones.",
-                    "{name} helped the aliens fix their broken space station using {his_her} clever problem-solving skills.",
-                    "Together, they traveled to different planets, discovering amazing space crystals and cosmic flowers.",
-                    "{name} returned home with new friends and learned that the universe is full of kindness and wonder!"
-                ],
-                prompt: "A {age}-year-old {gender} with {hair_color} hair and {eye_color} eyes, wearing a colorful space suit, floating among stars and planets with friendly aliens, children's book illustration style, cosmic adventure"
+            courage: {
+                title: "{name} and the Courage to Stand Up",
+                moral: "Teaches that true courage means standing up for what's right, even when you're scared",
+                scenes: [
+                    {
+                        text: "{name} sees a group of bigger kids bullying a smaller child on the playground, {his_her} heart racing with worry and fear.",
+                        prompt: "A {age}-year-old {gender} with {hair_color} hair and {eye_color} eyes witnessing bullying on a playground, {his_her} expression showing concern and inner conflict, dramatic playground setting, tense atmosphere, children's book illustration"
+                    },
+                    {
+                        text: "{name} takes a deep breath and bravely steps forward, even though {his_her} hands are shaking with nervousness.",
+                        prompt: "The same {gender} character with {hair_color} hair taking a brave step forward, {his_her} face showing determination despite fear, heroic stance, children's book illustration, courage in action"
+                    },
+                    {
+                        text: "With a strong voice, {name} tells the bullies to stop and helps the scared child stand up, showing incredible bravery.",
+                        prompt: "The {age}-year-old {gender} with {hair_color} hair and {eye_color} eyes standing protectively next to a smaller child, confronting bullies with confidence, heroic composition, children's book illustration, standing up for others"
+                    },
+                    {
+                        text: "The bullies back down, impressed by {name}'s courage, and other children join in to support the victim.",
+                        prompt: "The same {gender} character with {hair_color} hair surrounded by supportive friends, with the former bullies looking ashamed in the background, positive peer support, children's book illustration, community standing together"
+                    },
+                    {
+                        text: "{name} becomes known as the playground hero, and {his_her} act of courage inspires everyone to stand up for what's right.",
+                        prompt: "The {age}-year-old {gender} with {hair_color} hair and {eye_color} eyes being celebrated by happy children on a peaceful playground, {his_her} face beaming with pride, triumphant scene, children's book illustration, inspiring leadership"
+                    }
+                ]
             },
-            ocean: {
-                title: "{name}'s Ocean Adventure",
-                pages: [
-                    "{name} dove into the crystal-clear ocean and discovered {he_she} could breathe underwater like a mermaid!",
-                    "Swimming deeper, {name} found a little dolphin who was lost and couldn't find {his_her} family.",
-                    "{name} bravely offered to help and together they searched through coral reefs and underwater caves.",
-                    "They met wise sea turtles and playful seahorses who all joined the search for the dolphin's family.",
-                    "When they found the dolphin family, everyone celebrated, and {name} learned that helping others brings the greatest joy!"
-                ],
-                prompt: "A {age}-year-old {gender} with {hair_color} hair and {eye_color} eyes, swimming underwater with dolphins and colorful fish in a bright coral reef, children's book illustration style, underwater adventure"
+            sharing: {
+                title: "{name} and the Magic of Sharing",
+                moral: "Discovers that sharing creates abundance and brings people together",
+                scenes: [
+                    {
+                        text: "{name} brings {his_her} favorite lunch to school but notices a classmate sitting alone with no food, looking hungry and sad.",
+                        prompt: "A {age}-year-old {gender} with {hair_color} hair and {eye_color} eyes at a school lunch table with a delicious lunch, noticing a sad classmate with no food in the background, school cafeteria setting, emotional contrast, children's book illustration"
+                    },
+                    {
+                        text: "{name} hesitates for a moment, looking at {his_her} special meal, then makes the decision to share with the hungry child.",
+                        prompt: "The same {gender} character with {hair_color} hair looking thoughtfully at {his_her} lunch, then walking toward the lonely child with food in hand, act of generosity, children's book illustration, decision moment"
+                    },
+                    {
+                        text: "{name} sits with the lonely child and shares {his_her} lunch, both of them smiling as they eat together.",
+                        prompt: "The {age}-year-old {gender} with {hair_color} hair and {eye_color} eyes sharing lunch with another child, both laughing and enjoying the meal together, friendship forming, warm lighting, children's book illustration"
+                    },
+                    {
+                        text: "Other children see {name}'s kindness and join the table, everyone sharing their food and creating a feast of friendship.",
+                        prompt: "The same {gender} character with {hair_color} hair at the center of a large table with many children sharing food, abundant spread of different lunches, community celebration, children's book illustration, sharing abundance"
+                    },
+                    {
+                        text: "{name} realizes that by sharing {his_her} lunch, {he_she} gained something even better - wonderful friends and a heart full of joy.",
+                        prompt: "The {age}-year-old {gender} with {hair_color} hair and {eye_color} eyes surrounded by happy friends at lunch, {his_her} face glowing with happiness, magical sparkles around the sharing table, children's book illustration, joyful revelation"
+                    }
+                ]
             },
-            castle: {
-                title: "{name} the Brave Knight",
-                pages: [
-                    "Knight {name} put on shiny armor and set out on a quest to help a village troubled by a sad dragon.",
-                    "Instead of fighting, brave {name} decided to talk to the dragon and discover why {he_she} was so unhappy.",
-                    "The dragon explained that {he_she} was lonely and just wanted friends to play with and share stories.",
-                    "{name} invited the dragon to the village, where everyone learned that {he_she} was kind and gentle.",
-                    "The village threw a big celebration, and {name} learned that understanding and kindness are the greatest strengths!"
-                ],
-                prompt: "A {age}-year-old {gender} with {hair_color} hair and {eye_color} eyes, dressed as a knight with shiny armor, standing with a friendly dragon near a colorful castle, children's book illustration style, medieval fantasy"
+            honesty: {
+                title: "{name} and the Power of Truth",
+                moral: "Shows that telling the truth, even when it's hard, always leads to better outcomes",
+                scenes: [
+                    {
+                        text: "{name} accidentally breaks {his_her} mother's favorite vase while playing, {his_her} face filled with panic and fear.",
+                        prompt: "A {age}-year-old {gender} with {hair_color} hair and {eye_color} eyes looking shocked at a broken vase on the floor, {his_her} face showing guilt and worry, home interior setting, dramatic moment, children's book illustration"
+                    },
+                    {
+                        text: "{name} considers hiding the broken vase or blaming someone else, struggling with the difficult choice of what to do.",
+                        prompt: "The same {gender} character with {hair_color} hair standing in thought, imagining different scenarios (shown in thought bubbles), internal conflict visible on {his_her} face, children's book illustration, moral dilemma"
+                    },
+                    {
+                        text: "{name} takes a deep breath and bravely decides to tell {his_her} mother the truth, even though {he_she} is scared of getting in trouble.",
+                        prompt: "The {age}-year-old {gender} with {hair_color} hair and {eye_color} eyes approaching {his_her} mother with the broken vase pieces, showing courage and honesty, mother figure in background, children's book illustration, brave confession"
+                    },
+                    {
+                        text: "{name}'s mother is initially sad about the vase but proud of {his_her} honesty, giving {name} a warm, understanding hug.",
+                        prompt: "The same {gender} character with {hair_color} hair being hugged by {his_her} mother, both showing love and understanding, broken vase visible but not important anymore, emotional reconciliation, children's book illustration"
+                    },
+                    {
+                        text: "Together, {name} and {his_her} mother clean up the pieces and {name} learns that honesty always brings people closer together.",
+                        prompt: "The {age}-year-old {gender} with {hair_color} hair and {eye_color} eyes working with {his_her} mother to clean up, both smiling and bonding, sunlight streaming through windows, lesson learned, children's book illustration, family harmony"
+                    }
+                ]
             },
-            pirate: {
-                title: "Captain {name}'s Treasure",
-                pages: [
-                    "Captain {name} set sail on {his_her} colorful pirate ship to find the legendary Treasure of Friendship.",
-                    "Following an old treasure map, {name} arrived at a mysterious island filled with other young pirates.",
-                    "But these pirates were hungry and had been searching for food, not gold or jewels.",
-                    "Captain {name} shared {his_her} ship's supplies and discovered that sharing made everyone happier than any treasure.",
-                    "{name} learned that the real treasure was the new friendships {he_she} made and the joy of helping others!"
-                ],
-                prompt: "A {age}-year-old {gender} with {hair_color} hair and {eye_color} eyes, dressed as a friendly pirate captain on a colorful ship with treasure chests and other young pirates, children's book illustration style, adventure and friendship"
+            friendship: {
+                title: "{name} and the Bridge of Friendship",
+                moral: "Teaches that friendship requires effort, understanding, and forgiveness",
+                scenes: [
+                    {
+                        text: "{name} and {his_her} best friend have a big argument over a toy, both turning away from each other in anger.",
+                        prompt: "A {age}-year-old {gender} with {hair_color} hair and {eye_color} eyes arguing with another child over a toy, both looking angry and hurt, playground setting, conflict scene, children's book illustration"
+                    },
+                    {
+                        text: "{name} spends the day alone and sad, realizing how much {he_she} misses {his_her} friend's laughter and companionship.",
+                        prompt: "The same {gender} character with {hair_color} hair sitting alone on a swing, looking lonely and thoughtful, empty playground around {him_her}, melancholy mood, children's book illustration, missing friendship"
+                    },
+                    {
+                        text: "{name} decides to be the first to apologize and approaches {his_her} friend with a handmade peace offering.",
+                        prompt: "The {age}-year-old {gender} with {hair_color} hair and {eye_color} eyes approaching {his_her} friend with a handmade card or drawing, nervous but hopeful expression, act of reconciliation, children's book illustration"
+                    },
+                    {
+                        text: "Both friends apologize to each other and share a warm hug, understanding that friendship is more important than any toy.",
+                        prompt: "The same {gender} character with {hair_color} hair hugging {his_her} friend, both smiling with tears of joy, the disputed toy forgotten nearby, emotional reunion, children's book illustration, friendship restored"
+                    },
+                    {
+                        text: "{name} and {his_her} friend play together happily, their friendship now stronger because they learned to forgive and understand each other.",
+                        prompt: "The {age}-year-old {gender} with {hair_color} hair and {eye_color} eyes playing joyfully with {his_her} friend, sharing toys and laughing together, bridge or rainbow in background symbolizing connection, children's book illustration, stronger friendship"
+                    }
+                ]
             }
         };
 
-        async function generateStory() {
+        async function generateCinematicStory() {
             const name = document.getElementById('childName').value.trim() || 'Alex';
             const age = document.getElementById('childAge').value;
             const gender = document.getElementById('childGender').value;
@@ -491,7 +623,7 @@
             const theme = document.getElementById('storyTheme').value;
             
             if (!name) {
-                showError('Please enter the child\'s name!');
+                showError('Please enter the character\'s name!');
                 return;
             }
 
@@ -501,56 +633,64 @@
             
             btn.disabled = true;
             spinner.style.display = 'block';
-            btnText.textContent = `Creating ${name}'s Story...`;
+            btnText.textContent = `Creating ${name}'s Cinematic Story...`;
 
             hideMessages();
 
             try {
-                const template = storyTemplates[theme];
+                const storyTemplate = cinematicStories[theme];
                 
-                // Create personalized story
+                // Personalize the story
                 const personalizedStory = {
-                    title: personalizeText(template.title, name, gender),
-                    pages: template.pages.map(page => personalizeText(page, name, gender))
+                    title: personalizeText(storyTemplate.title, name, gender),
+                    moral: storyTemplate.moral,
+                    scenes: storyTemplate.scenes.map(scene => ({
+                        text: personalizeText(scene.text, name, gender),
+                        prompt: personalizeText(scene.prompt, name, gender)
+                            .replace(/{age}/g, age)
+                            .replace(/{gender}/g, gender)
+                            .replace(/{hair_color}/g, hairColor)
+                            .replace(/{eye_color}/g, eyeColor)
+                    }))
                 };
 
-                // Create AI prompt
-                const aiPrompt = personalizeText(template.prompt, name, gender)
-                    .replace('{age}', age)
-                    .replace('{gender}', gender)
-                    .replace('{hair_color}', hairColor)
-                    .replace('{eye_color}', eyeColor);
+                // Generate images for all scenes
+                const sceneImages = [];
+                for (let i = 0; i < personalizedStory.scenes.length; i++) {
+                    try {
+                        showSuccess(`Creating scene ${i + 1} of 5... Please wait for cinematic magic! ✨`);
+                        
+                        const response = await fetch('/api/generate-image', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({ 
+                                prompt: personalizedStory.scenes[i].prompt,
+                                size: "1024x1024",
+                                quality: "hd",
+                                style: "vivid"
+                            })
+                        });
 
-                // Try to generate AI image
-                let imageUrl = null;
-                try {
-                    const response = await fetch('/api/generate-image', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({ 
-                            prompt: aiPrompt,
-                            size: "1024x1024",
-                            quality: "standard",
-                            style: "vivid"
-                        })
-                    });
-
-                    if (response.ok) {
-                        const data = await response.json();
-                        imageUrl = data.url || data.data?.[0]?.url || data.image_url;
+                        if (response.ok) {
+                            const data = await response.json();
+                            const imageUrl = data.url || data.data?.[0]?.url || data.image_url;
+                            sceneImages.push(imageUrl);
+                        } else {
+                            throw new Error(`Scene ${i + 1} generation failed`);
+                        }
+                        
+                        // Add small delay between requests
+                        await new Promise(resolve => setTimeout(resolve, 500));
+                        
+                    } catch (error) {
+                        console.log(`Scene ${i + 1} failed, using fallback`);
+                        sceneImages.push(createCinematicFallback(name, age, gender, hairColor, eyeColor, theme, i));
                     }
-                } catch (aiError) {
-                    console.log('AI generation failed, using fallback');
                 }
 
-                // If AI fails, create custom illustration
-                if (!imageUrl) {
-                    imageUrl = createCustomIllustration(name, age, gender, hairColor, eyeColor, theme);
-                }
-
-                // Store story data
+                // Store complete story data
                 currentStoryData = {
                     name,
                     age,
@@ -559,22 +699,25 @@
                     eyeColor,
                     theme,
                     title: personalizedStory.title,
-                    pages: personalizedStory.pages,
-                    imageUrl
+                    moral: personalizedStory.moral,
+                    scenes: personalizedStory.scenes.map((scene, index) => ({
+                        text: scene.text,
+                        imageUrl: sceneImages[index]
+                    }))
                 };
 
                 currentPage = 0;
-                displayStory();
+                displayCinematicStory();
                 
-                showSuccess(`🎉 ${name}'s personalized story book is ready! Navigate through all 5 pages.`);
+                showSuccess(`🎬 ${name}'s cinematic story is ready! Each scene tells the story visually - navigate to see the magic!`);
 
             } catch (error) {
                 console.error('Error:', error);
-                showError(`Failed to create story: ${error.message}`);
+                showError(`Failed to create cinematic story: ${error.message}`);
             } finally {
                 btn.disabled = false;
                 spinner.style.display = 'none';
-                btnText.textContent = '🎨 Create Custom Story!';
+                btnText.textContent = '🎬 Create Cinematic Story!';
             }
         }
 
@@ -590,106 +733,98 @@
                 .replace(/{he_she}/g, pronouns.he_she);
         }
 
-        function createCustomIllustration(name, age, gender, hairColor, eyeColor, theme) {
+        function createCinematicFallback(name, age, gender, hairColor, eyeColor, theme, sceneIndex) {
             const canvas = document.createElement('canvas');
-            canvas.width = 800;
-            canvas.height = 800;
+            canvas.width = 1024;
+            canvas.height = 1024;
             const ctx = canvas.getContext('2d');
 
-            // Theme backgrounds
-            const themes = {
-                garden: { bg: ['#87CEEB', '#90EE90'], accent: '#FFB6C1' },
-                space: { bg: ['#191970', '#4B0082'], accent: '#FFD700' },
-                ocean: { bg: ['#00CED1', '#1E90FF'], accent: '#FF7F50' },
-                castle: { bg: ['#DDA0DD', '#9370DB'], accent: '#FFD700' },
-                pirate: { bg: ['#8B4513', '#CD853F'], accent: '#FFD700' }
-            };
+            // Cinematic backgrounds based on scene
+            const sceneColors = [
+                ['#87CEEB', '#FFB6C1'], // Scene 1 - Discovery
+                ['#FFD700', '#FFA500'], // Scene 2 - Decision  
+                ['#98FB98', '#90EE90'], // Scene 3 - Action
+                ['#DDA0DD', '#9370DB'], // Scene 4 - Transformation
+                ['#FF69B4', '#FFB6C1']  // Scene 5 - Resolution
+            ];
 
-            const themeData = themes[theme];
+            const colors = sceneColors[sceneIndex] || sceneColors[0];
             
-            // Background
-            const gradient = ctx.createLinearGradient(0, 0, 800, 800);
-            gradient.addColorStop(0, themeData.bg[0]);
-            gradient.addColorStop(1, themeData.bg[1]);
+            // Cinematic gradient background
+            const gradient = ctx.createLinearGradient(0, 0, 1024, 1024);
+            gradient.addColorStop(0, colors[0]);
+            gradient.addColorStop(1, colors[1]);
             ctx.fillStyle = gradient;
-            ctx.fillRect(0, 0, 800, 800);
+            ctx.fillRect(0, 0, 1024, 1024);
 
-            // Character
-            const centerX = 400;
-            const centerY = 350;
-            const scale = 1.2;
+            // Draw cinematic character
+            const centerX = 512;
+            const centerY = 400;
+            const scale = 1.5;
 
-            // Skin tone
+            // Character illustration (more detailed for cinematic feel)
             ctx.fillStyle = '#F4C2A1';
             ctx.beginPath();
             ctx.arc(centerX, centerY - 100 * scale, 80 * scale, 0, 2 * Math.PI);
             ctx.fill();
 
-            // Hair
+            // Hair with more detail
             const hairColors = {
-                black: '#1C1C1C',
-                brown: '#8B4513',
-                blonde: '#FFD700',
-                red: '#CD853F',
+                'shoulder-length black': '#1C1C1C',
                 'curly brown': '#8B4513',
-                'curly black': '#1C1C1C'
+                'straight blonde': '#FFD700',
+                'wavy red': '#CD853F',
+                'short brown': '#8B4513',
+                'long black': '#1C1C1C'
             };
             
-            ctx.fillStyle = hairColors[hairColor];
+            ctx.fillStyle = hairColors[hairColor] || '#1C1C1C';
             ctx.beginPath();
             ctx.arc(centerX, centerY - 130 * scale, 90 * scale, 0, Math.PI);
             ctx.fill();
 
-            // Eyes
+            // Expressive eyes
             const eyeColors = {
-                brown: '#8B4513',
-                blue: '#4169E1',
-                green: '#228B22',
-                hazel: '#8B7355',
+                'warm brown': '#8B4513',
+                'bright blue': '#4169E1',
+                'emerald green': '#228B22',
+                'hazel': '#8B7355',
                 'dark brown': '#654321'
             };
             
             ctx.fillStyle = eyeColors[eyeColor];
             ctx.beginPath();
-            ctx.arc(centerX - 25 * scale, centerY - 120 * scale, 8 * scale, 0, 2 * Math.PI);
+            ctx.arc(centerX - 30 * scale, centerY - 120 * scale, 12 * scale, 0, 2 * Math.PI);
             ctx.fill();
             ctx.beginPath();
-            ctx.arc(centerX + 25 * scale, centerY - 120 * scale, 8 * scale, 0, 2 * Math.PI);
+            ctx.arc(centerX + 30 * scale, centerY - 120 * scale, 12 * scale, 0, 2 * Math.PI);
             ctx.fill();
 
-            // Smile
-            ctx.strokeStyle = '#D2691E';
-            ctx.lineWidth = 4 * scale;
-            ctx.beginPath();
-            ctx.arc(centerX, centerY - 80 * scale, 20 * scale, 0, Math.PI);
-            ctx.stroke();
+            // Scene-specific expressions and poses
+            const emotions = ['😟', '😊', '💪', '✨', '🎉'];
+            ctx.font = `${60 * scale}px serif`;
+            ctx.textAlign = 'center';
+            ctx.fillText(emotions[sceneIndex], centerX + 150, centerY - 50);
 
-            // Body/outfit
-            ctx.fillStyle = themeData.accent;
-            ctx.beginPath();
-            ctx.arc(centerX, centerY + 50 * scale, 100 * scale, 0, Math.PI);
-            ctx.fill();
-
-            // Name
+            // Character name with cinematic styling
             ctx.fillStyle = '#FFFFFF';
             ctx.strokeStyle = '#000000';
-            ctx.lineWidth = 3;
-            ctx.font = `bold ${40 * scale}px Comic Sans MS`;
-            ctx.textAlign = 'center';
-            ctx.strokeText(name, centerX, 750);
-            ctx.fillText(name, centerX, 750);
+            ctx.lineWidth = 4;
+            ctx.font = `bold ${48 * scale}px Comic Sans MS`;
+            ctx.strokeText(name, centerX, 950);
+            ctx.fillText(name, centerX, 950);
 
             return canvas.toDataURL('image/png');
         }
 
-        function displayStory() {
+        function displayCinematicStory() {
             document.getElementById('defaultPreview').style.display = 'none';
             document.getElementById('storyDisplay').style.display = 'block';
             document.getElementById('downloadSection').style.display = 'block';
-            updatePage();
+            updateCinematicPage();
         }
 
-        function updatePage() {
+        function updateCinematicPage() {
             const image = document.getElementById('storyImage');
             const title = document.getElementById('storyTitle');
             const text = document.getElementById('storyText');
@@ -697,32 +832,34 @@
             const prevBtn = document.getElementById('prevBtn');
             const nextBtn = document.getElementById('nextBtn');
 
-            image.src = currentStoryData.imageUrl;
+            const currentScene = currentStoryData.scenes[currentPage];
+            
+            image.src = currentScene.imageUrl;
             title.textContent = currentStoryData.title;
-            text.textContent = currentStoryData.pages[currentPage];
-            indicator.textContent = `Page ${currentPage + 1} of ${currentStoryData.pages.length}`;
+            text.textContent = currentScene.text;
+            indicator.textContent = `Scene ${currentPage + 1} of ${currentStoryData.scenes.length}`;
             
             prevBtn.disabled = currentPage === 0;
-            nextBtn.disabled = currentPage === currentStoryData.pages.length - 1;
+            nextBtn.disabled = currentPage === currentStoryData.scenes.length - 1;
         }
 
         function previousPage() {
             if (currentPage > 0) {
                 currentPage--;
-                updatePage();
+                updateCinematicPage();
             }
         }
 
         function nextPage() {
-            if (currentPage < currentStoryData.pages.length - 1) {
+            if (currentPage < currentStoryData.scenes.length - 1) {
                 currentPage++;
-                updatePage();
+                updateCinematicPage();
             }
         }
 
         async function downloadPDF() {
             if (!currentStoryData.title) {
-                alert('Please generate a story first!');
+                alert('Please generate a cinematic story first!');
                 return;
             }
 
@@ -730,74 +867,80 @@
                 const { jsPDF } = window.jspdf;
                 const pdf = new jsPDF('p', 'mm', 'a4');
 
-                // Cover page
-                pdf.setFillColor(255, 248, 220);
+                // Professional cover page
+                pdf.setFillColor(25, 25, 112);
                 pdf.rect(0, 0, 210, 297, 'F');
                 
-                pdf.setTextColor(50, 50, 150);
-                pdf.setFontSize(28);
+                pdf.setTextColor(255, 215, 0);
+                pdf.setFontSize(32);
                 pdf.setFont(undefined, 'bold');
-                pdf.text(currentStoryData.title, 105, 50, { align: 'center' });
+                pdf.text(currentStoryData.title, 105, 60, { align: 'center' });
                 
                 pdf.setFontSize(18);
-                pdf.text(`A Custom Story for ${currentStoryData.name}`, 105, 70, { align: 'center' });
+                pdf.setTextColor(255, 255, 255);
+                pdf.text(`A Cinematic Story for ${currentStoryData.name}`, 105, 80, { align: 'center' });
                 
-                // Add character image if available
+                pdf.setFontSize(14);
+                pdf.text(`Moral Lesson: ${currentStoryData.moral}`, 105, 100, { align: 'center' });
+
+                // Add first scene image as cover
                 try {
-                    pdf.addImage(currentStoryData.imageUrl, 'PNG', 55, 90, 100, 100);
+                    pdf.addImage(currentStoryData.scenes[0].imageUrl, 'PNG', 55, 120, 100, 100);
                 } catch (e) {
-                    // Simple character representation
                     pdf.setFillColor(244, 194, 161);
-                    pdf.circle(105, 140, 40, 'F');
-                    pdf.setFontSize(14);
-                    pdf.text(`${currentStoryData.name}, age ${currentStoryData.age}`, 105, 200, { align: 'center' });
+                    pdf.circle(105, 170, 40, 'F');
                 }
 
-                // Story pages
-                currentStoryData.pages.forEach((pageText, index) => {
+                pdf.setTextColor(255, 215, 0);
+                pdf.setFontSize(16);
+                pdf.text('StoryMagic Pro - Cinematic Edition', 105, 280, { align: 'center' });
+
+                // Scene pages
+                currentStoryData.scenes.forEach((scene, index) => {
                     pdf.addPage();
                     
-                    // Background
-                    const colors = [[255, 248, 220], [240, 248, 255], [245, 255, 250], [255, 240, 245], [248, 248, 255]];
-                    const color = colors[index % colors.length];
-                    pdf.setFillColor(color[0], color[1], color[2]);
+                    // Elegant background
+                    pdf.setFillColor(248, 248, 255);
                     pdf.rect(0, 0, 210, 297, 'F');
                     
-                    // Page header
-                    pdf.setTextColor(50, 50, 150);
-                    pdf.setFontSize(20);
+                    // Scene header
+                    pdf.setTextColor(75, 0, 130);
+                    pdf.setFontSize(22);
                     pdf.setFont(undefined, 'bold');
-                    pdf.text(`Page ${index + 1}`, 105, 30, { align: 'center' });
+                    pdf.text(`Scene ${index + 1}`, 105, 30, { align: 'center' });
                     
-                    // Character image
+                    // Full-width cinematic image
                     try {
-                        pdf.addImage(currentStoryData.imageUrl, 'PNG', 75, 50, 60, 60);
+                        pdf.addImage(scene.imageUrl, 'PNG', 20, 40, 170, 120);
                     } catch (e) {
-                        pdf.setFillColor(244, 194, 161);
-                        pdf.circle(105, 80, 25, 'F');
+                        pdf.setFillColor(200, 200, 200);
+                        pdf.rect(20, 40, 170, 120, 'F');
+                        pdf.setTextColor(100, 100, 100);
+                        pdf.text(`Scene ${index + 1} Image`, 105, 100, { align: 'center' });
                     }
                     
-                    // Story text
-                    pdf.setFillColor(255, 255, 255, 0.9);
-                    pdf.rect(20, 130, 170, 80, 'F');
-                    pdf.setDrawColor(150, 150, 150);
-                    pdf.rect(20, 130, 170, 80, 'S');
+                    // Story text with elegant styling
+                    pdf.setFillColor(255, 255, 255);
+                    pdf.rect(15, 170, 180, 80, 'F');
+                    pdf.setDrawColor(75, 0, 130);
+                    pdf.setLineWidth(2);
+                    pdf.rect(15, 170, 180, 80, 'S');
                     
                     pdf.setTextColor(50, 50, 50);
                     pdf.setFontSize(12);
                     pdf.setFont(undefined, 'normal');
-                    const lines = pdf.splitTextToSize(pageText, 150);
-                    let yPos = 150;
+                    const lines = pdf.splitTextToSize(scene.text, 160);
+                    let yPos = 185;
                     lines.forEach(line => {
-                        if (yPos < 200) {
+                        if (yPos < 240) {
                             pdf.text(line, 105, yPos, { align: 'center' });
                             yPos += 8;
                         }
                     });
                 });
 
-                pdf.save(`${currentStoryData.name}_Custom_Story_Book.pdf`);
-                alert('📚 Custom story book downloaded successfully!');
+                pdf.save(`${currentStoryData.name}_Cinematic_Story.pdf`);
+                alert('🎬 Cinematic story book downloaded! Each page is a visual masterpiece!');
                 
             } catch (error) {
                 console.error('PDF error:', error);
@@ -822,24 +965,31 @@
             document.getElementById('successMessage').style.display = 'none';
         }
 
-        // Update preview when form changes
-        document.getElementById('childName').addEventListener('input', updatePreview);
-        document.getElementById('childGender').addEventListener('change', updatePreview);
-        document.getElementById('storyTheme').addEventListener('change', updatePreview);
+        // Update moral lesson display
+        document.getElementById('storyTheme').addEventListener('change', function() {
+            const theme = this.value;
+            const moralIndicator = document.getElementById('moralIndicator');
+            const moral = cinematicStories[theme].moral;
+            moralIndicator.querySelector('p').textContent = moral;
+        });
 
+        // Update preview
         function updatePreview() {
             const name = document.getElementById('childName').value || 'Child';
             const theme = document.getElementById('storyTheme').value;
             const themeEmojis = {
-                garden: '🌻',
-                space: '🚀',
-                ocean: '🌊',
-                castle: '🏰',
-                pirate: '🏴‍☠️'
+                kindness: '🌻',
+                courage: '🦁',
+                sharing: '🎁',
+                honesty: '✨',
+                friendship: '🤝'
             };
             
             document.getElementById('previewPlaceholder').textContent = themeEmojis[theme];
         }
+
+        document.getElementById('childName').addEventListener('input', updatePreview);
+        document.getElementById('storyTheme').addEventListener('change', updatePreview);
     </script>
 </body>
 </html>
