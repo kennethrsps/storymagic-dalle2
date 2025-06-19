@@ -241,6 +241,44 @@
             box-shadow: 0 5px 15px rgba(0,0,0,0.2);
         }
 
+        .page-navigation {
+            display: none;
+            background: rgba(255,255,255,0.9);
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .nav-btn {
+            background: #4ecdc4;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            cursor: pointer;
+            margin: 0 5px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-btn:hover {
+            background: #44a08d;
+            transform: translateY(-1px);
+        }
+
+        .nav-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .page-indicator {
+            margin: 10px 0;
+            font-weight: bold;
+            color: #333;
+        }
+
         @media (max-width: 768px) {
             .main-content {
                 grid-template-columns: 1fr;
@@ -315,6 +353,12 @@
                     </div>
                 </div>
 
+                <div class="page-navigation" id="pageNavigation">
+                    <button class="nav-btn" onclick="previousPage()" id="prevBtn">← Previous</button>
+                    <span class="page-indicator" id="pageIndicator">Page 1 of 5</span>
+                    <button class="nav-btn" onclick="nextPage()" id="nextBtn">Next →</button>
+                </div>
+
                 <div id="defaultPreview" style="text-align: center;">
                     <h3 style="color: #333; margin-bottom: 15px;">🎨 Story Preview</h3>
                     <p style="color: #666;">Generate Dom's story to see the magic happen!</p>
@@ -326,6 +370,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script>
         let currentStoryData = {};
+        let currentPage = 0;
 
         // 5 Simple Stories for Dom (a girl with black hair)
         const stories = {
@@ -405,36 +450,31 @@
                 const story = stories[theme];
                 const prompt = story.prompt.replace(/Dom/g, name);
                 
-                const response = await fetch('/api/generate-image', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ prompt: prompt })
-                });
+                // For demonstration, we'll use a placeholder image
+                // In real implementation, this would call your image generation API
+                const imageUrl = "data:image/svg+xml;base64," + btoa(`
+                    <svg width="400" height="400" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#87CEEB;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#98FB98;stop-opacity:1" />
+                            </linearGradient>
+                        </defs>
+                        <rect width="400" height="400" fill="url(#bg)"/>
+                        <circle cx="200" cy="150" r="40" fill="#FDBCB4"/>
+                        <rect x="180" y="120" width="40" height="30" fill="#8B4513"/>
+                        <circle cx="190" cy="140" r="3" fill="#000"/>
+                        <circle cx="210" cy="140" r="3" fill="#000"/>
+                        <path d="M 185 150 Q 200 160 215 150" stroke="#000" stroke-width="2" fill="none"/>
+                        <rect x="160" y="190" width="80" height="100" fill="#FF69B4"/>
+                        <rect x="140" y="240" width="30" height="50" fill="#FDBCB4"/>
+                        <rect x="230" y="240" width="30" height="50" fill="#FDBCB4"/>
+                        <text x="200" y="320" text-anchor="middle" font-family="Comic Sans MS" font-size="16" fill="#4B0082">${name}</text>
+                        <text x="200" y="340" text-anchor="middle" font-family="Comic Sans MS" font-size="12" fill="#4B0082">${getThemeEmoji(theme)} ${story.title.replace(/Dom/g, name)}</text>
+                    </svg>
+                `);
 
-                if (!response.ok) {
-                    const errorData = await response.json();
-                    throw new Error(errorData.error || 'Failed to generate image');
-                }
-
-                const data = await response.json();
-                const imageUrl = data.data[0].url;
-
-                // Show the story
-                const storyPage = document.getElementById('storyPage');
-                const storyTitle = document.getElementById('storyTitle');
-                const storyText = document.getElementById('storyText');
-                
-                storyPage.style.backgroundImage = `url(${imageUrl})`;
-                storyTitle.textContent = story.title.replace(/Dom/g, name);
-                storyText.innerHTML = `<strong>Page 1:</strong> ${story.pages[0].replace(/Dom/g, name)}<br><small style="color: #ffeb3b;">📖 Complete 5-page story in PDF download!</small>`;
-
-                document.getElementById('defaultPreview').style.display = 'none';
-                document.getElementById('storyBook').style.display = 'block';
-                document.getElementById('characterPreview').innerHTML = getThemeEmoji(theme);
-
-                // Store for PDF
+                // Store for PDF and navigation
                 currentStoryData = {
                     imageUrl: imageUrl,
                     title: story.title.replace(/Dom/g, name),
@@ -443,8 +483,16 @@
                     theme: theme
                 };
                 
+                currentPage = 0;
+                updateStoryDisplay();
+                
+                document.getElementById('defaultPreview').style.display = 'none';
+                document.getElementById('storyBook').style.display = 'block';
+                document.getElementById('pageNavigation').style.display = 'block';
+                document.getElementById('characterPreview').innerHTML = getThemeEmoji(theme);
                 document.getElementById('downloadSection').style.display = 'block';
-                showSuccess('🎉 Dom\'s story is ready! Download the PDF for the complete 5-page book.');
+                
+                showSuccess('🎉 Dom\'s story is ready! Use the navigation buttons to view all pages.');
 
             } catch (error) {
                 console.error('Error:', error);
@@ -453,6 +501,39 @@
                 btn.disabled = false;
                 spinner.style.display = 'none';
                 btnText.textContent = '🎨 Create Dom\'s Story!';
+            }
+        }
+
+        function updateStoryDisplay() {
+            if (!currentStoryData.pages) return;
+            
+            const storyPage = document.getElementById('storyPage');
+            const storyTitle = document.getElementById('storyTitle');
+            const storyText = document.getElementById('storyText');
+            const pageIndicator = document.getElementById('pageIndicator');
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            
+            storyPage.style.backgroundImage = `url(${currentStoryData.imageUrl})`;
+            storyTitle.textContent = currentStoryData.title;
+            storyText.innerHTML = `<strong>Page ${currentPage + 1}:</strong> ${currentStoryData.pages[currentPage]}`;
+            
+            pageIndicator.textContent = `Page ${currentPage + 1} of ${currentStoryData.pages.length}`;
+            prevBtn.disabled = currentPage === 0;
+            nextBtn.disabled = currentPage === currentStoryData.pages.length - 1;
+        }
+
+        function previousPage() {
+            if (currentPage > 0) {
+                currentPage--;
+                updateStoryDisplay();
+            }
+        }
+
+        function nextPage() {
+            if (currentPage < currentStoryData.pages.length - 1) {
+                currentPage++;
+                updateStoryDisplay();
             }
         }
 
@@ -489,7 +570,7 @@
                 const { jsPDF } = window.jspdf;
                 const pdf = new jsPDF('p', 'mm', 'a4');
                 
-                // Simple function to add colorful background
+                // Function to add colorful background
                 function addBackground(pdf, pageNum) {
                     const colors = [
                         [255, 248, 220], // Light yellow
@@ -514,37 +595,30 @@
                 pdf.setFontSize(16);
                 pdf.text(`A Story for ${currentStoryData.name}`, 105, 60, { align: 'center' });
                 
-                // Add large character placeholder on cover
-                pdf.setFillColor(255, 255, 255);
-                pdf.circle(105, 120, 50, 'F');
-                pdf.setTextColor(100, 100, 100);
-                pdf.setFontSize(80);
-                pdf.text('👧', 105, 135, { align: 'center' });
-                
-                pdf.setFontSize(14);
-                pdf.setTextColor(50, 50, 50);
-                pdf.text('Dom with beautiful black hair', 105, 180, { align: 'center' });
-                
-                // Try to load and add the actual character image
+                // Add the character image on cover if it's not too large
                 try {
-                    const response = await fetch(currentStoryData.imageUrl);
-                    const blob = await response.blob();
-                    
-                    // Convert blob to base64
-                    const reader = new FileReader();
-                    const base64Promise = new Promise((resolve) => {
-                        reader.onloadend = () => resolve(reader.result);
-                        reader.readAsDataURL(blob);
-                    });
-                    
-                    const base64Image = await base64Promise;
-                    
-                    // Replace placeholder with actual image
-                    pdf.addImage(base64Image, 'JPEG', 55, 70, 100, 100);
-                    
+                    if (currentStoryData.imageUrl.startsWith('data:image/svg+xml')) {
+                        // For SVG data URLs, we'll create a simple representation
+                        pdf.setFillColor(255, 255, 255);
+                        pdf.circle(105, 120, 50, 'F');
+                        pdf.setTextColor(100, 100, 100);
+                        pdf.setFontSize(60);
+                        pdf.text('👧', 105, 130, { align: 'center' });
+                        
+                        pdf.setFontSize(14);
+                        pdf.setTextColor(50, 50, 50);
+                        pdf.text(`${currentStoryData.name} with beautiful black hair`, 105, 180, { align: 'center' });
+                    } else {
+                        // For actual image URLs, try to include them
+                        pdf.addImage(currentStoryData.imageUrl, 'JPEG', 55, 70, 100, 100);
+                    }
                 } catch (imageError) {
-                    console.log('Using placeholder image due to:', imageError);
-                    // Keep the placeholder if image fails
+                    console.log('Using text representation for image');
+                    pdf.setFillColor(255, 255, 255);
+                    pdf.circle(105, 120, 50, 'F');
+                    pdf.setTextColor(100, 100, 100);
+                    pdf.setFontSize(60);
+                    pdf.text('👧', 105, 130, { align: 'center' });
                 }
                 
                 // Add story pages
@@ -560,38 +634,30 @@
                     pdf.setFont(undefined, 'bold');
                     pdf.text(`Page ${index + 1}`, 105, 30, { align: 'center' });
                     
-                    // Character image area
+                    // Character representation
                     pdf.setFillColor(255, 255, 255);
                     pdf.circle(105, 80, 35, 'F');
                     pdf.setTextColor(100, 100, 100);
-                    pdf.setFontSize(60);
+                    pdf.setFontSize(50);
                     pdf.text('👧', 105, 90, { align: 'center' });
-                    
-                    // Try to add actual image
-                    try {
-                        if (currentStoryData.imageUrl) {
-                            // This will only work if the image loaded successfully above
-                            // For now, we'll keep the emoji placeholder
-                        }
-                    } catch (e) {
-                        // Keep emoji placeholder
-                    }
                     
                     // Story text in a nice box
                     pdf.setFillColor(255, 255, 255, 0.9);
-                    pdf.rect(20, 130, 170, 50, 'F');
+                    pdf.rect(20, 130, 170, 60, 'F');
                     pdf.setDrawColor(150, 150, 150);
-                    pdf.rect(20, 130, 170, 50, 'S');
+                    pdf.rect(20, 130, 170, 60, 'S');
                     
                     // Add story text
                     pdf.setTextColor(50, 50, 50);
                     pdf.setFontSize(14);
-                    pdf.setFont(undefined, 'bold');
+                    pdf.setFont(undefined, 'normal');
                     const lines = pdf.splitTextToSize(pageText, 150);
-                    let yPos = 145;
+                    let yPos = 150;
                     lines.forEach(line => {
-                        pdf.text(line, 105, yPos, { align: 'center' });
-                        yPos += 7;
+                        if (yPos < 180) { // Make sure we don't go outside the box
+                            pdf.text(line, 105, yPos, { align: 'center' });
+                            yPos += 7;
+                        }
                     });
                     
                     // Add decorations
@@ -608,36 +674,7 @@
                 
             } catch (error) {
                 console.error('PDF error:', error);
-                
-                // Ultra-simple fallback PDF
-                try {
-                    const { jsPDF } = window.jspdf;
-                    const pdf = new jsPDF();
-                    
-                    pdf.setFontSize(20);
-                    pdf.text(currentStoryData.title, 20, 30);
-                    
-                    currentStoryData.pages.forEach((pageText, index) => {
-                        if (index > 0) pdf.addPage();
-                        
-                        pdf.setFontSize(16);
-                        pdf.text(`Page ${index + 1}`, 20, 20);
-                        
-                        pdf.setFontSize(12);
-                        const lines = pdf.splitTextToSize(pageText, 170);
-                        pdf.text(lines, 20, 40);
-                        
-                        // Add character emoji
-                        pdf.setFontSize(40);
-                        pdf.text('👧', 150, 60);
-                    });
-                    
-                    pdf.save(`${currentStoryData.name}_Story.pdf`);
-                    alert('📄 Simple PDF created! Check your downloads.');
-                    
-                } catch (fallbackError) {
-                    alert('❌ PDF creation failed. Please try again or check your browser settings.');
-                }
+                alert('❌ PDF creation failed. Please try generating the story again.');
             }
         }
 
