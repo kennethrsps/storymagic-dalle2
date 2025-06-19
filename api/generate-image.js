@@ -1,96 +1,82 @@
-// Replace your existing fetch call with this enhanced version
-async function generateStoryWithImage() {
-    const name = document.getElementById('childName').value || 'Emma';
-    const age = document.getElementById('childAge').value;
-    const theme = document.getElementById('storyTheme').value;
-    
-    // Show loading state
-    const btn = document.getElementById('generateBtn');
-    const spinner = document.getElementById('loadingSpinner');
-    const btnText = document.getElementById('btnText');
-    
-    btn.disabled = true;
-    spinner.style.display = 'block';
-    btnText.textContent = 'Generating AI Image...';
+export default async function handler(req, res) {
+  // Enable CORS
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
-    // Hide messages
-    document.getElementById('errorMessage').style.display = 'none';
-    document.getElementById('successMessage').style.display = 'none';
+  // Handle preflight request
+  if (req.method === 'OPTIONS') {
+    res.status(200).end();
+    return;
+  }
 
-    try {
-        const story = storyTemplates[theme];
-        const prompt = story.prompt.replace(/{name}/g, name).replace(/{age}/g, age);
-        
-        console.log('Sending prompt:', prompt); // Debug log
-        
-        // Call your real DALL-E API
-        const response = await fetch('/api/generate-image', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ prompt: prompt })
-        });
+  if (req.method !== 'POST') {
+    return res.status(405).json({ error: 'Method not allowed' });
+  }
 
-        console.log('Response status:', response.status); // Debug log
-        console.log('Response headers:', response.headers); // Debug log
-        
-        // Get the response text first
-        const responseText = await response.text();
-        console.log('Raw response:', responseText); // Debug log
+  try {
+    const { prompt } = req.body;
+    const apiKey = process.env.OPENAI_API_KEY;
 
-        if (!response.ok) {
-            // Try to parse as JSON, fallback to raw text
-            let errorMessage;
-            try {
-                const errorData = JSON.parse(responseText);
-                errorMessage = errorData.error || `HTTP ${response.status}`;
-            } catch (e) {
-                errorMessage = `Server returned: ${responseText.substring(0, 200)}...`;
-            }
-            throw new Error(errorMessage);
-        }
-
-        // Parse the successful response
-        let data;
-        try {
-            data = JSON.parse(responseText);
-        } catch (e) {
-            throw new Error(`Invalid JSON response: ${responseText.substring(0, 100)}...`);
-        }
-
-        if (!data.data || !data.data[0] || !data.data[0].url) {
-            throw new Error('No image URL in response');
-        }
-
-        const imageUrl = data.data[0].url;
-
-        // Update story display with AI image as background
-        const storyPage = document.getElementById('storyPage');
-        const storyTitle = document.getElementById('storyTitle');
-        const storyText = document.getElementById('storyText');
-        
-        storyPage.style.backgroundImage = `url(${imageUrl})`;
-        storyTitle.textContent = story.title.replace(/{name}/g, name);
-        storyText.innerHTML = story.text.replace(/{name}/g, name);
-
-        // Show the story book
-        document.getElementById('defaultPreview').style.display = 'none';
-        document.getElementById('storyBook').style.display = 'block';
-
-        // Update character preview
-        document.getElementById('characterPreview').innerHTML = getThemeEmoji(theme);
-
-        // Show success message
-        showSuccess('🎉 AI story generated successfully with real DALL-E!');
-
-    } catch (error) {
-        console.error('Full error:', error); // Debug log
-        showError(`Failed to generate story: ${error.message}`);
-    } finally {
-        // Reset button state
-        btn.disabled = false;
-        spinner.style.display = 'none';
-        btnText.textContent = '🎨 Generate Story with Real DALL-E!';
+    if (!apiKey) {
+      return res.status(500).json({ error: 'OpenAI API key not configured' });
     }
+
+    if (!prompt) {
+      return res.status(400).json({ error: 'Prompt is required' });
+    }
+
+    console.log('Generating image with prompt:', prompt);
+
+    const response = await fetch('https://api.openai.com/v1/images/generations', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${apiKey}`
+      },
+      body: JSON.stringify({
+        model: "dall-e-3",
+        prompt: prompt,
+        size: "1024x1024",
+        quality: "standard",
+        n: 1
+      })
+    });
+
+    const responseText = await response.text();
+    console.log('OpenAI response status:', response.status);
+    console.log('OpenAI response text:', responseText);
+
+    if (!response.ok) {
+      let errorMessage = `OpenAI API error: ${response.status}`;
+      try {
+        const errorData = JSON.parse(responseText);
+        errorMessage = errorData.error?.message || errorMessage;
+      } catch (e) {
+        errorMessage = responseText || errorMessage;
+      }
+      return res.status(response.status).json({ error: errorMessage });
+    }
+
+    let data;
+    try {
+      data = JSON.parse(responseText);
+    } catch (e) {
+      console.error('Failed to parse OpenAI response as JSON:', e);
+      return res.status(500).json({ error: 'Invalid response from OpenAI API' });
+    }
+
+    if (!data.data || !data.data[0] || !data.data[0].url) {
+      return res.status(500).json({ error: 'No image URL in OpenAI response' });
+    }
+
+    res.status(200).json(data);
+
+  } catch (error) {
+    console.error('Error in generate-image API:', error);
+    res.status(500).json({ 
+      error: `Server error: ${error.message}`,
+      details: error.stack
+    });
+  }
 }
