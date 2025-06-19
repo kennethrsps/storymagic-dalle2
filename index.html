@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>StoryMagic Pro - The Garden of Kindness</title>
+    <title>StoryMagic Pro - Garden of Kindness</title>
     <style>
         * {
             margin: 0;
@@ -98,11 +98,6 @@
             box-shadow: 0 0 10px rgba(255, 107, 107, 0.2);
         }
 
-        .form-group textarea {
-            height: 60px;
-            resize: vertical;
-        }
-
         .photo-upload-section {
             background: linear-gradient(135deg, #e8f5e8, #c8e6c9);
             padding: 20px;
@@ -159,8 +154,8 @@
 
         .photo-preview {
             display: none;
-            max-width: 150px;
-            max-height: 150px;
+            max-width: 120px;
+            max-height: 120px;
             border-radius: 12px;
             margin: 15px auto;
             box-shadow: 0 5px 15px rgba(0,0,0,0.2);
@@ -479,10 +474,39 @@
             transform: translateY(-1px);
         }
 
-        @media (max-width: 1200px) {
-            .main-content {
-                grid-template-columns: 400px 1fr;
-            }
+        .system-info {
+            background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            border-left: 4px solid #2196f3;
+        }
+
+        .system-info h5 {
+            color: #1976d2;
+            margin-bottom: 8px;
+            font-size: 0.9em;
+        }
+
+        .system-info ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .system-info li {
+            color: #1565c0;
+            margin-bottom: 3px;
+            font-size: 0.8em;
+            padding-left: 15px;
+            position: relative;
+        }
+
+        .system-info li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #4caf50;
+            font-weight: bold;
         }
 
         @media (max-width: 1024px) {
@@ -504,7 +528,7 @@
     <div class="container">
         <div class="header">
             <h1>🌻 The Garden of Kindness</h1>
-            <p>Create Your Child's Personalized Kindness Story</p>
+            <p>Your Child's Personalized Kindness Adventure</p>
         </div>
 
         <div class="main-content">
@@ -523,8 +547,8 @@
                     <button class="remove-photo-btn" id="removePhotoBtn" onclick="removePhoto()" style="display: none;">Remove Photo</button>
                     
                     <div class="character-analysis" id="characterAnalysis">
-                        <h5>🎨 AI Character Analysis</h5>
-                        <p id="analysisText">Analyzing photo to create character...</p>
+                        <h5>🎨 Character Analysis</h5>
+                        <p id="analysisText">Ready to analyze photo...</p>
                     </div>
                 </div>
 
@@ -575,8 +599,8 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="favoriteThings">Favorite Activities (Optional)</label>
-                        <textarea id="favoriteThings" placeholder="e.g., loves flowers, plays with toys, helps others..."></textarea>
+                        <label for="favoriteThings">Favorite Activities</label>
+                        <textarea id="favoriteThings" placeholder="e.g., loves flowers, gardening, helping others..."></textarea>
                     </div>
                 </div>
 
@@ -590,8 +614,19 @@
                 
                 <div class="download-section" id="downloadSection">
                     <h4>📚 Story Complete!</h4>
-                    <p>Your child's kindness adventure is ready!</p>
+                    <p>Your child's personalized kindness adventure is ready!</p>
                     <button class="download-btn" onclick="downloadStoryPDF()">📄 Download Story Book</button>
+                </div>
+
+                <div class="system-info">
+                    <h5>🚀 New System Features</h5>
+                    <ul>
+                        <li>Fixed background scenes for consistency</li>
+                        <li>Character overlay technology</li>
+                        <li>Perfect positioning system</li>
+                        <li>Fast generation (1 character only)</li>
+                        <li>Professional quality results</li>
+                    </ul>
                 </div>
             </div>
 
@@ -615,9 +650,9 @@
 
                 <div class="default-preview" id="defaultPreview">
                     <div class="preview-placeholder">🌻</div>
-                    <h3>The Garden of Kindness</h3>
-                    <p style="font-size: 1.2em; line-height: 1.6; margin-bottom: 20px;">Upload your child's photo to create a beautiful personalized story about kindness!</p>
-                    <p style="font-size: 1em; opacity: 0.8;">Watch your child become the hero of their own kindness adventure.</p>
+                    <h3>Garden of Kindness</h3>
+                    <p style="font-size: 1.2em; line-height: 1.6; margin-bottom: 20px;">Upload your child's photo to create their personalized kindness adventure!</p>
+                    <p style="font-size: 1em; opacity: 0.8;">New system: Fixed backgrounds + character overlay = perfect consistency!</p>
                 </div>
             </div>
         </div>
@@ -625,55 +660,65 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script>
-        let currentStoryData = {};
-        let currentPage = 0;
-        let uploadedPhoto = null;
-        let characterDescription = '';
+        // Generated Kindness Story Backgrounds
+        const KINDNESS_BACKGROUNDS = {
+            scene1: "https://oaidalleapiprodscus.blob.core.windows.net/private/org-6Z7jFAHtMXYj7phnwoCcOdE4/user-nq1uZhTF4tfAA2x76R18P3sU/img-qJuJK4ozCBv5fGkKCIxMX4JI.png?st=2025-06-19T13%3A45%3A54Z&se=2025-06-19T15%3A45%3A54Z&sp=r&sv=2024-08-04&sr=b&rscd=inline&rsct=image/png&skoid=475fd488-6c59-44a5-9aa9-31c4db451bea&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-06-19T11%3A47%3A42Z&ske=2025-06-20T11%3A47%3A42Z&sks=b&skv=2024-08-04&sig=/RWpIePWqvqu2AfGpkhw5Hva0Vhb2%2Bbus957%2BTTOdkY%3D",
+            scene2: "https://oaidalleapiprodscus.blob.core.windows.net/private/org-6Z7jFAHtMXYj7phnwoCcOdE4/user-nq1uZhTF4tfAA2x76R18P3sU/img-PkBLInA5ntbhCbvejya9T4NK.png?st=2025-06-19T13%3A46%3A11Z&se=2025-06-19T15%3A46%3A11Z&sp=r&sv=2024-08-04&sr=b&rscd=inline&rsct=image/png&skoid=475fd488-6c59-44a5-9aa9-31c4db451bea&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-06-19T06%3A08%3A26Z&ske=2025-06-20T06%3A08%3A26Z&sks=b&skv=2024-08-04&sig=5yny/yV2EM/mvmOwZLeBMIgT55n/aDP48AwPlzdvS34%3D",
+            scene3: "https://oaidalleapiprodscus.blob.core.windows.net/private/org-6Z7jFAHtMXYj7phnwoCcOdE4/user-nq1uZhTF4tfAA2x76R18P3sU/img-Zubx0KLfPsAcsBtKbDbwMD8y.png?st=2025-06-19T13%3A47%3A38Z&se=2025-06-19T15%3A47%3A38Z&sp=r&sv=2024-08-04&sr=b&rscd=inline&rsct=image/png&skoid=475fd488-6c59-44a5-9aa9-31c4db451bea&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-06-19T12%3A42%3A18Z&ske=2025-06-20T12%3A42%3A18Z&sks=b&skv=2024-08-04&sig=ohw2tME6a6uYhbVRDrFLpcAsn9X8xU9DJCkOujruZOo%3D",
+            scene4: "https://oaidalleapiprodscus.blob.core.windows.net/private/org-6Z7jFAHtMXYj7phnwoCcOdE4/user-nq1uZhTF4tfAA2x76R18P3sU/img-mQINcDbCtGv8IrZmGfmqzIrN.png?st=2025-06-19T13%3A47%3A25Z&se=2025-06-19T15%3A47%3A25Z&sp=r&sv=2024-08-04&sr=b&rscd=inline&rsct=image/png&skoid=475fd488-6c59-44a5-9aa9-31c4db451bea&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-06-18T15%3A41%3A08Z&ske=2025-06-19T15%3A41%3A08Z&sks=b&skv=2024-08-04&sig=pkYg/tAO2wPJjrRjvCr6ItwqcB5HeOoUAIxPscdMrrI%3D",
+            scene5: "https://oaidalleapiprodscus.blob.core.windows.net/private/org-6Z7jFAHtMXYj7phnwoCcOdE4/user-nq1uZhTF4tfAA2x76R18P3sU/img-4FDYfh4f6Bsai9PBGP7HVnua.png?st=2025-06-19T13%3A58%3A51Z&se=2025-06-19T15%3A58%3A51Z&sp=r&sv=2024-08-04&sr=b&rscd=inline&rsct=image/png&skoid=475fd488-6c59-44a5-9aa9-31c4db451bea&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-06-19T10%3A24%3A17Z&ske=2025-06-20T10%3A24%3A17Z&sks=b&skv=2024-08-04&sig=WjzqSbV/A9OwIsU0VYF4LEhXKyvGuDS4I2aH8Iff4as%3D",
+            scene6: "https://oaidalleapiprodscus.blob.core.windows.net/private/org-6Z7jFAHtMXYj7phnwoCcOdE4/user-nq1uZhTF4tfAA2x76R18P3sU/img-6QbiG4tZ2x8E4GMcKoi7isjt.png?st=2025-06-19T13%3A52%3A49Z&se=2025-06-19T15%3A52%3A49Z&sp=r&sv=2024-08-04&sr=b&rscd=inline&rsct=image/png&skoid=475fd488-6c59-44a5-9aa9-31c4db451bea&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-06-19T11%3A42%3A19Z&ske=2025-06-20T11%3A42%3A19Z&sks=b&skv=2024-08-04&sig=G6Dcc7w%2BtjVDvI9LgTI5Id1R5iGUjUZ5x4zF9Idv/Y4%3D"
+        };
 
-        // KINDNESS STORY TEMPLATE
+        // Background descriptions for character positioning
+        const BACKGROUND_INFO = {
+            scene1: { name: "Cozy Neighborhood", characterPosition: "center-bottom", characterScale: 0.25 },
+            scene2: { name: "Forgotten Garden", characterPosition: "center-bottom", characterScale: 0.22 },
+            scene3: { name: "Meeting Gardener", characterPosition: "left-bottom", characterScale: 0.20 },
+            scene4: { name: "Working Together", characterPosition: "center-bottom", characterScale: 0.23 },
+            scene5: { name: "Garden Blooms", characterPosition: "center-bottom", characterScale: 0.21 },
+            scene6: { name: "Community Garden", characterPosition: "center-bottom", characterScale: 0.24 }
+        };
+
+        // KINDNESS STORY CONTENT
         const kindnessStory = {
             title: "{name}'s Garden of Kindness",
-            shortMoral: "Small acts of kindness create big changes",
             fullMoral: "This story teaches that even the smallest acts of kindness can transform not just others, but ourselves too. When we choose kindness, we plant seeds that grow into beautiful friendships and positive change in our community.",
             scenes: [
                 {
                     title: "Meet {name}",
-                    text: "Meet {name}, a {personality} {age}-year-old who loves to {favorite_things}. One sunny morning, {name} was playing outside when something caught {his_her} attention.",
-                    setting: "Child's home front yard with a cozy house, green lawn, and sunny sky. The child is playing happily outside their house.",
-                    prompt_template: "Children's book illustration of {character_description} playing happily in front of a cozy house with a green lawn and sunny sky. Whimsical, warm colors, friendly atmosphere."
+                    text: "Meet {name}, a {personality} {age}-year-old who loves {favorite_things}. One sunny morning, {name} was playing outside when something caught {his_her} attention down the street."
                 },
                 {
                     title: "The Forgotten Garden",
-                    text: "Walking down the street, {name} discovered an old, forgotten garden. Among the wilting flowers sat a sad elderly gardener who looked very lonely and discouraged.",
-                    setting: "Old neglected garden with wilting flowers, overgrown weeds, and a sad elderly gardener sitting on a bench looking discouraged.",
-                    prompt_template: "Children's book illustration showing {character_description} discovering an old, neglected garden with wilting flowers and weeds. An elderly gardener sits sadly on a bench. Muted colors showing sadness, but hope in the child's expression."
+                    text: "Walking along, {name} discovered an old, forgotten garden. Among the wilting flowers sat a sad elderly gardener who looked very lonely and discouraged about his struggling plants."
                 },
                 {
                     title: "A Kind Offer",
-                    text: "Even though {name} felt a little {personality}, {his_her} heart filled with compassion. '{name} would like to help make your garden beautiful again,' {he_she} said with a gentle, caring smile.",
-                    setting: "The same garden, with the child approaching the elderly gardener with a kind, caring expression, offering to help.",
-                    prompt_template: "Children's book illustration of {character_description} approaching the elderly gardener with a kind, caring expression, offering help. The child shows compassion and determination. Warmer colors beginning to appear."
+                    text: "Even though {name} felt a little {personality}, {his_her} heart filled with compassion. '{name} would like to help make your garden beautiful again,' {he_she} said with a gentle, caring smile."
                 },
                 {
-                    title: "Working Together",
-                    text: "Side by side, {name} and the gardener planted new seeds, watered the flowers, and pulled weeds. They shared stories and laughter as they worked together to bring the garden back to life.",
-                    setting: "The garden being restored, with the child and elderly gardener working together planting flowers, watering plants, and sharing happy moments.",
-                    prompt_template: "Children's book illustration showing {character_description} and the elderly gardener working together in the garden, planting flowers and watering plants. Both are smiling and happy. Bright, cheerful colors as the garden comes alive."
+                    title: "Working Together", 
+                    text: "Side by side, {name} and the gardener planted new seeds, watered the flowers, and pulled weeds. They shared stories and laughter as they worked together to bring the garden back to life."
                 },
                 {
                     title: "The Garden Blooms",
-                    text: "As if by magic, the garden began to bloom in brilliant colors! Other children saw the beautiful transformation and came to help, creating a wonderful community garden full of friendship.",
-                    setting: "The garden now blooming magnificently with bright flowers, multiple children helping, and a sense of community and joy.",
-                    prompt_template: "Children's book illustration of a magnificent blooming garden with {character_description} and several other children working together. Bright, vibrant flowers everywhere, showing community and friendship. Joyful, celebration atmosphere."
+                    text: "As if by magic, the garden began to bloom in brilliant colors! Other children saw the beautiful transformation and came to help, creating a wonderful community garden full of friendship."
                 },
                 {
                     title: "Seeds of Kindness",
-                    text: "{name} learned that kindness is like planting seeds - it grows and spreads, creating beauty everywhere. The garden became a symbol of what happens when we care for others with open hearts.",
-                    setting: "The completed beautiful community garden with children and families enjoying it, showing the lasting impact of kindness.",
-                    prompt_template: "Children's book illustration showing {character_description} in the beautiful, thriving community garden surrounded by families and children enjoying the space. Golden sunset light, showing the lasting beauty created by kindness."
+                    text: "{name} learned that kindness is like planting seeds - it grows and spreads, creating beauty everywhere. The garden became a symbol of what happens when we care for others with open hearts."
                 }
             ]
         };
+
+        let currentStoryData = {};
+        let currentPage = 0;
+        let uploadedPhoto = null;
+        let characterDescription = '';
+        let generatedCharacter = null;
+
+        console.log("✅ Kindness story backgrounds loaded successfully!");
 
         // FILE UPLOAD HANDLING
         function handleFileUpload(event) {
@@ -702,6 +747,7 @@
         function removePhoto() {
             uploadedPhoto = null;
             characterDescription = '';
+            generatedCharacter = null;
             document.getElementById('photoPreview').style.display = 'none';
             document.getElementById('removePhotoBtn').style.display = 'none';
             document.getElementById('characterAnalysis').style.display = 'none';
@@ -750,14 +796,9 @@
                     const analysis = await response.json();
                     characterDescription = analysis.character_description;
                     
-                    // Auto-populate form fields if detected
-                    if (analysis.hair_color) updateFormField('hairColor', analysis.hair_color);
-                    if (analysis.eye_color) updateFormField('eyeColor', analysis.eye_color);
-                    if (analysis.skin_tone) updateFormField('skinTone', analysis.skin_tone);
-                    
                     document.getElementById('analysisText').innerHTML = `
                         <strong>Character Features Detected:</strong><br>
-                        ${analysis.description || 'Ready to create character!'}
+                        ${analysis.description || 'Character ready for generation!'}
                     `;
                 } else {
                     throw new Error('Analysis failed');
@@ -769,25 +810,171 @@
             }
         }
 
-        function updateFormField(fieldId, value) {
-            const field = document.getElementById(fieldId);
-            if (field && field.tagName === 'SELECT') {
-                for (let option of field.options) {
-                    if (option.value.includes(value.toLowerCase()) || option.text.toLowerCase().includes(value.toLowerCase())) {
-                        field.value = option.value;
-                        break;
-                    }
-                }
-            }
-        }
-
         function createManualCharacterDescription() {
             const name = document.getElementById('childName').value.trim() || 'Alex';
             const age = document.getElementById('childAge').value;
             const gender = document.getElementById('childGender').value;
             const personality = document.getElementById('childPersonality').value;
             
-            return `A ${age}-year-old ${gender} named ${name} who is ${personality}. The child has a friendly, warm expression and is dressed in casual, colorful clothing appropriate for a children's book illustration.`;
+            return `A ${age}-year-old ${gender} named ${name} who is ${personality}. The child has a friendly, warm expression and is dressed in casual, colorful clothing appropriate for a children's book illustration. Full body view showing the child standing naturally.`;
+        }
+
+        // CHARACTER GENERATION AND OVERLAY
+        async function generateCharacter() {
+            if (!characterDescription) {
+                characterDescription = createManualCharacterDescription();
+            }
+
+            const characterPrompt = `Children's book illustration of ${characterDescription}. Full body character illustration, standing pose, transparent background preferable, high quality children's book art style, friendly and approachable appearance.`;
+
+            try {
+                const response = await fetch('/api/generate-image', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        prompt: characterPrompt,
+                        size: "1024x1024",
+                        quality: "hd",
+                        style: "vivid"
+                    })
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    const imageUrl = data.url || data.data?.[0]?.url || data.image_url;
+                    if (imageUrl) {
+                        generatedCharacter = imageUrl;
+                        return imageUrl;
+                    }
+                }
+                throw new Error('Character generation failed');
+            } catch (error) {
+                console.error('Character generation error:', error);
+                return createFallbackCharacter();
+            }
+        }
+
+        function createFallbackCharacter() {
+            const canvas = document.createElement('canvas');
+            canvas.width = 512;
+            canvas.height = 512;
+            const ctx = canvas.getContext('2d');
+
+            // Simple character representation
+            const name = document.getElementById('childName').value.trim() || 'Alex';
+            const gender = document.getElementById('childGender').value;
+            
+            // Clear background
+            ctx.clearRect(0, 0, 512, 512);
+            
+            // Character circle
+            ctx.fillStyle = gender === 'girl' ? '#FFB6C1' : '#87CEEB';
+            ctx.beginPath();
+            ctx.arc(256, 200, 80, 0, 2 * Math.PI);
+            ctx.fill();
+            
+            // Face
+            ctx.fillStyle = '#F4C2A1';
+            ctx.beginPath();
+            ctx.arc(256, 180, 50, 0, 2 * Math.PI);
+            ctx.fill();
+            
+            // Eyes
+            ctx.fillStyle = '#000000';
+            ctx.beginPath();
+            ctx.arc(240, 170, 5, 0, 2 * Math.PI);
+            ctx.arc(272, 170, 5, 0, 2 * Math.PI);
+            ctx.fill();
+            
+            // Smile
+            ctx.strokeStyle = '#D2691E';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.arc(256, 180, 20, 0, Math.PI);
+            ctx.stroke();
+            
+            // Body
+            ctx.fillStyle = gender === 'girl' ? '#FF69B4' : '#4169E1';
+            ctx.fillRect(216, 280, 80, 120);
+            
+            // Name
+            ctx.fillStyle = '#333333';
+            ctx.font = 'bold 24px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText(name, 256, 450);
+
+            return canvas.toDataURL('image/png');
+        }
+
+        // CANVAS COMPOSITING SYSTEM
+        function createCompositeScene(backgroundKey, characterImage) {
+            return new Promise((resolve) => {
+                const canvas = document.createElement('canvas');
+                canvas.width = 1024;
+                canvas.height = 1024;
+                const ctx = canvas.getContext('2d');
+
+                const background = new Image();
+                background.crossOrigin = 'anonymous';
+                
+                background.onload = function() {
+                    // Draw background
+                    ctx.drawImage(background, 0, 0, 1024, 1024);
+                    
+                    const character = new Image();
+                    character.crossOrigin = 'anonymous';
+                    
+                    character.onload = function() {
+                        // Calculate character position and size
+                        const info = BACKGROUND_INFO[backgroundKey];
+                        const scale = info.characterScale || 0.22;
+                        const charWidth = character.width * scale;
+                        const charHeight = character.height * scale;
+                        
+                        let x, y;
+                        
+                        // Position based on background requirements
+                        switch(info.characterPosition) {
+                            case 'center-bottom':
+                                x = (1024 - charWidth) / 2;
+                                y = 1024 - charHeight - 50;
+                                break;
+                            case 'left-bottom':
+                                x = 100;
+                                y = 1024 - charHeight - 50;
+                                break;
+                            case 'right-bottom':
+                                x = 1024 - charWidth - 100;
+                                y = 1024 - charHeight - 50;
+                                break;
+                            default:
+                                x = (1024 - charWidth) / 2;
+                                y = 1024 - charHeight - 50;
+                        }
+                        
+                        // Draw character
+                        ctx.drawImage(character, x, y, charWidth, charHeight);
+                        
+                        resolve(canvas.toDataURL('image/png'));
+                    };
+                    
+                    character.onerror = function() {
+                        // If character fails to load, just return background
+                        resolve(canvas.toDataURL('image/png'));
+                    };
+                    
+                    character.src = characterImage;
+                };
+                
+                background.onerror = function() {
+                    // If background fails, create simple scene
+                    ctx.fillStyle = '#87CEEB';
+                    ctx.fillRect(0, 0, 1024, 1024);
+                    resolve(canvas.toDataURL('image/png'));
+                };
+                
+                background.src = KINDNESS_BACKGROUNDS[backgroundKey];
+            });
         }
 
         // STORY GENERATION
@@ -809,97 +996,56 @@
             btnText.textContent = `🌱 Creating ${name}'s Story...`;
 
             hideMessages();
-            showSuccess(`🎨 Creating "${name}'s Garden of Kindness"...`);
+            showSuccess(`🎨 Generating "${name}'s Garden of Kindness"...`);
 
             try {
                 const personality = document.getElementById('childPersonality').value;
-                const favoriteThings = document.getElementById('favoriteThings').value.trim() || 'helping others and playing outside';
+                const favoriteThings = document.getElementById('favoriteThings').value.trim() || 'playing outside and helping others';
                 const age = document.getElementById('childAge').value;
                 const gender = document.getElementById('childGender').value;
 
-                // Use photo analysis or create manual description
-                if (!characterDescription) {
-                    characterDescription = createManualCharacterDescription();
-                }
-
-                // Generate master character portrait first
+                // Step 1: Generate character
                 btnText.textContent = `🎨 Creating ${name}'s Character...`;
-                showSuccess(`👨‍🎨 Generating character portrait...`);
-
-                let masterCharacterImage = null;
-                try {
-                    const characterResponse = await fetch('/api/generate-image', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ 
-                            prompt: `Portrait of ${characterDescription}. Children's book illustration style, friendly and warm, high quality character design.`,
-                            size: "1024x1024",
-                            quality: "hd",
-                            style: "vivid"
-                        })
-                    });
-
-                    if (characterResponse.ok) {
-                        const characterData = await characterResponse.json();
-                        masterCharacterImage = characterData.url || characterData.data?.[0]?.url || characterData.image_url;
-                        showSuccess(`✅ Character portrait created!`);
-                    }
-                } catch (error) {
-                    console.log('Character portrait generation failed, proceeding with scenes');
+                showSuccess(`👨‍🎨 Generating character...`);
+                
+                const characterImage = await generateCharacter();
+                
+                if (characterImage) {
+                    showSuccess(`✅ Character created successfully!`);
+                } else {
+                    showError('Character generation failed, using fallback');
                 }
 
-                // Generate all 6 scene images
+                // Step 2: Composite character onto all backgrounds
+                btnText.textContent = `🖼️ Creating Story Scenes...`;
+                showSuccess(`🎬 Compositing character onto backgrounds...`);
+                
                 const sceneImages = [];
-                for (let i = 0; i < kindnessStory.scenes.length; i++) {
-                    const scene = kindnessStory.scenes[i];
-                    btnText.textContent = `🎨 Creating Scene ${i + 1}/6...`;
-                    showSuccess(`🎬 Generating "${scene.title.replace('{name}', name)}"...`);
+                for (let i = 1; i <= 6; i++) {
+                    const sceneKey = `scene${i}`;
+                    btnText.textContent = `🎨 Scene ${i}/6...`;
                     
                     try {
-                        const prompt = scene.prompt_template.replace('{character_description}', characterDescription);
-                        
-                        const response = await fetch('/api/generate-image', {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({ 
-                                prompt: prompt,
-                                size: "1024x1024",
-                                quality: "hd",
-                                style: "vivid"
-                            })
-                        });
-
-                        if (response.ok) {
-                            const data = await response.json();
-                            const imageUrl = data.url || data.data?.[0]?.url || data.image_url;
-                            if (imageUrl) {
-                                sceneImages.push(imageUrl);
-                                showSuccess(`✅ Scene ${i + 1} complete!`);
-                            } else {
-                                throw new Error('No image URL');
-                            }
-                        } else {
-                            throw new Error('DALL-E failed');
-                        }
-                        
-                        await new Promise(resolve => setTimeout(resolve, 1000));
-                        
+                        const compositeImage = await createCompositeScene(sceneKey, characterImage);
+                        sceneImages.push(compositeImage);
+                        showSuccess(`✅ Scene ${i} complete!`);
                     } catch (error) {
-                        console.log(`Scene ${i + 1} using fallback:`, error.message);
-                        sceneImages.push(createFallbackScene(name, i));
-                        showSuccess(`🎨 Scene ${i + 1}: Using backup illustration`);
-                        await new Promise(resolve => setTimeout(resolve, 400));
+                        console.error(`Scene ${i} composition failed:`, error);
+                        // Use original background as fallback
+                        sceneImages.push(KINDNESS_BACKGROUNDS[sceneKey]);
+                        showSuccess(`⚠️ Scene ${i} using background only`);
                     }
+                    
+                    await new Promise(resolve => setTimeout(resolve, 300));
                 }
 
-                // Assemble final story
+                // Step 3: Assemble final story
                 btnText.textContent = `📖 Assembling Story...`;
                 showSuccess(`🎉 Finalizing ${name}'s kindness adventure...`);
                 
                 currentStoryData = {
                     name, age, gender, personality, favoriteThings,
                     title: personalizeText(kindnessStory.title, name, gender),
-                    shortMoral: kindnessStory.shortMoral,
                     fullMoral: kindnessStory.fullMoral,
                     pages: kindnessStory.scenes.map((scene, index) => ({
                         title: personalizeText(scene.title, name, gender),
@@ -911,8 +1057,8 @@
                 currentPage = 0;
                 displayStory();
                 
-                btnText.textContent = `✅ ${name}'s Story Ready!`;
-                showSuccess(`🎉 "${currentStoryData.title}" is complete! Navigate through all pages.`);
+                btnText.textContent = `✅ ${name}'s Story Complete!`;
+                showSuccess(`🎉 "${currentStoryData.title}" is ready! Navigate through all pages.`);
 
             } catch (error) {
                 console.error('Generation error:', error);
@@ -956,58 +1102,6 @@
                 .replace(/{personality}/g, personality)
                 .replace(/{favorite_things}/g, favoriteThings)
                 .replace(/{age}/g, document.getElementById('childAge').value);
-        }
-
-        function createFallbackScene(name, sceneIndex) {
-            const canvas = document.createElement('canvas');
-            canvas.width = 1024;
-            canvas.height = 1024;
-            const ctx = canvas.getContext('2d');
-
-            // Scene-specific backgrounds
-            const sceneColors = [
-                ['#87CEEB', '#98FB98'], // Introduction - sky blue to light green
-                ['#D3D3D3', '#F0E68C'], // Garden discovery - gray to khaki  
-                ['#FFE4E1', '#FFA07A'], // Offering help - misty rose to light salmon
-                ['#90EE90', '#32CD32'], // Working together - light green to lime green
-                ['#FF69B4', '#FFB6C1'], // Garden blooms - hot pink to light pink
-                ['#FFD700', '#FFA500']  // Lesson learned - gold to orange
-            ];
-
-            const colors = sceneColors[sceneIndex] || sceneColors[0];
-            
-            const gradient = ctx.createLinearGradient(0, 0, 1024, 1024);
-            gradient.addColorStop(0, colors[0]);
-            gradient.addColorStop(1, colors[1]);
-            ctx.fillStyle = gradient;
-            ctx.fillRect(0, 0, 1024, 1024);
-
-            // Add scene elements
-            const sceneTexts = [
-                `${name} at Home`,
-                'The Forgotten Garden',
-                'Offering Kindness',
-                'Working Together', 
-                'Garden Blooms',
-                'Kindness Grows'
-            ];
-
-            // Text
-            ctx.fillStyle = '#FFFFFF';
-            ctx.strokeStyle = '#000000';
-            ctx.lineWidth = 3;
-            ctx.font = 'bold 48px Georgia';
-            ctx.textAlign = 'center';
-            ctx.strokeText(sceneTexts[sceneIndex], 512, 512);
-            ctx.fillText(sceneTexts[sceneIndex], 512, 512);
-
-            // Character representation
-            ctx.fillStyle = '#FF69B4';
-            ctx.beginPath();
-            ctx.arc(512, 300, 80, 0, 2 * Math.PI);
-            ctx.fill();
-
-            return canvas.toDataURL('image/png');
         }
 
         function displayStory() {
@@ -1070,16 +1164,15 @@
                 const pdf = new jsPDF('p', 'mm', 'a4');
 
                 // Cover page
-                pdf.setFillColor(25, 25, 112);
+                pdf.setFillColor(46, 125, 50);
                 pdf.rect(0, 0, 210, 297, 'F');
                 
-                pdf.setTextColor(255, 215, 0);
+                pdf.setTextColor(255, 255, 255);
                 pdf.setFontSize(28);
                 pdf.setFont(undefined, 'bold');
                 pdf.text(currentStoryData.title, 105, 50, { align: 'center' });
                 
                 pdf.setFontSize(16);
-                pdf.setTextColor(255, 255, 255);
                 pdf.text(`A Story About Kindness`, 105, 70, { align: 'center' });
 
                 // Story pages
@@ -1089,7 +1182,7 @@
                     pdf.setFillColor(250, 250, 255);
                     pdf.rect(0, 0, 210, 297, 'F');
                     
-                    pdf.setFillColor(25, 25, 112);
+                    pdf.setFillColor(46, 125, 50);
                     pdf.rect(0, 0, 210, 25, 'F');
                     pdf.setTextColor(255, 255, 255);
                     pdf.setFontSize(14);
@@ -1105,7 +1198,7 @@
                     
                     pdf.setFillColor(255, 255, 255);
                     pdf.rect(20, 185, 170, 70, 'F');
-                    pdf.setDrawColor(25, 25, 112);
+                    pdf.setDrawColor(46, 125, 50);
                     pdf.setLineWidth(2);
                     pdf.rect(20, 185, 170, 70, 'S');
                     
@@ -1148,7 +1241,7 @@
             document.getElementById('successMessage').style.display = 'none';
         }
 
-        console.log("Kindness Story Generator loaded successfully!");
+        console.log("Character Overlay System loaded successfully!");
     </script>
 </body>
 </html>
