@@ -8,7 +8,15 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </Head>
 
-      <style jsx global>{`
+      <div dangerouslySetInnerHTML={{
+        __html: `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StoryMagic - Real DALL-E Integration</title>
+    <style>
         * {
             margin: 0;
             padding: 0;
@@ -116,19 +124,6 @@ export default function Home() {
             opacity: 0.7;
             cursor: not-allowed;
             transform: none;
-        }
-
-        .debug-btn {
-            background: linear-gradient(45deg, #ff4757, #ff3838);
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 15px;
-            font-size: 0.9em;
-            font-weight: bold;
-            cursor: pointer;
-            width: 100%;
-            margin-top: 10px;
         }
 
         .loading-spinner {
@@ -261,157 +256,114 @@ export default function Home() {
                 font-size: 1.5em;
             }
         }
-      `}</style>
-
-      <div className="container">
-        <div className="header">
-          <h1>🎨 StoryMagic with Real DALL-E</h1>
-          <p>Create personalized children's books with AI-generated illustrations!</p>
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎨 StoryMagic with Real DALL-E</h1>
+            <p>Create personalized children's books with AI-generated illustrations!</p>
         </div>
 
-        <div className="main-content">
-          <div className="form-section">
-            <h2 style={{color: '#333', marginBottom: '30px', textAlign: 'center'}}>Create Your Story</h2>
-            
-            <div className="form-group">
-              <label htmlFor="childName">Child's Name</label>
-              <input type="text" id="childName" placeholder="Enter your child's name" defaultValue="Emma" />
-            </div>
-
-            <div className="form-group">
-              <label htmlFor="childAge">Age</label>
-              <select id="childAge" defaultValue="6">
-                <option value="4">4 years old</option>
-                <option value="5">5 years old</option>
-                <option value="6">6 years old</option>
-                <option value="7">7 years old</option>
-                <option value="8">8 years old</option>
-              </select>
-            </div>
-
-            <div className="form-group">
-              <label htmlFor="storyTheme">Story Theme</label>
-              <select id="storyTheme" defaultValue="garden">
-                <option value="garden">🌻 Magical Garden</option>
-                <option value="space">🚀 Space Adventure</option>
-                <option value="princess">👑 Royal Adventure</option>
-                <option value="ocean">🌊 Ocean Explorer</option>
-                <option value="forest">🌲 Enchanted Forest</option>
-              </select>
-            </div>
-
-            <button className="generate-btn" onClick={() => generateStoryWithImage()} id="generateBtn">
-              <div className="loading-spinner" id="loadingSpinner"></div>
-              <span id="btnText">🎨 Generate Story with Real DALL-E!</span>
-            </button>
-
-            <button className="debug-btn" onClick={() => debugApiCall()}>🔍 DEBUG API (Check Console)</button>
-
-            <div className="cost-info">
-              <h4 style={{color: '#2e7d32', marginBottom: '8px'}}>💰 Real DALL-E Cost</h4>
-              <p>• Each image: ~$0.04</p>
-              <p>• Uses your OpenAI credits</p>
-              <p>• High-quality 1024x1024 images</p>
-            </div>
-
-            <div className="error-message" id="errorMessage"></div>
-            <div className="success-message" id="successMessage"></div>
-          </div>
-
-          <div className="preview-section">
-            <div className="character-preview" id="characterPreview">
-              🌻
-            </div>
-
-            <div className="story-book" id="storyBook">
-              <div className="story-page" id="storyPage">
-                <div className="story-overlay">
-                  <div className="story-title" id="storyTitle">Your Story Title</div>
-                  <div className="story-text" id="storyText">Your personalized story will appear here...</div>
+        <div class="main-content">
+            <div class="form-section">
+                <h2 style="color: #333; margin-bottom: 30px; text-align: center;">Create Your Story</h2>
+                
+                <div class="form-group">
+                    <label for="childName">Child's Name</label>
+                    <input type="text" id="childName" placeholder="Enter your child's name" value="Emma">
                 </div>
-              </div>
+
+                <div class="form-group">
+                    <label for="childAge">Age</label>
+                    <select id="childAge">
+                        <option value="4">4 years old</option>
+                        <option value="5">5 years old</option>
+                        <option value="6" selected>6 years old</option>
+                        <option value="7">7 years old</option>
+                        <option value="8">8 years old</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="storyTheme">Story Theme</label>
+                    <select id="storyTheme">
+                        <option value="garden" selected>🌻 Magical Garden</option>
+                        <option value="space">🚀 Space Adventure</option>
+                        <option value="princess">👑 Royal Adventure</option>
+                        <option value="ocean">🌊 Ocean Explorer</option>
+                        <option value="forest">🌲 Enchanted Forest</option>
+                    </select>
+                </div>
+
+                <button class="generate-btn" onclick="generateStoryWithImage()" id="generateBtn">
+                    <div class="loading-spinner" id="loadingSpinner"></div>
+                    <span id="btnText">🎨 Generate Story with Real DALL-E!</span>
+                </button>
+
+                <div class="cost-info">
+                    <h4 style="color: #2e7d32; margin-bottom: 8px;">💰 Real DALL-E Cost</h4>
+                    <p>• Each image: ~$0.04</p>
+                    <p>• Uses your OpenAI credits</p>
+                    <p>• High-quality 1024x1024 images</p>
+                </div>
+
+                <div class="error-message" id="errorMessage"></div>
+                <div class="success-message" id="successMessage"></div>
             </div>
 
-            <div id="defaultPreview" style={{textAlign: 'center'}}>
-              <h3 style={{color: '#333', marginBottom: '15px'}}>AI Story Preview</h3>
-              <p style={{color: '#666'}}>Generate your story to see the AI image as background with your personalized text overlay!</p>
+            <div class="preview-section">
+                <div class="character-preview" id="characterPreview">
+                    🌻
+                </div>
+
+                <div class="story-book" id="storyBook">
+                    <div class="story-page" id="storyPage">
+                        <div class="story-overlay">
+                            <div class="story-title" id="storyTitle">Your Story Title</div>
+                            <div class="story-text" id="storyText">Your personalized story will appear here...</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="defaultPreview" style="text-align: center;">
+                    <h3 style="color: #333; margin-bottom: 15px;">AI Story Preview</h3>
+                    <p style="color: #666;">Generate your story to see the AI image as background with your personalized text overlay!</p>
+                </div>
             </div>
-          </div>
         </div>
-      </div>
+    </div>
 
-      <script dangerouslySetInnerHTML={{
-        __html: `
-          // Story templates
-          const storyTemplates = {
+    <script>
+        const storyTemplates = {
             garden: {
-              title: "{name}'s Magical Garden Adventure",
-              text: "Once upon a time, <span class='highlight'>{name}</span> discovered a magical garden where flowers could talk and butterflies granted wishes. With courage and kindness, {name} helped save the garden from a terrible drought, learning that caring for others brings the greatest magic of all.",
-              prompt: "A beautiful magical garden with talking flowers, colorful butterflies, and a happy {age}-year-old child named {name} watering glowing plants, fantasy children's book illustration, vibrant colors, whimsical and enchanting"
+                title: "{name}'s Magical Garden Adventure",
+                text: "Once upon a time, <span class='highlight'>{name}</span> discovered a magical garden where flowers could talk and butterflies granted wishes. With courage and kindness, {name} helped save the garden from a terrible drought, learning that caring for others brings the greatest magic of all.",
+                prompt: "A beautiful magical garden with talking flowers, colorful butterflies, and a happy {age}-year-old child named {name} watering glowing plants, fantasy children's book illustration, vibrant colors, whimsical and enchanting"
             },
             space: {
-              title: "Commander {name}'s Space Mission",
-              text: "Brave astronaut <span class='highlight'>{name}</span> received an urgent mission to save a distant planet. Flying through sparkling nebulas and past dancing comets, {name} discovered that friendship and teamwork were the greatest powers in the universe.",
-              prompt: "A young {age}-year-old astronaut named {name} in a colorful space suit floating among stars, planets, and nebulas, surrounded by friendly alien creatures, children's book illustration, cosmic and magical"
+                title: "Commander {name}'s Space Mission",
+                text: "Brave astronaut <span class='highlight'>{name}</span> received an urgent mission to save a distant planet. Flying through sparkling nebulas and past dancing comets, {name} discovered that friendship and teamwork were the greatest powers in the universe.",
+                prompt: "A young {age}-year-old astronaut named {name} in a colorful space suit floating among stars, planets, and nebulas, surrounded by friendly alien creatures, children's book illustration, cosmic and magical"
             },
             princess: {
-              title: "Princess {name} and the Crystal Kingdom",
-              text: "In a kingdom made of shimmering crystals, Princess <span class='highlight'>{name}</span> embarked on a quest to restore the kingdom's lost colors. Through acts of kindness and wisdom beyond their years, {name} learned that true royalty comes from helping others.",
-              prompt: "A young {age}-year-old royal child named {name} in a beautiful crystal palace with rainbow reflections, wearing a crown and royal clothes, surrounded by magical crystal formations, children's book illustration, sparkly and majestic"
+                title: "Princess {name} and the Crystal Kingdom",
+                text: "In a kingdom made of shimmering crystals, Princess <span class='highlight'>{name}</span> embarked on a quest to restore the kingdom's lost colors. Through acts of kindness and wisdom beyond their years, {name} learned that true royalty comes from helping others.",
+                prompt: "A young {age}-year-old royal child named {name} in a beautiful crystal palace with rainbow reflections, wearing a crown and royal clothes, surrounded by magical crystal formations, children's book illustration, sparkly and majestic"
             },
             ocean: {
-              title: "{name}'s Underwater Adventure",
-              text: "Deep beneath the ocean waves, <span class='highlight'>{name}</span> discovered an underwater city filled with friendly sea creatures. Together with dolphins, seahorses, and wise old turtles, {name} helped protect the ocean's greatest treasure - its beautiful coral gardens.",
-              prompt: "A cheerful {age}-year-old child named {name} swimming underwater with colorful fish, dolphins, and sea turtles in a vibrant coral reef, magical underwater scene, children's book illustration, bright and oceanic"
+                title: "{name}'s Underwater Adventure",
+                text: "Deep beneath the ocean waves, <span class='highlight'>{name}</span> discovered an underwater city filled with friendly sea creatures. Together with dolphins, seahorses, and wise old turtles, {name} helped protect the ocean's greatest treasure - its beautiful coral gardens.",
+                prompt: "A cheerful {age}-year-old child named {name} swimming underwater with colorful fish, dolphins, and sea turtles in a vibrant coral reef, magical underwater scene, children's book illustration, bright and oceanic"
             },
             forest: {
-              title: "{name} and the Enchanted Forest",
-              text: "When <span class='highlight'>{name}</span> wandered into an enchanted forest, they met talking animals who needed help finding their lost home. With bravery and a kind heart, {name} led them through magical adventures to safety.",
-              prompt: "A brave {age}-year-old child named {name} in an enchanted forest with talking animals like rabbits, deer, and owls, magical trees with glowing leaves, children's book illustration, warm and mystical"
+                title: "{name} and the Enchanted Forest",
+                text: "When <span class='highlight'>{name}</span> wandered into an enchanted forest, they met talking animals who needed help finding their lost home. With bravery and a kind heart, {name} led them through magical adventures to safety.",
+                prompt: "A brave {age}-year-old child named {name} in an enchanted forest with talking animals like rabbits, deer, and owls, magical trees with glowing leaves, children's book illustration, warm and mystical"
             }
-          };
+        };
 
-          async function debugApiCall() {
-            console.log('=== DEBUGGING API CALL ===');
-            
-            try {
-              console.log('1. Testing API endpoint...');
-              
-              const response = await fetch('/api/generate-image', {
-                method: 'POST',
-                headers: {
-                  'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ 
-                  prompt: "A test image of a happy child in a garden" 
-                })
-              });
-
-              console.log('2. Response status:', response.status);
-              console.log('3. Response ok:', response.ok);
-              console.log('4. Response headers:', Object.fromEntries(response.headers.entries()));
-              
-              const responseText = await response.text();
-              console.log('5. Raw response text (first 500 chars):', responseText.substring(0, 500));
-              
-              if (responseText.startsWith('{')) {
-                console.log('6. ✅ Response is JSON');
-                const data = JSON.parse(responseText);
-                console.log('7. Parsed JSON:', data);
-              } else {
-                console.log('6. ❌ Response is NOT JSON - likely an error page');
-                console.log('7. Full response:', responseText);
-              }
-              
-              alert('Debug complete! Check the browser console for details.');
-              
-            } catch (error) {
-              console.error('DEBUG ERROR:', error);
-              alert('Debug failed! Check console for error details.');
-            }
-          }
-
-          async function generateStoryWithImage() {
+        async function generateStoryWithImage() {
             const name = document.getElementById('childName').value || 'Emma';
             const age = document.getElementById('childAge').value;
             const theme = document.getElementById('storyTheme').value;
@@ -428,105 +380,102 @@ export default function Home() {
             document.getElementById('successMessage').style.display = 'none';
 
             try {
-              const story = storyTemplates[theme];
-              const prompt = story.prompt.replace(/{name}/g, name).replace(/{age}/g, age);
-              
-              console.log('Sending prompt:', prompt);
-              
-              const response = await fetch('/api/generate-image', {
-                method: 'POST',
-                headers: {
-                  'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ prompt: prompt })
-              });
+                const story = storyTemplates[theme];
+                const prompt = story.prompt.replace(/{name}/g, name).replace(/{age}/g, age);
+                
+                const response = await fetch('/api/generate-image', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ prompt: prompt })
+                });
 
-              console.log('Response status:', response.status);
-              
-              const responseText = await response.text();
-              console.log('Raw response (first 200 chars):', responseText.substring(0, 200));
+                const responseText = await response.text();
 
-              if (!response.ok) {
-                let errorMessage;
-                try {
-                  const errorData = JSON.parse(responseText);
-                  errorMessage = errorData.error || \`HTTP \${response.status}\`;
-                } catch (e) {
-                  errorMessage = \`Server returned: \${responseText.substring(0, 200)}...\`;
+                if (!response.ok) {
+                    let errorMessage;
+                    try {
+                        const errorData = JSON.parse(responseText);
+                        errorMessage = errorData.error || \`HTTP \${response.status}\`;
+                    } catch (e) {
+                        errorMessage = \`Server returned: \${responseText.substring(0, 200)}...\`;
+                    }
+                    throw new Error(errorMessage);
                 }
-                throw new Error(errorMessage);
-              }
 
-              let data;
-              try {
-                data = JSON.parse(responseText);
-              } catch (e) {
-                throw new Error(\`Invalid JSON response: \${responseText.substring(0, 100)}...\`);
-              }
+                let data;
+                try {
+                    data = JSON.parse(responseText);
+                } catch (e) {
+                    throw new Error(\`Invalid JSON response: \${responseText.substring(0, 100)}...\`);
+                }
 
-              if (!data.data || !data.data[0] || !data.data[0].url) {
-                throw new Error('No image URL in response');
-              }
+                if (!data.data || !data.data[0] || !data.data[0].url) {
+                    throw new Error('No image URL in response');
+                }
 
-              const imageUrl = data.data[0].url;
+                const imageUrl = data.data[0].url;
 
-              const storyPage = document.getElementById('storyPage');
-              const storyTitle = document.getElementById('storyTitle');
-              const storyText = document.getElementById('storyText');
-              
-              storyPage.style.backgroundImage = \`url(\${imageUrl})\`;
-              storyTitle.textContent = story.title.replace(/{name}/g, name);
-              storyText.innerHTML = story.text.replace(/{name}/g, name);
+                const storyPage = document.getElementById('storyPage');
+                const storyTitle = document.getElementById('storyTitle');
+                const storyText = document.getElementById('storyText');
+                
+                storyPage.style.backgroundImage = \`url(\${imageUrl})\`;
+                storyTitle.textContent = story.title.replace(/{name}/g, name);
+                storyText.innerHTML = story.text.replace(/{name}/g, name);
 
-              document.getElementById('defaultPreview').style.display = 'none';
-              document.getElementById('storyBook').style.display = 'block';
+                document.getElementById('defaultPreview').style.display = 'none';
+                document.getElementById('storyBook').style.display = 'block';
 
-              document.getElementById('characterPreview').innerHTML = getThemeEmoji(theme);
+                document.getElementById('characterPreview').innerHTML = getThemeEmoji(theme);
 
-              showSuccess('🎉 AI story generated successfully with real DALL-E!');
+                showSuccess('🎉 AI story generated successfully with real DALL-E!');
 
             } catch (error) {
-              console.error('Full error:', error);
-              showError(\`Failed to generate story: \${error.message}\`);
+                showError(\`Failed to generate story: \${error.message}\`);
             } finally {
-              btn.disabled = false;
-              spinner.style.display = 'none';
-              btnText.textContent = '🎨 Generate Story with Real DALL-E!';
+                btn.disabled = false;
+                spinner.style.display = 'none';
+                btnText.textContent = '🎨 Generate Story with Real DALL-E!';
             }
-          }
+        }
 
-          function getThemeEmoji(theme) {
+        function getThemeEmoji(theme) {
             const emojis = {
-              garden: '🌻',
-              space: '🚀',
-              princess: '👑',
-              ocean: '🌊',
-              forest: '🌲'
+                garden: '🌻',
+                space: '🚀',
+                princess: '👑',
+                ocean: '🌊',
+                forest: '🌲'
             };
             return emojis[theme] || '✨';
-          }
+        }
 
-          function showError(message) {
+        function showError(message) {
             const errorEl = document.getElementById('errorMessage');
             errorEl.textContent = message;
             errorEl.style.display = 'block';
             setTimeout(() => {
-              errorEl.style.display = 'none';
+                errorEl.style.display = 'none';
             }, 5000);
-          }
+        }
 
-          function showSuccess(message) {
+        function showSuccess(message) {
             const successEl = document.getElementById('successMessage');
             successEl.textContent = message;
             successEl.style.display = 'block';
             setTimeout(() => {
-              successEl.style.display = 'none';
+                successEl.style.display = 'none';
             }, 3000);
-          }
+        }
 
-          document.getElementById('storyTheme').addEventListener('change', function() {
+        document.getElementById('storyTheme').addEventListener('change', function() {
             document.getElementById('characterPreview').textContent = getThemeEmoji(this.value);
-          });
+        });
+    </script>
+</body>
+</html>
         `
       }} />
     </>
