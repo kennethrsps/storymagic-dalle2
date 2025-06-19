@@ -11,6 +11,225 @@
             box-sizing: border-box;
         }
 
+        function createDomCharacter(ctx, canvas, theme) {
+            const width = canvas.width;
+            const height = canvas.height;
+            
+            // Theme-specific backgrounds for high quality
+            const backgrounds = {
+                garden: { start: '#87CEEB', end: '#90EE90', accent: '#FFB6C1' },
+                space: { start: '#191970', end: '#4B0082', accent: '#FFD700' },
+                ocean: { start: '#00CED1', end: '#1E90FF', accent: '#FF7F50' },
+                castle: { start: '#DDA0DD', end: '#9370DB', accent: '#FFD700' },
+                pirate: { start: '#8B4513', end: '#CD853F', accent: '#FFD700' }
+            };
+            
+            const bg = backgrounds[theme] || backgrounds.garden;
+            
+            // High-quality background gradient
+            const gradient = ctx.createLinearGradient(0, 0, width, height);
+            gradient.addColorStop(0, bg.start);
+            gradient.addColorStop(1, bg.end);
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, width, height);
+            
+            // Dom's character (4-year-old girl with black hair, brown eyes) - Higher resolution
+            const centerX = width / 2;
+            const centerY = height / 2;
+            const scale = width / 512; // Scale for higher resolution
+            
+            // Head (bigger for 4-year-old proportions)
+            ctx.fillStyle = '#F4C2A1'; // Realistic skin tone
+            ctx.beginPath();
+            ctx.arc(centerX, centerY - 50 * scale, 80 * scale, 0, 2 * Math.PI);
+            ctx.fill();
+            
+            // Add subtle head shading
+            const headGradient = ctx.createRadialGradient(
+                centerX - 20 * scale, centerY - 70 * scale, 0,
+                centerX, centerY - 50 * scale, 80 * scale
+            );
+            headGradient.addColorStop(0, '#F8D7A1');
+            headGradient.addColorStop(1, '#E8B888');
+            ctx.fillStyle = headGradient;
+            ctx.beginPath();
+            ctx.arc(centerX, centerY - 50 * scale, 80 * scale, 0, 2 * Math.PI);
+            ctx.fill();
+            
+            // Beautiful black hair (shoulder-length, realistic)
+            ctx.fillStyle = '#1C1C1C'; // Natural black hair
+            ctx.beginPath();
+            ctx.arc(centerX, centerY - 90 * scale, 90 * scale, 0, Math.PI);
+            ctx.fill();
+            
+            // Hair sides for shoulder-length
+            ctx.beginPath();
+            ctx.ellipse(centerX - 65 * scale, centerY - 20 * scale, 35 * scale, 45 * scale, 0, 0, 2 * Math.PI);
+            ctx.fill();
+            ctx.beginPath();
+            ctx.ellipse(centerX + 65 * scale, centerY - 20 * scale, 35 * scale, 45 * scale, 0, 0, 2 * Math.PI);
+            ctx.fill();
+            
+            // Hair highlights
+            ctx.fillStyle = '#2C2C2C';
+            ctx.beginPath();
+            ctx.arc(centerX - 30 * scale, centerY - 85 * scale, 15 * scale, 0, 2 * Math.PI);
+            ctx.fill();
+            ctx.beginPath();
+            ctx.arc(centerX + 20 * scale, centerY - 90 * scale, 12 * scale, 0, 2 * Math.PI);
+            ctx.fill();
+            
+            // Warm brown eyes (detailed)
+            ctx.fillStyle = '#8B4513'; // Brown iris
+            ctx.beginPath();
+            ctx.arc(centerX - 25 * scale, centerY - 65 * scale, 12 * scale, 0, 2 * Math.PI);
+            ctx.fill();
+            ctx.beginPath();
+            ctx.arc(centerX + 25 * scale, centerY - 65 * scale, 12 * scale, 0, 2 * Math.PI);
+            ctx.fill();
+            
+            // Eye pupils
+            ctx.fillStyle = '#000000';
+            ctx.beginPath();
+            ctx.arc(centerX - 25 * scale, centerY - 65 * scale, 6 * scale, 0, 2 * Math.PI);
+            ctx.fill();
+            ctx.beginPath();
+            ctx.arc(centerX + 25 * scale, centerY - 65 * scale, 6 * scale, 0, 2 * Math.PI);
+            ctx.fill();
+            
+            // Eye highlights (sparkle)
+            ctx.fillStyle = '#FFFFFF';
+            ctx.beginPath();
+            ctx.arc(centerX - 22 * scale, centerY - 68 * scale, 4 * scale, 0, 2 * Math.PI);
+            ctx.fill();
+            ctx.beginPath();
+            ctx.arc(centerX + 28 * scale, centerY - 68 * scale, 4 * scale, 0, 2 * Math.PI);
+            ctx.fill();
+            
+            // Eyelashes
+            ctx.strokeStyle = '#000000';
+            ctx.lineWidth = 2 * scale;
+            for (let i = 0; i < 3; i++) {
+                const offsetX = (i - 1) * 8 * scale;
+                ctx.beginPath();
+                ctx.moveTo(centerX - 25 * scale + offsetX, centerY - 77 * scale);
+                ctx.lineTo(centerX - 25 * scale + offsetX, centerY - 82 * scale);
+                ctx.stroke();
+                
+                ctx.beginPath();
+                ctx.moveTo(centerX + 25 * scale + offsetX, centerY - 77 * scale);
+                ctx.lineTo(centerX + 25 * scale + offsetX, centerY - 82 * scale);
+                ctx.stroke();
+            }
+            
+            // Rosy cheeks (4-year-old feature)
+            ctx.fillStyle = '#FFB6C1';
+            ctx.globalAlpha = 0.6;
+            ctx.beginPath();
+            ctx.arc(centerX - 50 * scale, centerY - 35 * scale, 18 * scale, 0, 2 * Math.PI);
+            ctx.fill();
+            ctx.beginPath();
+            ctx.arc(centerX + 50 * scale, centerY - 35 * scale, 18 * scale, 0, 2 * Math.PI);
+            ctx.fill();
+            ctx.globalAlpha = 1.0;
+            
+            // Bright cheerful smile
+            ctx.strokeStyle = '#D2691E';
+            ctx.lineWidth = 4 * scale;
+            ctx.beginPath();
+            ctx.arc(centerX, centerY - 25 * scale, 20 * scale, 0, Math.PI);
+            ctx.stroke();
+            
+            // Theme-appropriate outfit
+            const outfitColors = {
+                garden: '#FF69B4', // Pink dress
+                space: '#9370DB',  // Purple space suit
+                ocean: '#00CED1',  // Cyan swimwear
+                castle: '#DDA0DD', // Lavender princess dress
+                pirate: '#8B4513'  // Brown pirate outfit
+            };
+            
+            ctx.fillStyle = outfitColors[theme] || outfitColors.garden;
+            ctx.beginPath();
+            ctx.arc(centerX, centerY + 60 * scale, 100 * scale, 0, Math.PI);
+            ctx.fill();
+            
+            // Arms
+            ctx.fillStyle = '#F4C2A1';
+            ctx.beginPath();
+            ctx.arc(centerX - 80 * scale, centerY + 30 * scale, 25 * scale, 0, 2 * Math.PI);
+            ctx.fill();
+            ctx.beginPath();
+            ctx.arc(centerX + 80 * scale, centerY + 30 * scale, 25 * scale, 0, 2 * Math.PI);
+            ctx.fill();
+            
+            // Name label (professional)
+            ctx.fillStyle = '#FFFFFF';
+            ctx.strokeStyle = '#000000';
+            ctx.lineWidth = 3 * scale;
+            ctx.font = `bold ${32 * scale}px Comic Sans MS`;
+            ctx.textAlign = 'center';
+            ctx.strokeText('Dom', centerX, height - 80 * scale);
+            ctx.fillText('Dom', centerX, height - 80 * scale);
+            
+            return canvas.toDataURL('image/png');
+        }
+
+        function createGenericCharacter(ctx, canvas, name, theme) {
+            // Similar structure but more generic for other children
+            const width = canvas.width;
+            const height = canvas.height;
+            
+            // Simplified version for non-Dom characters
+            const gradient = ctx.createLinearGradient(0, 0, width, height);
+            gradient.addColorStop(0, '#87CEEB');
+            gradient.addColorStop(1, '#98FB98');
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, width, height);
+            
+            const centerX = width / 2;
+            const centerY = height / 2;
+            
+            // Generic character
+            ctx.fillStyle = '#F4C2A1';
+            ctx.beginPath();
+            ctx.arc(centerX, centerY - 50, 50, 0, 2 * Math.PI);
+            ctx.fill();
+            
+            // Hair
+            ctx.fillStyle = '#8B4513';
+            ctx.beginPath();
+            ctx.arc(centerX, centerY - 70, 60, 0, Math.PI);
+            ctx.fill();
+            
+            // Eyes
+            ctx.fillStyle = '#000';
+            ctx.beginPath();
+            ctx.arc(centerX - 15, centerY - 60, 5, 0, 2 * Math.PI);
+            ctx.fill();
+            ctx.beginPath();
+            ctx.arc(centerX + 15, centerY - 60, 5, 0, 2 * Math.PI);
+            ctx.fill();
+            
+            // Smile
+            ctx.strokeStyle = '#000';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.arc(centerX, centerY - 40, 12, 0, Math.PI);
+            ctx.stroke();
+            
+            // Body
+            ctx.fillStyle = '#FF69B4';
+            ctx.fillRect(centerX - 40, centerY, 80, 80);
+            
+            // Name
+            ctx.fillStyle = '#4B0082';
+            ctx.font = 'bold 20px Comic Sans MS';
+            ctx.textAlign = 'center';
+            ctx.fillText(name, centerX, height - 50);
+            
+            return canvas.toDataURL('image/png');
+
         body {
             font-family: 'Comic Sans MS', cursive, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -372,7 +591,6 @@
         let currentStoryData = {};
         let currentPage = 0;
 
-        // 5 Simple Stories for Dom (a girl with black hair)
         const stories = {
             garden: {
                 title: "Dom's Magic Garden",
@@ -383,7 +601,7 @@
                     "Dom made friends with talking butterflies.",
                     "Dom learned that caring makes magic happen!"
                 ],
-                prompt: "A happy 4-year-old girl named Dom with beautiful black hair and a big smile in a magical garden with colorful flowers and butterflies, children's book illustration, bright and cheerful, detailed character features"
+                prompt: "A beautiful 4-year-old girl with shoulder-length black hair and warm brown eyes, in a magical garden with colorful flowers and butterflies, children's book illustration, bright and cheerful, detailed character features"
             },
             space: {
                 title: "Dom Goes to Space",
@@ -394,7 +612,7 @@
                     "Dom and the aliens played fun space games.",
                     "Dom learned that friends are everywhere!"
                 ],
-                prompt: "A cheerful 4-year-old girl named Dom with beautiful black hair in a colorful space suit floating with friendly aliens among stars and planets, children's book illustration, cosmic and fun, detailed character"
+                prompt: "A cheerful 4-year-old girl with shoulder-length black hair and warm brown eyes, in a colorful space suit floating with friendly aliens among stars and planets, children's book illustration, cosmic and fun, detailed character"
             },
             ocean: {
                 title: "Dom's Ocean Adventure",
@@ -405,7 +623,7 @@
                     "All the sea creatures thanked Dom with hugs!",
                     "Dom learned that helping others feels wonderful!"
                 ],
-                prompt: "A joyful 4-year-old girl named Dom with beautiful black hair swimming underwater with colorful fish and sea creatures in a bright coral reef, children's book illustration, underwater adventure, detailed character"
+                prompt: "A joyful 4-year-old girl with shoulder-length black hair and warm brown eyes, swimming underwater with colorful fish and sea creatures in a bright coral reef, children's book illustration, underwater adventure, detailed character"
             },
             castle: {
                 title: "Dom the Brave Knight",
@@ -416,7 +634,7 @@
                     "The dragon smiled and they became best friends!",
                     "Dom learned that kindness is true bravery!"
                 ],
-                prompt: "A brave 4-year-old girl named Dom with beautiful black hair in knight armor with a friendly smiling dragon in front of a colorful castle, children's book illustration, medieval and heartwarming, detailed character"
+                prompt: "A brave 4-year-old girl with shoulder-length black hair and warm brown eyes, in knight armor with a friendly smiling dragon in front of a colorful castle, children's book illustration, medieval and heartwarming, detailed character"
             },
             pirate: {
                 title: "Captain Dom's Treasure",
@@ -427,7 +645,7 @@
                     "Dom shared her treasure food with everyone.",
                     "Dom learned that sharing is the best treasure!"
                 ],
-                prompt: "A happy 4-year-old girl named Dom with beautiful black hair as a pirate captain on a colorful ship with treasure chests and friendly pirates, children's book illustration, adventure and friendship, detailed character"
+                prompt: "A happy 4-year-old girl with shoulder-length black hair and warm brown eyes, as a pirate captain on a colorful ship with treasure chests and friendly pirates, children's book illustration, adventure and friendship, detailed character"
             }
         };
 
@@ -448,67 +666,60 @@
 
             try {
                 const story = stories[theme];
-                const prompt = story.prompt.replace(/Dom/g, name);
                 
-                // Create a simple character image using Canvas
-                const canvas = document.createElement('canvas');
-                canvas.width = 400;
-                canvas.height = 400;
-                const ctx = canvas.getContext('2d');
+                // Create detailed character prompt for Dom (4-year-old girl with black hair, brown eyes)
+                let characterPrompt;
+                if (name.toLowerCase() === 'dom') {
+                    characterPrompt = `A beautiful 4-year-old girl named Dom with shoulder-length black hair, warm brown eyes, rosy cheeks, and a bright cheerful smile. She has an innocent round face typical of a 4-year-old. ${story.prompt.split(',').slice(1).join(',')}`;
+                } else {
+                    characterPrompt = story.prompt.replace(/Dom/g, name);
+                }
                 
-                // Background gradient
-                const gradient = ctx.createLinearGradient(0, 0, 400, 400);
-                gradient.addColorStop(0, '#87CEEB');
-                gradient.addColorStop(1, '#98FB98');
-                ctx.fillStyle = gradient;
-                ctx.fillRect(0, 0, 400, 400);
+                let imageUrl;
                 
-                // Character head
-                ctx.fillStyle = '#FDBCB4';
-                ctx.beginPath();
-                ctx.arc(200, 150, 40, 0, 2 * Math.PI);
-                ctx.fill();
-                
-                // Hair
-                ctx.fillStyle = '#8B4513';
-                ctx.fillRect(180, 120, 40, 30);
-                
-                // Eyes
-                ctx.fillStyle = '#000';
-                ctx.beginPath();
-                ctx.arc(190, 140, 3, 0, 2 * Math.PI);
-                ctx.fill();
-                ctx.beginPath();
-                ctx.arc(210, 140, 3, 0, 2 * Math.PI);
-                ctx.fill();
-                
-                // Smile
-                ctx.strokeStyle = '#000';
-                ctx.lineWidth = 2;
-                ctx.beginPath();
-                ctx.arc(200, 150, 10, 0, Math.PI);
-                ctx.stroke();
-                
-                // Body
-                ctx.fillStyle = '#FF69B4';
-                ctx.fillRect(160, 190, 80, 100);
-                
-                // Arms
-                ctx.fillStyle = '#FDBCB4';
-                ctx.fillRect(140, 240, 30, 50);
-                ctx.fillRect(230, 240, 30, 50);
-                
-                // Add name text
-                ctx.fillStyle = '#4B0082';
-                ctx.font = 'bold 16px Comic Sans MS';
-                ctx.textAlign = 'center';
-                ctx.fillText(name, 200, 320);
-                
-                // Add theme text
-                ctx.font = '12px Comic Sans MS';
-                ctx.fillText(story.title.replace(/Dom/g, name), 200, 340);
-                
-                const imageUrl = canvas.toDataURL('image/png');
+                // Call your existing DALL-E integration
+                try {
+                    const response = await fetch('/api/generate-image', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ 
+                            prompt: characterPrompt,
+                            size: "1024x1024",
+                            quality: "standard",
+                            style: "vivid"
+                        })
+                    });
+
+                    if (response.ok) {
+                        const data = await response.json();
+                        // Handle different possible response formats from DALL-E
+                        imageUrl = data.url || data.data?.[0]?.url || data.image_url;
+                        
+                        if (!imageUrl) {
+                            throw new Error('No image URL in response');
+                        }
+                    } else {
+                        const errorData = await response.json();
+                        throw new Error(errorData.error || `API Error: ${response.status}`);
+                    }
+                } catch (aiError) {
+                    console.log('DALL-E generation failed, using custom character for Dom:', aiError);
+                    showError(`AI generation failed: ${aiError.message}. Using custom character.`);
+                    
+                    // Create detailed custom character for Dom as fallback
+                    const canvas = document.createElement('canvas');
+                    canvas.width = 1024;
+                    canvas.height = 1024;
+                    const ctx = canvas.getContext('2d');
+                    
+                    if (name.toLowerCase() === 'dom') {
+                        imageUrl = createDomCharacter(ctx, canvas, theme);
+                    } else {
+                        imageUrl = createGenericCharacter(ctx, canvas, name, theme);
+                    }
+                }
 
                 // Store for PDF and navigation
                 currentStoryData = {
@@ -677,11 +888,24 @@
                     pdf.text(`Page ${index + 1}`, 105, 30, { align: 'center' });
                     
                     // Character representation
-                    pdf.setFillColor(255, 255, 255);
-                    pdf.circle(105, 80, 35, 'F');
-                    pdf.setTextColor(100, 100, 100);
-                    pdf.setFontSize(50);
-                    pdf.text('👧', 105, 90, { align: 'center' });
+                    try {
+                        if (currentStoryData.imageUrl.startsWith('data:image/png')) {
+                            // Add smaller version of the character image
+                            pdf.addImage(currentStoryData.imageUrl, 'PNG', 75, 50, 60, 60);
+                        } else {
+                            // Simple drawn character
+                            pdf.setFillColor(255, 182, 193);
+                            pdf.circle(105, 80, 25, 'F');
+                            pdf.setFillColor(139, 69, 19);
+                            pdf.rect(90, 65, 30, 15, 'F');
+                        }
+                    } catch (e) {
+                        // Fallback simple character
+                        pdf.setFillColor(255, 182, 193);
+                        pdf.circle(105, 80, 25, 'F');
+                        pdf.setFillColor(139, 69, 19);
+                        pdf.rect(90, 65, 30, 15, 'F');
+                    }
                     
                     // Story text in a nice box
                     pdf.setFillColor(255, 255, 255, 0.9);
