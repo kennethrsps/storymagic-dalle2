@@ -489,64 +489,184 @@
                 const { jsPDF } = window.jspdf;
                 const pdf = new jsPDF('p', 'mm', 'a4');
                 
-                // Cover page with image
-                pdf.setFontSize(24);
-                pdf.setFont(undefined, 'bold');
-                pdf.text(currentStoryData.title, 105, 30, { align: 'center' });
+                // Create colorful background for each page
+                function addColorfulBackground(pdf, pageNum) {
+                    // Set different background colors for variety
+                    const colors = [
+                        [255, 248, 220], // Light yellow
+                        [240, 248, 255], // Light blue  
+                        [245, 255, 250], // Light green
+                        [255, 240, 245], // Light pink
+                        [248, 248, 255], // Light purple
+                        [255, 250, 240]  // Light orange
+                    ];
+                    
+                    const color = colors[pageNum % colors.length];
+                    pdf.setFillColor(color[0], color[1], color[2]);
+                    pdf.rect(0, 0, 210, 297, 'F'); // Fill entire page
+                    
+                    // Add decorative border
+                    pdf.setDrawColor(100, 150, 200);
+                    pdf.setLineWidth(2);
+                    pdf.rect(10, 10, 190, 277);
+                }
                 
-                // Add the character image
+                // Cover page
+                addColorfulBackground(pdf, 0);
+                
+                pdf.setTextColor(50, 50, 150); // Dark blue text
+                pdf.setFontSize(28);
+                pdf.setFont(undefined, 'bold');
+                pdf.text(currentStoryData.title, 105, 40, { align: 'center' });
+                
+                pdf.setFontSize(18);
+                pdf.setTextColor(100, 100, 100);
+                pdf.text(`A Visual Story for ${currentStoryData.name}`, 105, 60, { align: 'center' });
+                
+                // Load and process the character image
                 const img = new Image();
                 img.crossOrigin = 'anonymous';
                 
-                img.onload = function() {
-                    // Add main character image to cover
-                    pdf.addImage(img, 'JPEG', 55, 50, 100, 100);
+                // Create a promise to handle image loading
+                const imageLoadPromise = new Promise((resolve, reject) => {
+                    img.onload = () => resolve(img);
+                    img.onerror = () => reject(new Error('Image failed to load'));
+                    img.src = currentStoryData.imageUrl;
+                });
+                
+                try {
+                    await imageLoadPromise;
                     
-                    // Add each story page
+                    // Add large character image to cover page
+                    pdf.addImage(img, 'JPEG', 40, 80, 130, 130);
+                    
+                    // Add decorative elements to cover
+                    pdf.setFontSize(30);
+                    pdf.text('🌟', 20, 80);
+                    pdf.text('⭐', 170, 80);
+                    pdf.text('✨', 20, 200);
+                    pdf.text('💫', 170, 200);
+                    
+                    // Add each story page with images
                     currentStoryData.pages.forEach((pageText, index) => {
                         pdf.addPage();
                         
-                        // Page number
+                        // Add colorful background
+                        addColorfulBackground(pdf, index + 1);
+                        
+                        // Page header
+                        pdf.setTextColor(50, 50, 150);
+                        pdf.setFontSize(20);
+                        pdf.setFont(undefined, 'bold');
+                        pdf.text(`Page ${index + 1}`, 105, 25, { align: 'center' });
+                        
+                        // Add character image (medium size)
+                        pdf.addImage(img, 'JPEG', 60, 40, 90, 90);
+                        
+                        // Story text with nice formatting
+                        pdf.setTextColor(50, 50, 50);
                         pdf.setFontSize(16);
                         pdf.setFont(undefined, 'bold');
-                        pdf.text(`Page ${index + 1}`, 105, 30, { align: 'center' });
                         
-                        // Add character image on each page (smaller)
-                        pdf.addImage(img, 'JPEG', 70, 50, 70, 70);
+                        // Create text box with background
+                        pdf.setFillColor(255, 255, 255, 0.9);
+                        pdf.roundedRect(20, 145, 170, 60, 5, 5, 'F');
                         
-                        // Story text below image
-                        pdf.setFontSize(14);
-                        pdf.setFont(undefined, 'normal');
-                        const lines = pdf.splitTextToSize(pageText, 160);
-                        pdf.text(lines, 25, 140);
+                        // Add border to text box
+                        pdf.setDrawColor(150, 150, 150);
+                        pdf.setLineWidth(1);
+                        pdf.roundedRect(20, 145, 170, 60, 5, 5, 'S');
                         
-                        // Fun decorations
+                        // Add story text
+                        const lines = pdf.splitTextToSize(pageText, 150);
+                        let yPos = 165;
+                        lines.forEach(line => {
+                            pdf.text(line, 105, yPos, { align: 'center' });
+                            yPos += 8;
+                        });
+                        
+                        // Add fun decorations around the page
+                        pdf.setFontSize(25);
+                        pdf.text('🎨', 15, 50);
+                        pdf.text('📚', 180, 50);
+                        pdf.text('🌈', 15, 100);
+                        pdf.text('⭐', 180, 100);
+                        
+                        // Add page-specific decorations based on theme
+                        const themeDecorations = {
+                            garden: ['🌻', '🦋', '🌸', '🌿'],
+                            space: ['🚀', '🌟', '👽', '🌙'],
+                            ocean: ['🐠', '🌊', '🐙', '🏝️'],
+                            castle: ['🏰', '⚔️', '🛡️', '👑'],
+                            pirate: ['🏴‍☠️', '💰', '⚓', '🗺️']
+                        };
+                        
+                        const decorations = themeDecorations[currentStoryData.theme] || ['✨', '⭐', '🌟', '💫'];
                         pdf.setFontSize(20);
-                        pdf.text('⭐', 180, 50);
-                        pdf.text('🌟', 25, 50);
+                        decorations.forEach((decoration, i) => {
+                            const positions = [
+                                [25, 220], [180, 220], [25, 260], [180, 260]
+                            ];
+                            if (positions[i]) {
+                                pdf.text(decoration, positions[i][0], positions[i][1]);
+                            }
+                        });
                     });
                     
-                    // Save the PDF
-                    pdf.save(`${currentStoryData.name}_Story_Book.pdf`);
-                };
-                
-                img.onerror = function() {
-                    // Create PDF without image if there's an error
+                    // Back cover with summary
+                    pdf.addPage();
+                    addColorfulBackground(pdf, 6);
+                    
+                    pdf.setTextColor(50, 50, 150);
+                    pdf.setFontSize(24);
+                    pdf.setFont(undefined, 'bold');
+                    pdf.text(`${currentStoryData.name}'s Adventure Complete!`, 105, 50, { align: 'center' });
+                    
+                    // Add character image one more time
+                    pdf.addImage(img, 'JPEG', 60, 80, 90, 90);
+                    
+                    pdf.setTextColor(100, 100, 100);
+                    pdf.setFontSize(16);
+                    pdf.text('Thank you for reading!', 105, 190, { align: 'center' });
+                    pdf.text('Created with StoryMagic Pro', 105, 210, { align: 'center' });
+                    
+                    // Fun ending decorations
+                    pdf.setFontSize(30);
+                    pdf.text('🎉', 30, 100);
+                    pdf.text('🎊', 170, 100);
+                    pdf.text('💖', 30, 150);
+                    pdf.text('🌟', 170, 150);
+                    
+                } catch (imageError) {
+                    console.log('Creating PDF without images due to:', imageError);
+                    
+                    // Fallback: Create visually appealing PDF without character images
                     currentStoryData.pages.forEach((pageText, index) => {
                         if (index > 0) pdf.addPage();
                         
-                        pdf.setFontSize(16);
+                        addColorfulBackground(pdf, index);
+                        
+                        pdf.setTextColor(50, 50, 150);
+                        pdf.setFontSize(20);
                         pdf.text(`Page ${index + 1}`, 105, 30, { align: 'center' });
                         
-                        pdf.setFontSize(14);
+                        // Create large decorative character placeholder
+                        pdf.setFillColor(200, 220, 255);
+                        pdf.circle(105, 90, 40, 'F');
+                        pdf.setTextColor(100, 100, 100);
+                        pdf.setFontSize(60);
+                        pdf.text('👦', 105, 100, { align: 'center' });
+                        
+                        // Story text
+                        pdf.setTextColor(50, 50, 50);
+                        pdf.setFontSize(16);
                         const lines = pdf.splitTextToSize(pageText, 160);
-                        pdf.text(lines, 25, 60);
+                        pdf.text(lines, 25, 160);
                     });
-                    
-                    pdf.save(`${currentStoryData.name}_Story_Book.pdf`);
-                };
+                }
                 
-                img.src = currentStoryData.imageUrl;
+                // Save the PDF
+                pdf.save(`${currentStoryData.name}_Visual_Story_Book.pdf`);
                 
             } catch (error) {
                 console.error('PDF error:', error);
