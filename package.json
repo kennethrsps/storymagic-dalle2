@@ -1,19 +1,5 @@
 {
   "name": "storymagic-dalle2",
   "version": "1.0.0",
-  "description": "AI-powered children's story generator with DALL-E integration",
-  "main": "index.js",
-  "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start"
-  },
-  "dependencies": {
-    "next": "^14.0.0",
-    "react": "^18.0.0",
-    "react-dom": "^18.0.0"
-  },
-  "engines": {
-    "node": ">=18.0.0"
-  }
+  "description": "AI-powered children's story generator"
 }
